@@ -13,7 +13,6 @@ jobs:
       matrix:
         # Define the directories for each of your mdBooks
         book_dir: [doc/workflow]
-    
     steps:
       - name: Checkout repository
         uses: [actions/checkout@v4](https://github.com)
