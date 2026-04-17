@@ -26,6 +26,15 @@ jobs:
           cd ${{ matrix.book_dir }}
           mdbook build
 
+      # Step to move index.html from /doc/ to site root
+      - name: Deploy Landing Page to Root
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc  # Source folder where index.html lives
+          # No destination_dir means files are placed at the root of gh-pages
+          keep_files: true
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
