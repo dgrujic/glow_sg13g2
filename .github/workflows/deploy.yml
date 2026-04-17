@@ -11,14 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # Define the directories for each of your mdBooks
         book_dir: [doc/workflow]
     steps:
       - name: Checkout repository
-        uses: [actions/checkout@v4](https://github.com)
+        uses: actions/checkout@v4
 
       - name: Setup mdBook
-        uses: [peaceiris/actions-mdbook@v2](https://github.com/marketplace/actions/mdbook-action)
+        uses: peaceiris/actions-mdbook@v2
         with:
           mdbook-version: 'latest'
 
@@ -28,10 +27,9 @@ jobs:
           mdbook build
 
       - name: Deploy to GitHub Pages
-        uses: [peaceiris/actions-gh-pages@v3](https://github.com)
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./${{ matrix.book_dir }}/book
-          # Deploys each book to its own subdirectory on the gh-pages branch
           destination_dir: ${{ matrix.book_dir }}
-          keep_files: true # Important: prevents one book from deleting others
+          keep_files: true
