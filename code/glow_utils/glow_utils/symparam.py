@@ -18,6 +18,7 @@
 
 import ast
 import _ast
+from collections import ChainMap
 
 class Symparam:
     """
@@ -189,10 +190,11 @@ class Symparam:
         self.paramDict = paramDict
         self.fnDict = fnDict
         
-    def substitute(self, paramExpr):
+    def substitute(self, paramExpr, instanceFns = {}):
         """
         Perform symbolic substitution of variables.
         The result is a string expression where all symbols evaluate to numbers.
+        Argument instanceFns is per-instance function dictionary
         """
         if isinstance(paramExpr, float):
             return paramExpr
@@ -201,12 +203,13 @@ class Symparam:
             return paramExpr
         
         parsedExpr = ast.parse(paramExpr, mode='eval')
-        expr = self.variableExpander(self.paramDict, self.fnDict, fullExpansion=False).visit(parsedExpr)
+        expr = self.variableExpander(self.paramDict, ChainMap(self.fnDict, instanceFns), fullExpansion=False).visit(parsedExpr)
         return self.printAstExpression(expr)
 
-    def evaluate(self, paramExpr):
+    def evaluate(self, paramExpr, instanceFns = {}):
         """
         Evaluate parameter expression in the scope of parameters given in dictionary paramDict and functions given in dictionary fnDict.
+        Argument instanceFns is per-instance function dictionary
         The result is a number.
         """
         if isinstance(paramExpr, float):
@@ -216,10 +219,10 @@ class Symparam:
             return paramExpr
         
         parsedExpr = ast.parse(paramExpr, mode='eval')
-        expr = self.variableExpander(self.paramDict, self.fnDict).visit(parsedExpr)
+        expr = self.variableExpander(self.paramDict, ChainMap(self.fnDict, instanceFns)).visit(parsedExpr)
         code = compile(expr, 'temp', 'eval')
         # If all is ok, while we get here all parameters are already evaluated,
         # only the evaluation of functions is remaining
-        value = eval(code, self.fnDict)
+        value = eval(code, {}, ChainMap(self.fnDict, instanceFns))
         return value
 
