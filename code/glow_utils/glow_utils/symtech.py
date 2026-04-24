@@ -16,31 +16,48 @@
 #
 ########################################################################
 
+import json
+
 class SymTech:
-    processName = "sg13g2"
-    nmosModelName = "sg13s_lvnmos"
-    pmosModelName = "sg13s_lvpmos"
-    # Minumum MOSFET diffusion width, used to calculate source/drain area and periphery
-    nmosDW = 310e-9
-    pmosDW = 310e-9
+    technology = {
+        "processName" : "sg13g2",
+        "nmosModelName" : "sg13g2_lvnmos",
+        "pmosModelName" : "sg13g2_lvpmos",
+        "nmosAS" : "ipar('w') * 310e-9",
+        "nmosAD" : "ipar('w') * 310e-9",
+        "nmosPS" : "2 * (ipar('w') + 310e-9)",
+        "nmosPD" : "2 * (ipar('w') + 310e-9)",
+        "pmosAS" : "ipar('w') * 310e-9",
+        "pmosAD" : "ipar('w') * 310e-9",
+        "pmosPS" : "2 * (ipar('w') + 310e-9)",
+        "pmosPD" : "2 * (ipar('w') + 310e-9)"        
+    }
+    processName = technology["processName"]
+    nmosModelName = technology["nmosModelName"]
+    pmosModelName = technology["pmosModelName"]
 
     def nmosAS():
-        return 'ipar("w")*' + str(SymTech.nmosDW)
+        return SymTech.technology["nmosAS"]
     def nmosAD():
-        return 'ipar("w")*' + str(SymTech.nmosDW) 
+        return SymTech.technology["nmosAD"]
     def nmosPS():
-        return '2*(ipar("w")+' + str(SymTech.nmosDW) + ')'
+        return SymTech.technology["nmosPS"]
     def nmosPD():
-        return '2*(ipar("w")+' + str(SymTech.nmosDW) + ')'
+        return SymTech.technology["nmosPD"]
     
     def pmosAS():
-        return 'ipar("w")*' + str(SymTech.pmosDW)
+        return SymTech.technology["pmosAS"]
     def pmosAD():
-        return 'ipar("w")*' + str(SymTech.pmosDW) 
+        return SymTech.technology["pmosAD"]
     def pmosPS():
-        return '2*(ipar("w")+' + str(SymTech.pmosDW) + ')'
+        return SymTech.technology["pmosPS"]
     def pmosPD():
-        return '2*(ipar("w")+' + str(SymTech.pmosDW) + ')'
-
+        return SymTech.technology["pmosPD"]
+    
+    @classmethod
+    def loadTech(cls, fileName):
+        # Load technology information from JSON file
+        with open(fileName, 'r') as file:
+            cls.technology = json.load(file)
 
 
