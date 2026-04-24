@@ -16,8 +16,8 @@
 #
 ########################################################################
 
-from symparam import Symparam
-from symdict import Symdict
+from glow_utils.symparam import Symparam
+from glow_utils.symdict import Symdict
 
 #///////////////////////////////////////////////////////////////////////////////////////
 # Circuit element base class

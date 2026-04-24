@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glow_utils"
+version = "0.1.0"
+description = "Gate Library for Open Flow Utilities"
+authors = [
+    {name = "Dr. Dušan Grujić", email = "dusan.grujic@etf.bg.ac.rs"}
+]
+license = {text = "APACHE 2.0"}
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+]
+

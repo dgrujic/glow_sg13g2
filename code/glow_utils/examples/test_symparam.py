@@ -1,5 +1,5 @@
 
-from symparam import Symparam
+from glow_utils.symparam import Symparam
 
 values = {  'x' : 'a+b',
             'y' : 'c',

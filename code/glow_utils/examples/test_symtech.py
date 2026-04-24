@@ -1,5 +1,5 @@
 
-from symtech import SymTech
+from glow_utils.symtech import SymTech
 from pathlib import Path
 
 def printTech():

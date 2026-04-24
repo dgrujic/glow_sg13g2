@@ -1,5 +1,5 @@
 
-from symdict import Symdict
+from glow_utils.symdict import Symdict
 
 print("Symdict example")
 print("")

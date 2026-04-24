@@ -1,6 +1,6 @@
 
-from symmosfet import SymNMOS, SymPMOS
-from symparam import Symparam
+from glow_utils.symmosfet import SymNMOS, SymPMOS
+from glow_utils.symparam import Symparam
 
 n = SymNMOS("N0", ['Y', 'A', 'VSS', 'VSS'], {'w' : 'WN', 'l' : 'L'})
 p = SymPMOS("P0", ['Y', 'A', 'VDD', 'VDD'], {'w' : 'WP', 'l' : 'L'})

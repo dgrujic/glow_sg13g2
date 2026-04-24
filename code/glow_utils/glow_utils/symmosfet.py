@@ -16,8 +16,8 @@
 #
 ########################################################################
 
-from symdevice import Symdevice
-from symtech import SymTech
+from glow_utils.symdevice import Symdevice
+from glow_utils.symtech import SymTech
 
 #
 # MOSFET base class
