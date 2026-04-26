@@ -1,0 +1,366 @@
+########################################################################
+#
+# Copyright 2026 Dr. Dušan Grujić (dusan.grujic@etf.bg.ac.rs)
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#    https://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+########################################################################
+
+
+"""
+Symsubcircuit metaclass implements subcircuit functionality.
+It can generate subcircuit classes with given names and nodes,
+to which device instances can be added.
+Generated classes can be instantiated hiearchicaly to build complex circuits.
+"""
+
+from copy import deepcopy
+import textwrap
+from glow_utils.symdict import Symdict
+from glow_utils.symparam import Symparam
+
+class Symsubcircuit(object):
+    """
+    Symsubcircuit metaclass
+    
+    Symsubcircuit is a metaclass used for creating subcircuit classes.
+    The main idea is to create a new class for each subcircuit.
+
+    For example, an inverter subcircuit class named 'inv_par' with terminals 
+    'A', 'Y', 'VDD' and 'VSS' and default parameter values w = 300e-9, l = 130e-9
+    can be created as:
+    
+    inv_par_cls = subcircuit( 'inv_par', ('A', 'Y', 'VDD', 'VSS'), {'WN':200e-9, 'WP':400e-9, 'L':130e-9} )
+    
+    The created subcircuit class, stored in cls_inv_par, can be populated with circuit elements or other subcircuits.
+
+    Continuing the inverter example, transistors can be added to subcircuit as:
+    n0 = SymNMOS('N0', ['Y', 'A', 'VSS', 'VSS'], {'w':'WN'}, {'l':'L'})
+    p0 = SymNMOS('P0', ['Y', 'A', 'VDD', 'VDD'], {'w':'WP'}, {'l':'L'})
+    inv_par_cls.addElement( [n0, p0] )
+    
+    addElement is a classmethod, so the elements are stored as class variables.
+    This way, the subcircuit elements are shared amongst all instances of the
+    same subcircuit. At this point the created subcircuit class has no instances.
+    In order to use the subcircuit, it needs to be instantiated:
+    
+    inv_par_inst = inv_par_cls('instanceName', ('in', 'out', 'VDD', 'VSS'), {'WN':300e-9, 'WP':600e-9})
+    
+    By creating a subcircuit instance, it is given a name, connected to given nodes and
+    optionally default parameters are overridden.
+    The subcircuit instance can then be added to a other subcircuit to form a hierarchy:
+    
+    subckt_cls.addElement( inv_par_inst )
+ 
+    """
+
+    #
+    # Class variables
+    #
+    subCkts = {}                    # Dictionary of all created subcircuit classes
+    subCktClassName = None          # Subcircuit class name
+    subCktTerminals = None          # List of subcircuit terminals
+    subCktDefaultParameters = None  # Dictionary of default parameter values
+    subCktDefaultFunctions = None   # Dictionary of default functions
+    subCktElements = None           # List of subcircuit elements
+
+    #************************
+    # New class creation
+    #************************    
+    def __new__(cls, subCktClassName, subCktTerminals, subCktDefaultParameters={}, subCktDefaultFunctions={}, globalScope=False ):
+        """
+        This method creates a new subcircuit class.
+        subCktClassName is a new subcircuit class name,
+        subCktTerminals is a list of new subcircuit terminals and
+        subCktDefaultParameters is a dictionary of default parameter values.
+        subCktDefaultFunctions is a dictionary of default parameter values.        
+        Each subcircuit class will be given its own class variables.
+        """
+        # Dictionary of new subcircuit class functions and variables
+        newDict = { # Overload __new__ method so that newly created class doesn't create classes, but instances
+                    '__new__' : cls.__new_instance__,   
+                    # Give each subcircuit class a set of its own class variables
+                    'subCktClassName' : subCktClassName,
+                    'subCktTerminals' : subCktTerminals,
+                    'subCktDefaultParameters' : Symdict({}, subCktDefaultParameters),
+                    'subCktDefaultFunctions' : Symdict({}, subCktDefaultFunctions),
+                    'subCktElements' : []
+                   }
+
+        newClass = type(subCktClassName, (Symsubcircuit,), newDict) # Return the newly created class
+        if globalScope:
+            globals()[subCktClassName]=newClass # Add class to global symbols
+        # Add newly created subcircuit class to dictionary of available subcircuits
+        cls.subCkts.update({subCktClassName : newClass})
+        return newClass
+
+    #************************
+    # Class methods, common to all instances of the same subcircuit class
+    #************************
+
+    @classmethod
+    def getSubckts(cls):
+        return cls.subCkts
+
+    @classmethod
+    def getClassName(cls):
+        return cls.subCktClassName
+
+    @classmethod
+    def getTerminals(cls):
+        return cls.subCktTerminals
+        
+    @classmethod
+    def getDefaultParameters(cls):
+        return cls.subCktDefaultParameters
+
+    @classmethod
+    def getDefaultFunctions(cls):
+        return cls.subCktDefaultFunctions
+        
+    @classmethod
+    def getElements(cls):
+        return cls.subCktElements
+        
+    @classmethod
+    def addElement(cls, newElement):
+       if isinstance(newElement, list) or isinstance(newElement, tuple):
+           cls.subCktElements += newElement           
+       else:
+           cls.subCktElements += [newElement]
+           
+    #************************
+    # Instance methods, for subcircuit instances
+    #************************
+
+    @staticmethod
+    def __new_instance__(cls, instName, instNodes, instParams={}, instFns={}):
+        return super(Symsubcircuit, cls).__new__(cls)
+    
+    def __init__(self, instName, instNodes, instParams={}, instFns={}):
+        self.name = instName
+        self.nodes = instNodes
+        self.parameters = Symdict(self.getDefaultParameters(), localDict=instParams)
+        self.functions = Symdict(self.getDefaultFunctions(), localDict=instFns)
+        
+    def getName(self):
+        return self.name
+        
+    def getNodes(self):
+        return self.nodes
+
+    def flatten(self,  circuit = None):
+        """
+        Flatten subcircuit into a higher level circuit.
+        Generic element flattening:
+            1. Deep copy an element
+            2. Give it a hierarchical name
+            3. Rename nodes
+            4. Assign parameter evaluator to the new element
+            5. Execute custom flatten code
+            6. Add the newly created element to the flat circuit
+        Returns a list of flat circuit elements.
+        """
+        if circuit is None:
+            # This is top level circuit
+            self.hierarchyDelimiter = ""
+            self.buildHierarchyName() # Build full hierarchical name
+            upperLevelParamDict = Symdict({})
+            upperLevelFnDict = Symdict({})
+            flatCircuit = Symsubcircuit(self.name + "_flat", self.getNodes(), self.parameters, self.functions, {})
+            isTop = True
+        else:
+            self.hierarchyDelimiter = circuit.getHierarchyDelimiter() # Get the hierarchy delimiter from circuit
+            self.buildHierarchyName(circuit) # Build full hierarchical name
+            upperLevelParamDict = circuit.getParameterDict()
+            upperLevelFnDict = circuit.getFunctionDict()
+            flatCircuit = []
+            isTop = False
+        
+        paramDict = Symdict(upperLevelParamDict, localDict = self.getParameterDict())
+        fnDict = Symdict(upperLevelFnDict, localDict = self.getFunctionDict())
+        
+        parameterEvaluator = Symparam(paramDict, fnDict)
+        
+        for element in  self.getElements():
+            if isinstance(element, Symsubcircuit):
+                # Another subcircuit. Flatten it into this one
+                flat = element.flatten(self)
+                for elem in flat:
+                    elem.flatten(self)
+                    if isTop:
+                        flatCircuit.addElement( elem )
+                    else:
+                        flatCircuit.append( elem )
+            else:
+                hierPath = self.getHierarchyName() + self.getHierarchyDelimiter()
+                newElement = deepcopy(element)
+                newElement.name =  hierPath + newElement.name
+                newNodeNames = []
+                for i in range(0,len(newElement.getNodes())):
+                    node = newElement.getNodes()[i]
+                    if node in self.getTerminals():
+                        terminalIndex = self.getTerminals().index(node)
+                        pinName = self.nodes[terminalIndex]
+                        if circuit is not None:
+                            upperLevelPath = circuit.getHierarchyName()
+                        else:
+                            upperLevelPath = ""
+                        if upperLevelPath != "":
+                            pinName = upperLevelPath + self.getHierarchyDelimiter() + pinName
+                        node = pinName
+                    else:
+                        node = hierPath + node
+                    newNodeNames.append(node)
+                newElement.putNodes(tuple(newNodeNames))
+                newElement.setParameterEvaluator(parameterEvaluator)
+                newElement.evaluateInstanceParameters()
+                newElement.flatten(self)
+                if isTop:
+                    flatCircuit.addElement( newElement )
+                else:
+                    flatCircuit.append( newElement )
+        return flatCircuit
+
+    def buildHierarchyName(self, circuit = None):
+        """
+        Build hierarchical name
+        """
+        hierarchyDelimiter = self.getHierarchyDelimiter()
+        if circuit is None:
+            self.hierarchyName = ""
+        else:
+            self.hierarchyName = circuit.getHierarchyName() + hierarchyDelimiter + self.name            
+                
+    def getHierarchyName(self):
+        """
+        Returns a full hierarchical name
+        """
+        return self.hierarchyName
+        
+    def getHierarchyDelimiter(self):
+        """
+        Returns a hierarchy delimiter obtained from upper level circuit.
+        """
+        return self.hierarchyDelimiter
+
+    #************************
+    # Subcircuit functions
+    #************************
+
+    def getFunction(self, fnName):
+        if fnName in self.functions:
+            return self.functions[fnName]
+        else:
+            raise ValueError("Function "+fnName+" does not exist")
+    
+    def addFunction(self, fnName, fn):
+        if fnName in self.functions:
+            raise ValueError("Function "+fnName+" already exists")
+        self.functions.update( {fnName : fn} )
+        
+    def getFunctionDict(self):
+        return self.functions         
+
+    def setFunctionDict(self, fnDict):
+        self.functions = fnDict
+
+    #************************
+    # Subcircuit parameters
+    #************************
+
+    def getParameter(self, paramName):
+        if paramName in self.parameters:
+            return self.parameters[paramName]
+        else:
+            raise ValueError("Parameter "+paramName+" does not exist")
+
+    def addParameter(self, paramName, paramValue):
+        if paramName in self.parameters:
+            raise ValueError("Parameter "+paramName+" already exists")
+        self.parameters.update( {paramName : paramValue} )
+
+    def getParameterDict(self):
+        return self.parameters            
+
+    def setParameterDict(self, parameterDict):
+        self.parameters = parameterDict
+
+    #************************
+    # Info methods
+    #************************
+
+    @classmethod
+    def info(cls):
+        ret =  "Subcircuit name : " + cls.getClassName() + "\n"
+        ret += "Pins            : " + " ".join(cls.getTerminals()) + "\n"
+        ret += "Default params  : " + str(cls.getDefaultParameters().__repr__()) + "\n"
+        ret += "Elements        : \n"
+        for elem in cls.getElements():
+            ret += textwrap.indent(str(elem), '\t') + "\n"
+        return ret
+
+    def __str__(self):
+        terminals = self.getTerminals()
+        nodes = self.getNodes()
+        ret =  "Subcircuit      : " + self.getClassName() + "\n"
+        ret += "Instance name   : " + self.name + "\n"
+        ret += "Pins            : " + " ".join(terminals) + "\n"
+        ret += "Connectivity    : " + " ".join(f"{t}->{n}" for t, n in zip(terminals, nodes)) + "\n"
+        ret += "Parameters      : " + str(self.parameters.__repr__()) + "\n"
+        ret += "Elements        : \n"
+        for elem in self.getElements():
+            ret += textwrap.indent(str(elem), '\t') + "\n"
+        return ret
+    
+    @classmethod
+    def netlist_SPICE(cls):
+        res = ".subckt " + cls.subCktClassName + " "
+        res += " ".join(cls.subCktTerminals)
+        params = cls.getDefaultParameters()
+        fns = cls.getDefaultFunctions()
+
+        paramDict = Symdict({}, localDict = params)
+        fnDict = Symdict({}, localDict = fns)
+        parameterEvaluator = Symparam(paramDict, fnDict)
+
+        for param in params.keys():
+            paramVal = parameterEvaluator.substitute(params[param])
+            res += " " + param + "=" + str(paramVal)
+        res += "\n"
+        for elem in cls.getElements():
+            if isinstance(elem, Symsubcircuit):
+                res += elem.to_SPICE(True)
+            else:
+                res += elem.to_SPICE()
+        res += ".ends\n"
+        return res
+
+    #************************
+    # SPICE conversion
+    #************************
+
+    def to_SPICE(self, netlistInstance = True):
+        # If netlistInstance = True, only instantiate the subcircuit,
+        # otherwise print the subcircuit definition
+        if netlistInstance:
+            res = "X" + self.name + " "
+            res += " ".join(self.nodes) + " "
+            res += self.subCktClassName + " "
+            params = self.getParameterDict()
+            for param in params.keys():
+                res += " " + param + "=" + str(params[param])
+            res += "\n"
+        else:
+            res = self.netlist_SPICE()
+        return res
