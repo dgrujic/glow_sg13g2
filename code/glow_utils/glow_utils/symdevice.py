@@ -96,6 +96,14 @@ class Symdevice(object):
         """
         pass
 
+    def evalInternalFns(self, expr):
+        """
+        Perform symbolic substitution of device internal functions
+        """
+        parameterEvaluator = Symparam(self.parameters, self.functions)
+        subsExpr = parameterEvaluator.substitute(expr, allowSymbols=True)
+        return subsExpr
+
     def getNodes(self):
         """
         Return the component's nodes.
@@ -163,15 +171,10 @@ class Symdevice(object):
         return "Symdevice base class"
         
     def __str__(self):
-        res = "Circuit element : "+type(self).__name__ + ", device type : " + self.getDeviceType() + "\n"
-        res += "Instance name : "+ self.name + "\n"
-        res += "Nodes = ["
-        for node in self.nodes:
-            res += node + " "
-        res = res[:-1]
-        res += "]\n"
-        res += "Parameters :\n"
-        for paramName in self.parameters:
-            paramValue = self.parameters[paramName]
-            res += "\t"+paramName+" = "+str(paramValue)+"\n"
+        res =  "Circuit element : " +type(self).__name__ + "\n"
+        res += "Device type     : " + self.getDeviceType() + "\n"
+        res += "Instance name   : " + self.name + "\n"
+        res += "Nodes           : " + " ".join(self.nodes) + "\n"
+        res += "Parameters      : " + self.parameters.__repr__()
+        res += "\n"
         return res

@@ -56,9 +56,10 @@ class SymMOSFET(Symdevice):
         res += " ".join(self.getNodes()) + " "
         res += self.getModelName() + " "
 
-        for param in ['m', 'w', 'l', 'ad', 'as', 'pd', 'ps', 'nrd', 'nrs']:
+        for param in ['m', 'w', 'l', 'ad', 'as', 'pd', 'ps', 'nrd', 'nrs', 'ng']:
             if self.hasParameter(param):
-                res += param + "=" + str(self.parameters.get(param)) + " "
+                paramVal = self.evalInternalFns(self.parameters.get(param))
+                res += param + "=" + str(paramVal) + " "
         res += "\n"
         return res
 

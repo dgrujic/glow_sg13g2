@@ -33,7 +33,7 @@ class Symparam:
        """
        Subclass to walk the nodes of AST expression and perform variable expansion.
        """
-       def __init__(self, paramDict, fnDict, fullExpansion=True):
+       def __init__(self, paramDict, fnDict, fullExpansion=True, allowSymbols=False):
             """
             Initialize parameter dictionary
             If fullExpansion is False, the variable expansion is performed up to the last symbol,
@@ -42,6 +42,7 @@ class Symparam:
             self.paramDict = paramDict
             self.fnDict = fnDict
             self.fullExpansion = fullExpansion
+            self.allowSymbols = allowSymbols
                       
        def visit_Name(self, node):
             """
@@ -54,7 +55,10 @@ class Symparam:
                 if callable(parExpr):                  # Check if current node is a function
                     return node                        # This node is a function, do not try to expand it
                 else:
-                    raise ValueError("Unknown symbol: "+str(node.id))
+                    if not self.allowSymbols:
+                        raise ValueError("Unknown symbol: "+str(node.id))
+                    else:
+                        return node
             # Add exception handling
             parExprParsed = ast.parse(str(parExpr), mode='eval')  # Parse parameter expression
             #if not(isinstance(parExprParsed.body, _ast.Num) and not self.fullExpansion):
@@ -69,7 +73,7 @@ class Symparam:
         """
         Print AST tree to string representation
         """
-        code = self.astToCode(astTree)
+        code = self.astToCode(astTree, self.paramDict, self.fnDict)
         return code.exprString
 
     class astToCode(ast.NodeVisitor):
@@ -112,7 +116,7 @@ class Symparam:
                     _ast.Not    : 'not'
                   }
 
-        def __init__(self, astTree):
+        def __init__(self, astTree, paramDict = {}, fnDict = {}):
             """
             astToCode constructor.
             Traverses the AST tree and constructs the string expression in exprString.
@@ -120,6 +124,8 @@ class Symparam:
             """
             self.astTree = astTree  # AST tree to traverse
             self.exprString = ""    # Expression string
+            self.paramDict = paramDict
+            self.fnDict = fnDict    # Function dictionary
             self.visit(astTree)     # Start the AST tree traversing. Nodes emit the string expression to expString
             
         def visit_Expression(self, node):
@@ -134,7 +140,7 @@ class Symparam:
         def visit_Num(self, node):
             num = node.n
             if num<0:
-                numStr = '('+repr(num)+')'  # power operator has precedce, so (-x)**y yields correct result
+                numStr = '('+repr(num)+')'  # power operator has precede, so (-x)**y yields correct result
             else:
                 numStr = repr(num)
             self.exprString += numStr
@@ -155,6 +161,12 @@ class Symparam:
             self.exprString += ')'
 
         def visit_Call(self, node):
+            fnName = node.func.id
+            # Save current expression string
+            tmpExpString = self.exprString
+            # Reset expression string so that only function call is produced
+            self.exprString = ""
+
             self.visit(node.func)
             self.exprString += '('
             i = 0
@@ -171,13 +183,14 @@ class Symparam:
                 self.exprString += '='
                 self.visit(keyword.value)
                 i += 1
-            if node.starargs:
-                self.exprString += ', *'
-                self.visit(starargs)
-            if node.kwargs:
-                self.exprString += ', **'
-                self.visit(kwargs)
             self.exprString += ')'
+
+            if fnName in self.fnDict:
+                # Evaluate function
+                val = '(' + eval(self.exprString, self.paramDict, self.fnDict) + ')'
+                self.exprString = tmpExpString + val
+            else:
+                self.exprString = tmpExpString + self.exprString
         
         def generic_visit(self, node):  # Catch the undefined node types
             raise ValueError("Node type "+str(node.__class__)+" not implemented")
@@ -190,10 +203,11 @@ class Symparam:
         self.paramDict = paramDict
         self.fnDict = fnDict
         
-    def substitute(self, paramExpr, instanceFns = {}):
+    def substitute(self, paramExpr, instanceFns = {}, allowSymbols = False):
         """
         Perform symbolic substitution of variables.
-        The result is a string expression where all symbols evaluate to numbers.
+        The result is a string expression where all symbols evaluate to numbers if allowSymbols = False.
+        If allowSymbols = True, parameters that are undefined are left as-is.
         Argument instanceFns is per-instance function dictionary
         """
         if isinstance(paramExpr, float):
@@ -203,8 +217,11 @@ class Symparam:
             return paramExpr
         
         parsedExpr = ast.parse(paramExpr, mode='eval')
-        expr = self.variableExpander(self.paramDict, ChainMap(self.fnDict, instanceFns), fullExpansion=False).visit(parsedExpr)
-        return self.printAstExpression(expr)
+        expr = self.variableExpander(self.paramDict, ChainMap(self.fnDict, instanceFns), fullExpansion=False, allowSymbols=allowSymbols).visit(parsedExpr)
+        #return self.printAstExpression(expr)
+        expr = self.printAstExpression(expr)
+        # ast is used to remove unnecessary parantheses
+        return ast.unparse(ast.parse(expr)).replace(" ", "")
 
     def evaluate(self, paramExpr, instanceFns = {}):
         """

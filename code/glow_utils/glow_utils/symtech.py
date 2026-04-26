@@ -23,14 +23,14 @@ class SymTech:
         "processName" : "sg13g2",
         "nmosModelName" : "sg13g2_lvnmos",
         "pmosModelName" : "sg13g2_lvpmos",
-        "nmosAS" : "ipar('w') * 310e-9",
-        "nmosAD" : "ipar('w') * 310e-9",
-        "nmosPS" : "2 * (ipar('w') + 310e-9)",
-        "nmosPD" : "2 * (ipar('w') + 310e-9)",
-        "pmosAS" : "ipar('w') * 310e-9",
-        "pmosAD" : "ipar('w') * 310e-9",
-        "pmosPS" : "2 * (ipar('w') + 310e-9)",
-        "pmosPD" : "2 * (ipar('w') + 310e-9)"        
+        "nmosAS" : "ipar('w')*310e-9",
+        "nmosAD" : "ipar('w')*310e-9",
+        "nmosPS" : "2*(ipar('w')+310e-9)",
+        "nmosPD" : "2*(ipar('w')+310e-9)",
+        "pmosAS" : "ipar('w')*310e-9",
+        "pmosAD" : "ipar('w')*310e-9",
+        "pmosPS" : "2*(ipar('w')+310e-9)",
+        "pmosPD" : "2*(ipar('w')+310e-9)"        
     }
     processName = technology["processName"]
     nmosModelName = technology["nmosModelName"]
