@@ -18,6 +18,7 @@
 
 from glow_utils.symparam import Symparam
 from glow_utils.symdict import Symdict
+from collections import ChainMap
 
 #///////////////////////////////////////////////////////////////////////////////////////
 # Circuit element base class
@@ -83,10 +84,11 @@ class Symdevice(object):
         Function to evaluate the instance parameters.
         The parameters are evaluated and inserted into instance dictionary.
         """
-        for paramName in self.parameters:
+        for paramName in list(self.parameters.keys()):
             if self.isParameterEvaluated(paramName):
                 paramExpr = self.parameters[paramName]
-                paramValue = self.parameterEvaluator.evaluate(paramExpr, instanceFns = self.functions)
+                iparamExpr = self.evalInternalFns(paramExpr)
+                paramValue = str(self.parameterEvaluator.evaluate(iparamExpr, instanceFns = self.functions))
                 self.parameters.update( {paramName : paramValue} )
         self.evaluateInstanceParametersCustom()
 
@@ -100,9 +102,12 @@ class Symdevice(object):
         """
         Perform symbolic substitution of device internal functions
         """
-        parameterEvaluator = Symparam(self.parameters, self.functions)
+        parameterEvaluator = Symparam(self.parameters, ChainMap(self.functions, {"ppar" : self.ppar_pass}))
         subsExpr = parameterEvaluator.substitute(expr, allowSymbols=True)
         return subsExpr
+
+    def ppar_pass(self, expr):
+        return expr
 
     def getNodes(self):
         """

@@ -25,6 +25,7 @@ Generated classes can be instantiated hiearchicaly to build complex circuits.
 """
 
 from copy import deepcopy
+from copy import copy
 import textwrap
 from glow_utils.symdict import Symdict
 from glow_utils.symparam import Symparam
@@ -37,12 +38,12 @@ class Symsubcircuit(object):
     The main idea is to create a new class for each subcircuit.
 
     For example, an inverter subcircuit class named 'inv_par' with terminals 
-    'A', 'Y', 'VDD' and 'VSS' and default parameter values w = 300e-9, l = 130e-9
+    'A', 'Y', 'VDD' and 'VSS' and default parameter values WN = 200e-9, WP = 400e-9 and L = 130e-9
     can be created as:
     
     inv_par_cls = subcircuit( 'inv_par', ('A', 'Y', 'VDD', 'VSS'), {'WN':200e-9, 'WP':400e-9, 'L':130e-9} )
     
-    The created subcircuit class, stored in cls_inv_par, can be populated with circuit elements or other subcircuits.
+    The created subcircuit class, stored in inv_par_cls, can be populated with circuit elements or other subcircuits.
 
     Continuing the inverter example, transistors can be added to subcircuit as:
     n0 = SymNMOS('N0', ['Y', 'A', 'VSS', 'VSS'], {'w':'WN'}, {'l':'L'})
@@ -62,6 +63,34 @@ class Symsubcircuit(object):
     
     subckt_cls.addElement( inv_par_inst )
  
+    Function ipar can be used to fetch the value of instance parameter, 
+    and ipar('parameter_name') evaluates to the value of instance parameter 'parameter_name'.
+    For example, NMOS instance with parameters
+    {'w': 'WN', 'l': 'L', 
+     'as': "ipar('w')*310e-9", 'ad': "ipar('w')*310e-9", 
+     'ps': "2*(ipar('w')+310e-9)", 'pd': "2*(ipar('w')+310e-9)"}
+    uses ipar function in expressions for as, ad, ps and pd.
+    In this example, ipar('w') evaluates to the value of instance parameter 'w', so ipar('w') = 'WN'.
+    Symbolic value 'WN' can further be evaluated to other expressions or a number, depending on the
+    upper level subcircuit parameters.
+
+    Function ppar can be used to fetch the value of instance parrent, which is usually a subcircuit.
+    For example, a CMOS inverter
+
+    inv_par = Symsubcircuit("inv_par", ['A', 'Y', 'VDD', 'VSS'], {'WN' : 300e-9, 'WP' : 450e-9, 'L' : 130e-9, 'NGN' : 1, 'NGP' : 1})
+    n = SymNMOS("N0", ['Y', 'A', 'VSS', 'VSS'], {'w' : 'ppar("WN")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGN")'})
+    p = SymPMOS("P0", ['Y', 'A', 'VDD', 'VDD'], {'w' : 'ppar("WP")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGP")'})
+    inv_par.addElement([n, p])
+
+    uses ppar to evaluate the value of 'WN', 'L' and 'NGN' for a given subcircuit instance.
+    Continuing the example with two instances of inv_par that have different values of parameters:
+    inv1 = inv_par("inv1", ['A', 'net1', 'VDD', 'VSS'], {'WN' : '1e-6', 'WP' : '2e-6', 'NGN' : 2, 'NGP' : 2, 'L' : 130e-9})
+    inv2 = inv_par("inv2", ['net1', 'Y', 'VDD', 'VSS'], {'WN' : '1.5e-6', 'WP' : '3e-6', 'NGN' : 4, 'NGP' : 4, 'L' : 130e-9})
+    we have that ppar evaluates to different values in different instances:
+    inv1:  ppar("WN") = 1e-6
+    inv2:  ppar("WN") = 2e-6
+    Use of ppar enables creation of parametrized hierarchical circuits.
+
     """
 
     #
@@ -151,8 +180,13 @@ class Symsubcircuit(object):
         self.name = instName
         self.nodes = instNodes
         self.parameters = Symdict(self.getDefaultParameters(), localDict=instParams)
-        self.functions = Symdict(self.getDefaultFunctions(), localDict=instFns)
-        
+        localFns = {"ppar" : self.ppar}
+        localFns.update(instFns)
+        self.functions = Symdict(self.getDefaultFunctions(), localDict=localFns)
+
+    def ppar(self, name):
+        return self.parameters[name]
+
     def getName(self):
         return self.name
         
@@ -186,9 +220,12 @@ class Symsubcircuit(object):
             upperLevelFnDict = circuit.getFunctionDict()
             flatCircuit = []
             isTop = False
-        
-        paramDict = Symdict(upperLevelParamDict, localDict = self.getParameterDict())
+
+        paramDict = Symdict(upperLevelParamDict, localDict = copy(self.getParameterDict()))
+        pparEvaluator = Symparam(paramDict, upperLevelFnDict)
+        pparEvaluator.substitute(paramDict)
         fnDict = Symdict(upperLevelFnDict, localDict = self.getFunctionDict())
+        
         
         parameterEvaluator = Symparam(paramDict, fnDict)
         
@@ -203,6 +240,7 @@ class Symsubcircuit(object):
                     else:
                         flatCircuit.append( elem )
             else:
+                # Circuit element
                 hierPath = self.getHierarchyName() + self.getHierarchyDelimiter()
                 newElement = deepcopy(element)
                 newElement.name =  hierPath + newElement.name
@@ -331,7 +369,7 @@ class Symsubcircuit(object):
         fns = cls.getDefaultFunctions()
 
         paramDict = Symdict({}, localDict = params)
-        fnDict = Symdict({}, localDict = fns)
+        fnDict = Symdict({"ppar" : lambda x:x}, localDict = fns)
         parameterEvaluator = Symparam(paramDict, fnDict)
 
         for param in params.keys():
@@ -340,7 +378,7 @@ class Symsubcircuit(object):
         res += "\n"
         for elem in cls.getElements():
             if isinstance(elem, Symsubcircuit):
-                res += elem.to_SPICE(True)
+                res += elem.to_SPICE(True, parameterEvaluator)
             else:
                 res += elem.to_SPICE()
         res += ".ends\n"
@@ -350,7 +388,7 @@ class Symsubcircuit(object):
     # SPICE conversion
     #************************
 
-    def to_SPICE(self, netlistInstance = True):
+    def to_SPICE(self, netlistInstance = True, parameterEvaluator = None):
         # If netlistInstance = True, only instantiate the subcircuit,
         # otherwise print the subcircuit definition
         if netlistInstance:
@@ -359,7 +397,10 @@ class Symsubcircuit(object):
             res += self.subCktClassName + " "
             params = self.getParameterDict()
             for param in params.keys():
-                res += " " + param + "=" + str(params[param])
+                if parameterEvaluator is None:
+                    res += " " + param + "=" + str(params[param])
+                else:
+                    res += " " + param + "=" + str(parameterEvaluator.substitute(params[param]))
             res += "\n"
         else:
             res = self.netlist_SPICE()

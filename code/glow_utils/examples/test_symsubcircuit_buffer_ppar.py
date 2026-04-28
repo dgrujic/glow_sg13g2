@@ -11,8 +11,8 @@ inv_par.addElement([n, p])
 
 buff_par = Symsubcircuit("buff_par", ['A', 'Y', 'VDD', 'VSS', ], {'WN' : 1e-6, 'WP' : 2e-6, 'NGN' : 2, 'NGP' : 2})
 
-inv1 = inv_par("inv1", ['A', 'net1', 'VDD', 'VSS'], {'WN' : 1e-6, 'WP' : 1.5e-6, 'NGN' : 2, 'NGP' : 2, 'L' : 130e-9})
-inv2 = inv_par("inv2", ['net1', 'Y', 'VDD', 'VSS'], {'WN' : 2e-6, 'WP' : 3e-6, 'NGN' : 4, 'NGP' : 4, 'L' : 130e-9})
+inv1 = inv_par("inv1", ['A', 'net1', 'VDD', 'VSS'], {'WN' : '1.5*ppar("WN")', 'WP' : '1.75*ppar("WP")', 'NGN' : 2, 'NGP' : 2, 'L' : 130e-9})
+inv2 = inv_par("inv2", ['net1', 'Y', 'VDD', 'VSS'], {'WN' : '2*ppar("WN")', 'WP' : '2*ppar("WP")', 'NGN' : 4, 'NGP' : 4, 'L' : 130e-9})
 
 buff_par.addElement([inv1, inv2])
 

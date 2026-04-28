@@ -184,11 +184,13 @@ class Symparam:
                 self.visit(keyword.value)
                 i += 1
             self.exprString += ')'
-
+            
             if fnName in self.fnDict:
                 # Evaluate function
-                val = '(' + eval(self.exprString, self.paramDict, self.fnDict) + ')'
-                self.exprString = tmpExpString + val
+                val = '(' + str(eval(self.exprString, {}, ChainMap(self.paramDict, self.fnDict))) + ')'
+                self.exprString = tmpExpString #+ val
+                parExprParsed = ast.parse(str(val), mode='eval')  # Parse parameter expression
+                self.visit(parExprParsed) # Recursively evaluate parameters
             else:
                 self.exprString = tmpExpString + self.exprString
         
@@ -210,18 +212,26 @@ class Symparam:
         If allowSymbols = True, parameters that are undefined are left as-is.
         Argument instanceFns is per-instance function dictionary
         """
-        if isinstance(paramExpr, float):
-            return paramExpr
-        
-        if isinstance(paramExpr, int):
-            return paramExpr
-        
-        parsedExpr = ast.parse(paramExpr, mode='eval')
-        expr = self.variableExpander(self.paramDict, ChainMap(self.fnDict, instanceFns), fullExpansion=False, allowSymbols=allowSymbols).visit(parsedExpr)
-        #return self.printAstExpression(expr)
-        expr = self.printAstExpression(expr)
-        # ast is used to remove unnecessary parantheses
-        return ast.unparse(ast.parse(expr)).replace(" ", "")
+
+        if isinstance(paramExpr, dict):
+            keys = list(paramExpr.keys())
+            for key in keys:
+                val = self.substitute(paramExpr[key], instanceFns, allowSymbols)
+                paramExpr.update({key : val})
+        else:
+            if isinstance(paramExpr, float):
+                return paramExpr
+            
+            if isinstance(paramExpr, int):
+                return paramExpr
+            
+            parsedExpr = ast.parse(paramExpr, mode='eval')
+            chainFns = ChainMap(self.fnDict, instanceFns)
+            expr = self.variableExpander(self.paramDict, chainFns, fullExpansion=False, allowSymbols=allowSymbols).visit(parsedExpr)
+            expr = self.printAstExpression(expr)
+            # ast is used to remove unnecessary parantheses
+            ret = ast.unparse(ast.parse(expr)).replace(" ", "")
+            return ret 
 
     def evaluate(self, paramExpr, instanceFns = {}):
         """
@@ -234,7 +244,6 @@ class Symparam:
         
         if isinstance(paramExpr, int):
             return paramExpr
-        
         parsedExpr = ast.parse(paramExpr, mode='eval')
         expr = self.variableExpander(self.paramDict, ChainMap(self.fnDict, instanceFns)).visit(parsedExpr)
         code = compile(expr, 'temp', 'eval')
