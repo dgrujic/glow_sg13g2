@@ -17,3 +17,5 @@ from .symdict import *
 from .symmosfet import *
 from .symparam import *
 from .symtech import *
+from .symsubcircuit import *
+from .symcheck import *

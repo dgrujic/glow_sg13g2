@@ -211,7 +211,7 @@ class Symsubcircuit(object):
             self.buildHierarchyName() # Build full hierarchical name
             upperLevelParamDict = Symdict({})
             upperLevelFnDict = Symdict({})
-            flatCircuit = Symsubcircuit(self.name + "_flat", self.getNodes(), self.parameters, self.functions, {})
+            flatCircuit = Symsubcircuit(self.name + "_flat", self.getTerminals(), self.parameters, self.functions, {})
             isTop = True
         else:
             self.hierarchyDelimiter = circuit.getHierarchyDelimiter() # Get the hierarchy delimiter from circuit
@@ -384,6 +384,30 @@ class Symsubcircuit(object):
         res += ".ends\n"
         return res
 
+    @classmethod
+    def netlist_CDL(cls, printParams=False):
+        res = ".SUBCKT " + cls.subCktClassName + " "
+        res += " ".join(cls.subCktTerminals)
+        params = cls.getDefaultParameters()
+        fns = cls.getDefaultFunctions()
+
+        paramDict = Symdict({}, localDict = params)
+        fnDict = Symdict({"ppar" : lambda x:x}, localDict = fns)
+        parameterEvaluator = Symparam(paramDict, fnDict)
+
+        for param in params.keys():
+            if printParams:
+                paramVal = parameterEvaluator.substitute(params[param])
+            res += " " + param + "=" + str(paramVal)
+        res += "\n"
+        for elem in cls.getElements():
+            if isinstance(elem, Symsubcircuit):
+                res += elem.to_CDL(True, parameterEvaluator)
+            else:
+                res += elem.to_CDL()
+        res += ".ends\n"
+        return res
+
     #************************
     # SPICE conversion
     #************************
@@ -405,3 +429,9 @@ class Symsubcircuit(object):
         else:
             res = self.netlist_SPICE()
         return res
+
+    #************************
+    # CDL conversion
+    #************************
+    def to_CDL(self, netlistInstance = True, parameterEvaluator = None):
+        raise ValueError("Hierarchical CDL netlisting is not supported. Use SPICE for hiearchical circuits.")

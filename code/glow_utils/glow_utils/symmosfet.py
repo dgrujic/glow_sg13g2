@@ -24,6 +24,10 @@ from glow_utils.symtech import SymTech
 #
 
 class SymMOSFET(Symdevice):
+    # Device terminal names
+    terminals = ['D', 'G', 'S', 'B']
+    terminalNumbers = {name: index for index, name in enumerate(terminals)}
+
     def initInstance(self):
         # Custom device initialization code
         # Check if w and l are given
@@ -56,6 +60,18 @@ class SymMOSFET(Symdevice):
         res += " ".join(self.getNodes()) + " "
         res += self.getModelName() + " "
         for param in ['m', 'w', 'l', 'ad', 'as', 'pd', 'ps', 'nrd', 'nrs', 'ng']:
+            if self.hasParameter(param):
+                paramVal = self.evalInternalFns(self.parameters.get(param))
+                res += param + "=" + str(paramVal) + " "
+        res += "\n"
+        return res
+
+    def to_CDL(self):
+        # Return string for CDL netlist
+        res = "M" + self.getName() + " "
+        res += " ".join(self.getNodes()) + " "
+        res += self.getModelName() + " "
+        for param in ['m', 'w', 'l', 'ng']:
             if self.hasParameter(param):
                 paramVal = self.evalInternalFns(self.parameters.get(param))
                 res += param + "=" + str(paramVal) + " "

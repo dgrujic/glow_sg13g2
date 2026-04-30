@@ -30,6 +30,8 @@ class Symdevice(object):
     """
     deviceType = "unspecified"
     modelName = "symdevice"
+    terminals = []
+    terminalNumbers = {name: index for index, name in enumerate(terminals)}
 
     def __init__(self, name, nodes, parameters):
         """
@@ -108,6 +110,28 @@ class Symdevice(object):
 
     def ppar_pass(self, expr):
         return expr
+
+    @classmethod
+    def getTerminals(cls):
+        """
+        Returns device terminal names
+        """
+        return cls.terminals
+    
+    @classmethod
+    def getTerminalNumber(cls, name):
+        """
+        Returns device terminal number
+        """
+        return cls.terminalNumbers[name]
+
+    @classmethod
+    def getTerminalName(cls, num):
+        """
+        Returns device terminal number
+        """
+        return cls.terminals[num]
+
 
     def getNodes(self):
         """
