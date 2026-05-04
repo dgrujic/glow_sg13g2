@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Standard cell design - GLOW Workflow</title>
+        <title>GLOW Utilities - GLOW Workflow</title>
 
 
         <!-- Custom HTML head -->
@@ -174,19 +174,95 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="standard-cell-design"><a class="header" href="#standard-cell-design">Standard cell design</a></h1>
+                        <h1 id="glow-utilities"><a class="header" href="#glow-utilities">GLOW Utilities</a></h1>
+<p>Python package <code>glow_utils</code> provides utility functions used for design of digital standard cell library.
+Package can be installed with</p>
+<pre><code class="language-sh">pip install .
+</code></pre>
+<p>For development it is convenient to link the Python files to the package installation as</p>
+<pre><code class="language-sh">pip install -e .
+</code></pre>
+<p>so that changes in Python files are immediately available without the need to reinstall the package.</p>
+<h2 id="quick-start"><a class="header" href="#quick-start">Quick start</a></h2>
+<p>GLOW utilities are designed to aid the development of circuits, specifically digital standard cells. They provide a programmatic way for development of parametrized hierarchical circuits, performing various checks, transformations and exporting to SPICE or CDL netlists.</p>
+<p>Minium example of parametrized CMOS inverter is</p>
+<pre><code class="language-Python">from glow_utils.symsubcircuit import Symsubcircuit
+from glow_utils.symmosfet import SymNMOS, SymPMOS
+
+inv_par = Symsubcircuit("inv_par", ['A', 'Y', 'VDD', 'VSS'], {'WN' : 300e-9, 'WP' : 450e-9, 'L' : 130e-9, 'NGN' : 1, 'NGP' : 1})
+n = SymNMOS("N0", ['Y', 'A', 'VSS', 'VSS'], {'w' : 'ppar("WN")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGN")'})
+p = SymPMOS("P0", ['Y', 'A', 'VDD', 'VDD'], {'w' : 'ppar("WP")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGP")'})
+inv_par.addElement([n, p])
+print(inv_par.netlist_SPICE())
+</code></pre>
+<p>The output of this Python code is</p>
+<pre><code class="language-spice">.subckt inv_par A Y VDD VSS WN=3e-07 WP=4.5e-07 L=1.3e-07 NGN=1 NGP=1
+MN0 Y A VSS VSS sg13g2_lvnmos w=WN l=L ad=WN*3.1e-07 as=WN*3.1e-07 pd=2*(WN+3.1e-07) ps=2*(WN+3.1e-07) ng=NGN 
+MP0 Y A VDD VDD sg13g2_lvpmos w=WP l=L ad=WP*3.1e-07 as=WP*3.1e-07 pd=2*(WP+3.1e-07) ps=2*(WP+3.1e-07) ng=NGP 
+.ends
+</code></pre>
+<p>A simple CMOS inverter testbench can be made by creating an instance of the inverter and defining transistor models - in this case a dummy <code>LEVEL 1</code> MOSFET model.</p>
+<pre><code class="language-spice">X1 in out vdd 0 inv_par
+.model sg13g2_lvnmos NMOS (LEVEL=1 VTO=0.3 KP=50u)
+.model sg13g2_lvpmos PMOS (LEVEL=1 VTO=-0.3 KP=20u)
+</code></pre>
+<p>What is left is to define voltage sources and simulations</p>
+<pre><code class="language-spice">Vdd vdd 0 1.2
+Vin in 0 PULSE(0 1.2 0 1n 1n 10n 20n)
+Cl out 0 10f
+.tran 0.1n 100n
+.control
+run
+plot v(in) v(out)
+.endc
+.end
+</code></pre>
+<p>Saving the file as <code>tb_inv.cir</code> and running a simulation with</p>
+<pre><code class="language-sh">ngspice tb_inv.cir
+</code></pre>
+<p>results in an error</p>
+<pre><code class="language-sh">  unknown parameter (ng) 
+    Simulation interrupted due to error!
+</code></pre>
+<p>This error is a consequence of a chosen inadequate MOSFET model that does not support parameter <code>ng</code>, that is supported by target technology. Netlist can be corrected by deleting the extra parameter, and the whole corrected netlist is given in the listing below:</p>
+<pre><code class="language-spice">* CMOS Inverter Testbench
+.subckt inv_par A Y VDD VSS WN=3e-07 WP=4.5e-07 L=1.3e-07
+MN0 Y A VSS VSS sg13g2_lvnmos w=WN l=L ad=WN*3.1e-07 as=WN*3.1e-07 pd=2*(WN+3.1e-07) ps=2*(WN+3.1e-07)
+MP0 Y A VDD VDD sg13g2_lvpmos w=WP l=L ad=WP*3.1e-07 as=WP*3.1e-07 pd=2*(WP+3.1e-07) ps=2*(WP+3.1e-07)
+.ends
+
+X1 in out vdd 0 inv_par
+.model sg13g2_lvnmos NMOS (LEVEL=1 VTO=0.3 KP=50u)
+.model sg13g2_lvpmos PMOS (LEVEL=1 VTO=-0.3 KP=20u)
+Vdd vdd 0 1.2
+Vin in 0 PULSE(0 1.2 0 1n 1n 10n 20n)
+Cl out 0 10f
+.tran 0.1n 100n
+.control
+run
+plot v(in) v(out)
+.endc
+.end
+</code></pre>
+<p>This time the simulation runs successfully and the input and output waveforms are displayed.</p>
+<p>This simple example shows how to use GLOW utils to design a CMOS inverter, but they can be used for much complex cases.</p>
+<h2 id="symtech-class"><a class="header" href="#symtech-class">Symtech class</a></h2>
+<h2 id="symdict-class"><a class="header" href="#symdict-class">Symdict class</a></h2>
+<h2 id="symparam-class"><a class="header" href="#symparam-class">Symparam class</a></h2>
+<h2 id="symdevice-class"><a class="header" href="#symdevice-class">Symdevice class</a></h2>
+<h3 id="symmosfet-class"><a class="header" href="#symmosfet-class">SymMOSFET class</a></h3>
+<h3 id="symnmos-and-sympmos"><a class="header" href="#symnmos-and-sympmos">SymNMOS and SymPMOS</a></h3>
+<h2 id="symsubcircuit-class"><a class="header" href="#symsubcircuit-class">Symsubcircuit class</a></h2>
+<h2 id="symcheck-class"><a class="header" href="#symcheck-class">Symcheck class</a></h2>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="digital_flow_overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="design_flow.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="design_flow.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -194,13 +270,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="digital_flow_overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="design_flow.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="design_flow.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
-                    </a>
             </nav>
 
         </div>
