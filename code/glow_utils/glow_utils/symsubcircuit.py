@@ -386,6 +386,7 @@ class Symsubcircuit(object):
 
     @classmethod
     def netlist_CDL(cls, printParams=False):
+        from glow_utils.symcheck import Symcheck
         res = ".SUBCKT " + cls.subCktClassName + " "
         res += " ".join(cls.subCktTerminals)
         params = cls.getDefaultParameters()
@@ -400,12 +401,25 @@ class Symsubcircuit(object):
                 paramVal = parameterEvaluator.substitute(params[param])
             res += " " + param + "=" + str(paramVal)
         res += "\n"
+        # Add pin info as comment
+        check = Symcheck(cls)
+        id = check.identifyTerminals()
+        inputs = id['I']
+        outputs = id['O']
+        pwr = id['P']
+        gnd = id['G']
+        res += "*.PININFO "
+        res += ":I ".join(inputs + [""])
+        res += ":O ".join(outputs + [""])
+        res += ":B ".join(pwr + [""])
+        res += ":B ".join(gnd + [""])
+        res += "\n"
         for elem in cls.getElements():
             if isinstance(elem, Symsubcircuit):
                 res += elem.to_CDL(True, parameterEvaluator)
             else:
                 res += elem.to_CDL()
-        res += ".ends\n"
+        res += ".ENDS\n"
         return res
 
     #************************
