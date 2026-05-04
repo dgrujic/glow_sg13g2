@@ -17,7 +17,7 @@ Work in progress...
 
 # Documentation 
 
-Work in progress...
+Work on project documentation is in progress, and can be accessed [here](https://dgrujic.github.io/glow_sg13g2/)
 
 # License
 

@@ -1,6 +1,6 @@
 # GLOW Utilities
 
-Python package glow_utils provides utility functions used for design of digital standard cell library.
+Python package `glow_utils` provides utility functions used for design of digital standard cell library.
 Package can be installed with
 ``` sh
 pip install .
@@ -85,6 +85,19 @@ This time the simulation runs successfully and the input and output waveforms ar
 
 This simple example shows how to use GLOW utils to design a CMOS inverter, but they can be used for much complex cases.
 
-Complete documentation can be found [here](https://dgrujic.github.io/glow_sg13g2/doc/workflow/glow_utils.html)
+## Symtech class
 
+## Symdict class
+
+## Symparam class
+
+## Symdevice class
+
+### SymMOSFET class
+
+### SymNMOS and SymPMOS
+
+## Symsubcircuit class
+
+## Symcheck class
 
