@@ -34,3 +34,13 @@ print(flat_buff1.netlist_SPICE())
 print("*"*40)
 print("CDL netlist")
 print(flat_buff1.netlist_CDL())
+
+
+print("Anonimize devices and nodes")
+flat_buff1.anonimize()
+print("*"*40)
+print("Anonimized SPICE netlist")
+print(flat_buff1.netlist_SPICE())
+print("*"*40)
+print("Anonimized CDL netlist")
+print(flat_buff1.netlist_CDL())

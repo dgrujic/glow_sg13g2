@@ -29,6 +29,7 @@ from copy import copy
 import textwrap
 from glow_utils.symdict import Symdict
 from glow_utils.symparam import Symparam
+from glow_utils.symdevice import Symdevice
 
 class Symsubcircuit(object):
     """
@@ -167,7 +168,60 @@ class Symsubcircuit(object):
            cls.subCktElements += newElement           
        else:
            cls.subCktElements += [newElement]
-           
+
+    @classmethod
+    def anonimize(cls, startIndex=0, netPrefix = "n"):
+        """
+        Anonimize renames instances and nodes to shorthen their names and
+        to strip hieararchy information.
+        For example, instances
+        Minv1N0 net1 A VSS VSS
+        Minv1P0 net1 A VDD VDD
+        Minv2N0 Y net1 VSS VSS
+        Minv2P0 Y net1 VDD VDD
+        contain hierarchy information in their names, and they could be renamed to
+        MN0 net1 A VSS VSS
+        MP0 net1 A VDD VDD
+        MN1 Y net1 VSS VSS
+        MP1 Y net1 VDD VDD
+        Similar reasoning could be applied to net names.
+        """
+        # Element counter is a dictionary that contains encountered Symdevices and their current count
+        elementCounter = {}
+        # Net translator is a dictionary that contains translation between original and short net names
+        netTranslator = {}
+        # Terminals are top level nets that should not be renamed
+        terminals = cls.getTerminals()
+        for elem in cls.subCktElements:
+            if not isinstance(elem, Symdevice):
+                raise ValueError("Anonimize works only with flat circuits.")
+            elemType = elem.deviceType
+            if elemType in elementCounter:
+                # Already encountered such element
+                n = elementCounter[elemType] + 1
+                elementCounter.update({elemType : n})
+            else:
+                # New element, add it to elementCounter
+                n = 0
+                elementCounter.update({elemType : startIndex})
+            newName = elem.modelPrefix + str(n)
+            elem.name = newName
+            elemNodes = elem.getNodes()
+            newNodes = []
+            for nodeName in elemNodes:
+                if nodeName in terminals:
+                    # Top level node, do not rename
+                    newNodes.append(nodeName)
+                else:
+                    # Not a top level node, rename it
+                    if nodeName not in netTranslator:
+                        n = len(netTranslator)
+                        newName = netPrefix + str(n)
+                        netTranslator.update( {nodeName : newName} )
+                        
+                    newNodes.append( netTranslator[nodeName] )
+            elem.nodes = newNodes
+
     #************************
     # Instance methods, for subcircuit instances
     #************************

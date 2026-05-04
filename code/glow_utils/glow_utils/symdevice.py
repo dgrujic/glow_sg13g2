@@ -30,6 +30,7 @@ class Symdevice(object):
     """
     deviceType = "unspecified"
     modelName = "symdevice"
+    modelPrefix = "unspecified"
     terminals = []
     terminalNumbers = {name: index for index, name in enumerate(terminals)}
 

@@ -84,6 +84,7 @@ class SymMOSFET(Symdevice):
 class SymNMOS(SymMOSFET, SymTech):
     modelName = SymTech.nmosModelName
     deviceType = "nmos"
+    modelPrefix = "N"
     def initInstance(self):
         # Call base class init
         super().initInstance()
@@ -104,6 +105,7 @@ class SymNMOS(SymMOSFET, SymTech):
 class SymPMOS(SymMOSFET, SymTech):
     modelName = SymTech.pmosModelName
     deviceType = "pmos"
+    modelPrefix = "P"
     def initInstance(self):
         # Call base class init
         super().initInstance()
