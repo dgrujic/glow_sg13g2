@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-fb6691cd.js";
+            window.path_to_searchindex_js = "searchindex-9d325793.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-c3b33635.js"></script>
@@ -197,8 +197,8 @@ print(inv_par.netlist_SPICE())
 </code></pre>
 <p>The output of this Python code is</p>
 <pre><code class="language-spice">.subckt inv_par A Y VDD VSS WN=3e-07 WP=4.5e-07 L=1.3e-07 NGN=1 NGP=1
-MN0 Y A VSS VSS sg13g2_lvnmos w=WN l=L ad=WN*3.1e-07 as=WN*3.1e-07 pd=2*(WN+3.1e-07) ps=2*(WN+3.1e-07) ng=NGN 
-MP0 Y A VDD VDD sg13g2_lvpmos w=WP l=L ad=WP*3.1e-07 as=WP*3.1e-07 pd=2*(WP+3.1e-07) ps=2*(WP+3.1e-07) ng=NGP 
+MN0 Y A VSS VSS sg13g2_lvnmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN}
+MP0 Y A VDD VDD sg13g2_lvpmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP}
 .ends
 </code></pre>
 <p>A simple CMOS inverter testbench can be made by creating an instance of the inverter and defining transistor models - in this case a dummy <code>LEVEL 1</code> MOSFET model.</p>
@@ -227,8 +227,8 @@ plot v(in) v(out)
 <p>This error is a consequence of a chosen inadequate MOSFET model that does not support parameter <code>ng</code>, that is supported by target technology. Netlist can be corrected by deleting the extra parameter, and the whole corrected netlist is given in the listing below:</p>
 <pre><code class="language-spice">* CMOS Inverter Testbench
 .subckt inv_par A Y VDD VSS WN=3e-07 WP=4.5e-07 L=1.3e-07
-MN0 Y A VSS VSS sg13g2_lvnmos w=WN l=L ad=WN*3.1e-07 as=WN*3.1e-07 pd=2*(WN+3.1e-07) ps=2*(WN+3.1e-07)
-MP0 Y A VDD VDD sg13g2_lvpmos w=WP l=L ad=WP*3.1e-07 as=WP*3.1e-07 pd=2*(WP+3.1e-07) ps=2*(WP+3.1e-07)
+MN0 Y A VSS VSS sg13g2_lvnmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)}
+MP0 Y A VDD VDD sg13g2_lvpmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)}
 .ends
 
 X1 in out vdd 0 inv_par
