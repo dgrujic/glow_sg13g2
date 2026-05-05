@@ -313,7 +313,10 @@ class Symsubcircuit(object):
             self.buildHierarchyName() # Build full hierarchical name
             upperLevelParamDict = Symdict({})
             upperLevelFnDict = Symdict({})
+            name = self.getClassName()
             flatCircuit = Symsubcircuit(self.getClassName() + "_flat", self.getTerminals(), self.parameters, self.functions, {})
+            # Rename the flattened circuit so that it has the same SPICE name as the original hierarchical circuit
+            flatCircuit.subCktClassName = name
             isTop = True
         else:
             self.hierarchyDelimiter = circuit.getHierarchyDelimiter() # Get the hierarchy delimiter from circuit
