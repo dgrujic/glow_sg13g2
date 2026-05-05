@@ -311,14 +311,29 @@ class Symsubcircuit(object):
         pparEvaluator.substitute(paramDict)
         fnDict = Symdict(upperLevelFnDict, localDict = self.getFunctionDict())
         
-        
         parameterEvaluator = Symparam(paramDict, fnDict)
         
-        for element in  self.getElements():
+        for element in self.getElements():
+            hierPath = self.getHierarchyName() + self.getHierarchyDelimiter()
             if isinstance(element, Symsubcircuit):
                 # Another subcircuit. Flatten it into this one
                 flat = element.flatten(self)
                 for elem in flat:
+                    # Rename nodes into upper hierarchy
+                    newNodeNames = []
+                    for i in range(0,len(elem.getNodes())):
+                        node = elem.getNodes()[i]
+                        if node in self.getTerminals():
+                            if circuit is None:
+                                pinName = node
+                            else:
+                                terminalIndex = self.getTerminals().index(node)
+                                pinName = self.nodes[terminalIndex]
+                            node = pinName
+                        else:
+                            node = hierPath + node
+                        newNodeNames.append(node)
+                    elem.putNodes(tuple(newNodeNames))
                     elem.flatten(self)
                     if isTop:
                         flatCircuit.addElement( elem )
@@ -326,7 +341,6 @@ class Symsubcircuit(object):
                         flatCircuit.append( elem )
             else:
                 # Circuit element
-                hierPath = self.getHierarchyName() + self.getHierarchyDelimiter()
                 newElement = deepcopy(element)
                 newElement.name =  hierPath + newElement.name
                 newNodeNames = []
@@ -335,15 +349,7 @@ class Symsubcircuit(object):
                     if node in self.getTerminals():
                         terminalIndex = self.getTerminals().index(node)
                         pinName = self.nodes[terminalIndex]
-                        if circuit is not None:
-                            upperLevelPath = circuit.getHierarchyName()
-                        else:
-                            upperLevelPath = ""
-                        if upperLevelPath != "":
-                            pinName = upperLevelPath + self.getHierarchyDelimiter() + pinName
                         node = pinName
-                    else:
-                        node = hierPath + node
                     newNodeNames.append(node)
                 newElement.putNodes(tuple(newNodeNames))
                 newElement.setParameterEvaluator(parameterEvaluator)
