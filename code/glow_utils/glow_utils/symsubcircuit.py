@@ -133,7 +133,7 @@ class Symsubcircuit(object):
             globals()[subCktClassName]=newClass # Add class to global symbols
         # Add newly created subcircuit class to dictionary of available subcircuits
         if subCktClassName in cls.subCkts:
-            raise ValueError("Subcircuit name" + subCktClassName + "is not unique.")
+            raise ValueError("Subcircuit name " + subCktClassName + " is not unique.")
         cls.subCkts.update({subCktClassName : newClass})
         return newClass
 
@@ -278,6 +278,23 @@ class Symsubcircuit(object):
     def getNodes(self):
         return self.nodes
 
+    @classmethod
+    def flat(cls):
+        """
+        Class method wrapper for flatten function.
+        Makes a dummy class instance and flattens it.
+        Returns flattened circuit.
+        """
+        name = cls.getClassName() + "_flat"
+        cls.subCktElementNames.discard(name)
+        dummy = cls("dummy", cls.getTerminals(), cls.getDefaultParameters())
+        cls.subCktElementNames.discard("dummy_flat")
+        cls.subCkts.pop(name, None)
+        flat = dummy.flatten()
+        cls.subCkts.pop("dummy_flat", None)
+        return flat
+
+
     def flatten(self,  circuit = None):
         """
         Flatten subcircuit into a higher level circuit.
@@ -296,7 +313,7 @@ class Symsubcircuit(object):
             self.buildHierarchyName() # Build full hierarchical name
             upperLevelParamDict = Symdict({})
             upperLevelFnDict = Symdict({})
-            flatCircuit = Symsubcircuit(self.name + "_flat", self.getTerminals(), self.parameters, self.functions, {})
+            flatCircuit = Symsubcircuit(self.getClassName() + "_flat", self.getTerminals(), self.parameters, self.functions, {})
             isTop = True
         else:
             self.hierarchyDelimiter = circuit.getHierarchyDelimiter() # Get the hierarchy delimiter from circuit
