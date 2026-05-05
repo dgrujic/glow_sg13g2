@@ -54,6 +54,15 @@ class SymMOSFET(Symdevice):
         return 0.0
     def defaultPD(self):
         return 0.0
+    
+    @staticmethod
+    def isNumber(x):
+        try:
+            float(x)
+            return True
+        except ValueError:
+            return False  
+
     def to_SPICE(self):
         # Return string for SPICE netlist
         res = "M" + self.getName() + " "
@@ -63,7 +72,7 @@ class SymMOSFET(Symdevice):
             if self.hasParameter(param):
                 paramVal = self.evalInternalFns(self.parameters.get(param))
                 if isinstance(paramVal, (int, float)) or self.isNumber(paramVal):
-                    res += param + "=" + str(paramVal) + " "
+                    res += param + "=" + "{:.4g}".format(float(paramVal)) + " "
                 else:
                     # NGSPICE expression
                     res += param + "={" + str(paramVal) + "} "
@@ -78,7 +87,10 @@ class SymMOSFET(Symdevice):
         for param in ['m', 'w', 'l', 'ng']:
             if self.hasParameter(param):
                 paramVal = self.evalInternalFns(self.parameters.get(param))
-                res += param + "=" + str(paramVal) + " "
+                if isinstance(paramVal, (int, float)) or self.isNumber(paramVal):
+                    res += param + "=" + "{:.4g}".format(float(paramVal)) + " "
+                else:
+                    res += param + "=" + str(paramVal) + " "
         res += "\n"
         return res
 
