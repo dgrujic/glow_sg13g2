@@ -62,7 +62,7 @@ class SymMOSFET(Symdevice):
         for param in ['m', 'w', 'l', 'ad', 'as', 'pd', 'ps', 'nrd', 'nrs', 'ng']:
             if self.hasParameter(param):
                 paramVal = self.evalInternalFns(self.parameters.get(param))
-                if isinstance(paramVal, (int, float)):
+                if isinstance(paramVal, (int, float)) or self.isNumber(paramVal):
                     res += param + "=" + str(paramVal) + " "
                 else:
                     # NGSPICE expression

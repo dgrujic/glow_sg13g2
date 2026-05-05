@@ -124,7 +124,8 @@ class Symsubcircuit(object):
                     'subCktTerminals' : subCktTerminals,
                     'subCktDefaultParameters' : Symdict({}, subCktDefaultParameters),
                     'subCktDefaultFunctions' : Symdict({}, subCktDefaultFunctions),
-                    'subCktElements' : []
+                    'subCktElements' : [],
+                    'subCktElementNames' : set()
                    }
 
         newClass = type(subCktClassName, (Symsubcircuit,), newDict) # Return the newly created class
@@ -161,13 +162,28 @@ class Symsubcircuit(object):
     @classmethod
     def getElements(cls):
         return cls.subCktElements
-        
+
+    @classmethod
+    def isElementNameUnique(cls, name):
+        if name in cls.subCktElementNames:
+            return False
+        else:
+            cls.subCktElementNames.update(name)
+            return True
+
     @classmethod
     def addElement(cls, newElement):
        if isinstance(newElement, list) or isinstance(newElement, tuple):
-           cls.subCktElements += newElement           
+            for elem in newElement:
+                if cls.isElementNameUnique(elem.name):
+                    cls.subCktElements += [elem]
+                else:
+                    raise ValueError("Element name " + elem.name + " is not unique.")
        else:
-           cls.subCktElements += [newElement]
+            if cls.isElementNameUnique(newElement.name):
+                cls.subCktElements += [newElement]
+            else:
+                raise ValueError("Element name " + newElement.name + " is not unique.")
 
     @classmethod
     def anonimize(cls, startIndex=0, netPrefix = "n"):
@@ -240,6 +256,14 @@ class Symsubcircuit(object):
 
     def ppar(self, name):
         return self.parameters[name]
+
+    @staticmethod
+    def isNumber(x):
+        try:
+            float(x)
+            return True
+        except ValueError:
+            return False 
 
     def getName(self):
         return self.name
@@ -490,9 +514,14 @@ class Symsubcircuit(object):
             params = self.getParameterDict()
             for param in params.keys():
                 if parameterEvaluator is None:
-                    res += " " + param + "=" + str(params[param])
+                    paramVal = str(params[param])
                 else:
-                    res += " " + param + "=" + str(parameterEvaluator.substitute(params[param]))
+                    paramVal = str(parameterEvaluator.substitute(params[param]))
+                if isinstance(paramVal, (int, float)) or self.isNumber(paramVal):
+                    res += param + "=" + str(paramVal) + " "
+                else:
+                    # NGSPICE expression
+                    res += param + "={" + str(paramVal) + "} "
             res += "\n"
         else:
             res = self.netlist_SPICE()

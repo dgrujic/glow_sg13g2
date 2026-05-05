@@ -112,6 +112,14 @@ class Symdevice(object):
     def ppar_pass(self, expr):
         return expr
 
+    @staticmethod
+    def isNumber(x):
+        try:
+            float(x)
+            return True
+        except ValueError:
+            return False    
+
     @classmethod
     def getTerminals(cls):
         """
