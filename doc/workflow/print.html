@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9d325793.js";
+            window.path_to_searchindex_js = "searchindex-8186789a.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-c3b33635.js"></script>
@@ -273,12 +273,286 @@ plot v(in) v(out)
 <p>This time the simulation runs successfully and the input and output waveforms are displayed.</p>
 <p>This simple example shows how to use GLOW utils to design a CMOS inverter, but they can be used for much complex cases.</p>
 <h2 id="symtech-class"><a class="header" href="#symtech-class">Symtech class</a></h2>
+<p>Symtech class is intended to be a container of all relevant technology information, so that the rest of the <code>glow_utils</code> classes can be used with any technology.
+Technology information is stored in a dictionary, that can be read from JSON file.
+For example, JSON file for IHP SG13G2 technology is:</p>
+<pre><code class="language-json">{
+    "processName" : "sg13g2",
+    "nmosModelName" : "sg13g2_lvnmos",
+    "pmosModelName" : "sg13g2_lvpmos",
+    "nmosAS" : "ipar('w') * 310e-9",
+    "nmosAD" : "ipar('w') * 310e-9",
+    "nmosPS" : "2 * (ipar('w') + 310e-9)",
+    "nmosPD" : "2 * (ipar('w') + 310e-9)",
+    "pmosAS" : "ipar('w') * 310e-9",
+    "pmosAD" : "ipar('w') * 310e-9",
+    "pmosPS" : "2 * (ipar('w') + 310e-9)",
+    "pmosPD" : "2 * (ipar('w') + 310e-9)"
+}
+</code></pre>
+<p>Predefined key names are given in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Key</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>processName</td><td>Name of technology.</td></tr>
+<tr><td>nmosModelName</td><td>Name of NMOS transistor model.</td></tr>
+<tr><td>pmosModelName</td><td>Name of PMOS transistor model.</td></tr>
+<tr><td>nmosAS</td><td>Expression to calculate NMOS source diffusion area.</td></tr>
+<tr><td>nmosAD</td><td>Expression to calculate NMOS drain diffusion area.</td></tr>
+<tr><td>pmosAS</td><td>Expression to calculate PMOS source diffusion area.</td></tr>
+<tr><td>pmosAD</td><td>Expression to calculate PMOS drain diffusion area.</td></tr>
+<tr><td>nmosPS</td><td>Expression to calculate NMOS source diffusion perimeter.</td></tr>
+<tr><td>nmosPD</td><td>Expression to calculate NMOS drain diffusion perimeter.</td></tr>
+<tr><td>pmosPS</td><td>Expression to calculate PMOS source diffusion perimeter.</td></tr>
+<tr><td>pmosPD</td><td>Expression to calculate PMOS drain diffusion perimeter.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Function <code>ipar</code> used in expressions is defined in the <a href="#symdevice-class">Symdevice</a> class.</p>
+<p>New keys can be added to JSON file and used to expand or add new functionalities.
+Unused keys in JSON file will be ignored.</p>
 <h2 id="symdict-class"><a class="header" href="#symdict-class">Symdict class</a></h2>
+<p>Symdict is a sub-class of Python <code>dict</code> to allow hierarchical parameter evaluation.
+It is mainly used internally in other classes to build hierarchy of circuit parameters.
+Dictionary keys and values are evaluated in a hierarchical manner,
+where keys and values defined in local dictionary take precedence over upper levels.</p>
+<p>For example:</p>
+<pre><code class="language-python">from glow_utils.symdict import Symdict
+topDict = { 'x':1, 'y':2 }
+level1Dict = Symdict( topDict, localDict={'x':5 } )
+print(level1Dict['x'])
+# 5
+</code></pre>
+<p><code>level1Dict['x']</code> evaluates to 5 instead of 1, since the local parameter value of <code>x</code> takes precedence over the global value.
+The same principle applies for any depth of dictionary hierarchy.
+If the key in not defined in any dictionary, a KeyError exception is raised, as in a regular Python <code>dict</code>.</p>
 <h2 id="symparam-class"><a class="header" href="#symparam-class">Symparam class</a></h2>
+<p>Symparam class is used to evaluate symbolic parameter expressions.
+Symbolic expressions can be expanded by substitution so that resulting expression contains only symbols that evaluate to numbers or are not defined. Alternatively, symbolic expressions can be evaluated to get a numeric value.
+When <code>Symparam</code> is used with <code>Symdict</code>, it provides means for hierarchical evaluation of expressions, either to symbolic expression or numerical value, and is mainly used internally by other classes.</p>
+<p><code>Symparam</code> constructor takes two arguments, a dictionary of parameters <code>paramDict</code> and a dictionary of functions <code>fnDict</code>:</p>
+<pre><code class="language-python">evaluator = Symparam(paramDict, fnDict)
+</code></pre>
+<p>Instance <code>evaluator</code> of <code>Symparam</code> uses provided <code>paramDict</code> and <code>fnDict</code> to substitute or evaluate symbolic expressions.
+Method <code>substitute</code> performs symbolic substitution on a given expression and results in a symbolic expression.</p>
+<pre><code class="language-python">def substitute(self, paramExpr, instanceFns = {}, allowSymbols = False):
+</code></pre>
+<p>Argument <code>paramExpr</code> is a string containing an expression to work on.
+Optional argument <code>instanceFns</code> allows for additional, e.g. per-instance defined, functions that are not defined in <code>fnDict</code>.
+Optional argument <code>allowSymbols</code> controls the behavior of symbolic substitution. If <code>allowSymbols = False</code> an exception is raised if a symbol is not defined - it does not expand to other symbols nor does it have a numerical value. If <code>allowSymbols = True</code> the substitution stops when a symbol is not defined, without raising an exception.</p>
+<p>For example, substitution on expression <code>x + y</code> can be performed as:</p>
+<pre><code class="language-python">evaluator.substitute('x + y') # Result is a symbolic expression
+</code></pre>
+<p>Method <code>evaluate</code> performs symbolic substitution and evaluates a given expression to a number.</p>
+<pre><code class="language-python">def evaluate(self, paramExpr, instanceFns = {}):
+</code></pre>
+<p>Argument <code>paramExpr</code> is a string containing an expression to work on.
+Optional argument <code>instanceFns</code> allows for additional, e.g. per-instance defined, functions that are not defined in <code>fnDict</code>.
+Method <code>evaluate</code> tries to evaluate an expression to a number, and raises an exception if it can’t be done - e.g. a symbol does not evaluate to number for available parameter and function dictionaries.</p>
+<p>For example, evaluation of expression <code>x + y</code> can be performed as:</p>
+<pre><code class="language-python">evaluator.evaluate('x + y') # Result is a number
+</code></pre>
+<p>A complete example of <code>Symparam</code> basic use is given in the code below:</p>
+<pre><code class="language-python">from glow_utils.symparam import Symparam
+
+values = {  'x' : 'a+b',
+            'y' : 'c',
+            'a' : 1,
+            'b' : 2,
+            'c' : 3}
+
+params = Symparam(values, {})
+expression = 'x * y'
+print('Dictionary')
+print(values)
+print('Expression')
+print(expression)
+print('Expression after substitution')
+print(params.substitute( expression ))
+print('Expression numeric value')
+print(params.evaluate( expression ))
+</code></pre>
+<p>The output of the previous Python code is</p>
+<pre><code>Dictionary
+{'x': 'a+b', 'y': 'c', 'a': 1, 'b': 2, 'c': 3}
+Expression
+x * y
+Expression after substitution
+(a+b)*c
+Expression numeric value
+9
+</code></pre>
 <h2 id="symdevice-class"><a class="header" href="#symdevice-class">Symdevice class</a></h2>
+<p><code>Symdevice</code> is base class for devices, and it provides common functions that device should implement.
+It should be used as a base class when implementing device models.</p>
+<p>Excerpt from <code>Symdevice</code> code shows the minimum device constructor:</p>
+<pre><code class="language-python">class Symdevice(object):
+    """
+    Circuit element base class
+    """
+    deviceType = "unspecified"
+    modelName = "symdevice"
+    modelPrefix = "unspecified"
+    terminals = []
+
+    def __init__(self, name, nodes, parameters):
+        self.name = name
+        self.nodes = nodes
+        self.parameters = parameters
+        self.parameterEvaluator = None  # Symparam instance
+        self.functions = {"ipar" : self.ipar}
+        self.initInstance()
+</code></pre>
+<p>Class variables <code>deviceType</code>, <code>modelName</code>, <code>modelPrefix</code> and <code>terminals</code> are common for all instances of a given device class.</p>
+<p>Class variable <code>deviceType</code> is a string indicating a device type - currently only <code>"nmos"</code> and <code>"pmos"</code> devices are implemented.</p>
+<p>Class variable <code>modelName</code> contains a name of SPICE device model that is used as a model in SPICE and CDL netlists.</p>
+<p>Class variable <code>modelPrefix</code> is a string that is used as a name prefix.</p>
+<p>Class variable <code>terminals</code> is a list of device terminal names. The order of terminals in the list should match the order of terminals in SPICE models.</p>
+<p>Device instance is created by making an instance of device class:</p>
+<pre><code class="language-python">dev_inst = dev_cls("inst_name", ['net1', 'net2', 'net3', 'net4'], {'w' : 400e-9, 'l' : 130e-9})
+</code></pre>
+<p>Instance <code>dev_inst</code> is given a name <code>inst_name</code>, and its terminals are connected to nodes <code>['net1', 'net2', 'net3', 'net4']</code>, and assigned parameter values <code>'w' = 400e-9</code> and <code>'l' = 130e-9</code>. Assigned parameter instance values override the default device parameters.</p>
 <h3 id="symmosfet-class"><a class="header" href="#symmosfet-class">SymMOSFET class</a></h3>
+<p><code>SymMOSFET</code> is a base class for creating MOSFET devices.
+It defines terminal names, their order and SPICE/CDL output formatting, and is used to construct NMOS and PMOS device classes.</p>
+<p>MOSFET terminals are assinged as <code>['D', 'G', 'S', 'B']</code></p>
+<p><code>SymMOSFET</code> defines the following device parameters:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Parameter</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>m</td><td>Device multiplier.</td></tr>
+<tr><td>w</td><td>MOSFET channel width.</td></tr>
+<tr><td>l</td><td>MOSFET channel length.</td></tr>
+<tr><td>ad</td><td>Drain diffusion area.</td></tr>
+<tr><td>as</td><td>Source diffusion area.</td></tr>
+<tr><td>pd</td><td>Drain diffusion perimeter.</td></tr>
+<tr><td>ps</td><td>Source diffusion perimeter.</td></tr>
+<tr><td>nrd</td><td>Drain diffusion equivalent number of squares.</td></tr>
+<tr><td>nrs</td><td>Source diffusion equivalent number of squares.</td></tr>
+<tr><td>ng</td><td>Number of gates (fingers).</td></tr>
+</tbody>
+</table>
+</div>
+<p>These parameters are common to many MOSFET models, and <code>SymMOSFET</code> can be used without modification with them.</p>
 <h3 id="symnmos-and-sympmos"><a class="header" href="#symnmos-and-sympmos">SymNMOS and SymPMOS</a></h3>
+<p><code>SymNMOS</code> and <code>SymPMOS</code> extend the <code>SymMOSFET</code> class by assigning the device type, model name and model prefix.
+They can be used to construct CMOS circuits with parametrized values.
+Value parametrization is useful in at least two ways: it provides a way of using standard building blocks to construct complex circuits, and also to capture the design intent by explicitly stating transistor ratios.</p>
+<p>NMOS and PMOS devices can be instantiated as</p>
+<pre><code class="language-python">n = SymNMOS("N0", ['Y', 'A', 'VSS', 'VSS'], {'w' : 'WN', 'l' : 'L'})
+p = SymPMOS("P0", ['Y', 'A', 'VDD', 'VDD'], {'w' : 'WP', 'l' : 'L'})
+</code></pre>
+<p>In this example the NMOS and PMOS device have been instantiated with symbolic values for channel width and length. Parameters <code>ad</code>, <code>as</code>, <code>ps</code> and <code>pd</code> have the default values, that are taken from technology parameters retrieved from <code>Symtech</code>.</p>
+<p>For example, default value for parameter <code>ad</code> is an expression</p>
+<pre><code class="language-python">"ipar('w') * 310e-9"
+</code></pre>
+<p>Function <code>ipar('w')</code> evaluates to the value of instance parameter <code>w</code>, that is <code>'WN'</code> in the previous example. This symbol can be further expanded by substitution and eventually evaluated at the circuit top level.</p>
 <h2 id="symsubcircuit-class"><a class="header" href="#symsubcircuit-class">Symsubcircuit class</a></h2>
+<p>Symsubcircuit is a meta-class used for creating subcircuit classes.
+Instances of Symsubcircuit class are not objects, but new classes that represent a specific subcircuit which can be instantiated as objects.</p>
+<p>For example, an inverter subcircuit class named <code>inv_par</code> with terminals
+<code>A</code>, <code>Y</code>, <code>VDD</code> and <code>VSS</code>, and default parameter values <code>WN = 200e-9</code>, <code>WP = 400e-9</code> and <code>L = 130e-9</code> can be created as:</p>
+<pre><code class="language-python">inv_par_cls = subcircuit( 'inv_par', ('A', 'Y', 'VDD', 'VSS'), {'WN':200e-9, 'WP':400e-9, 'L':130e-9} )
+</code></pre>
+<p>The newly created subcircuit class, stored in inv_par_cls, can be populated with circuit elements or other subcircuits.</p>
+<p>Continuing the inverter example, transistors can be added to subcircuit as:</p>
+<pre><code class="language-python">n0 = SymNMOS('N0', ['Y', 'A', 'VSS', 'VSS'], {'w':'WN'}, {'l':'L'})
+p0 = SymNMOS('P0', ['Y', 'A', 'VDD', 'VDD'], {'w':'WP'}, {'l':'L'})
+inv_par_cls.addElement( [n0, p0] )
+</code></pre>
+<p><code>addElement</code> is a classmethod, so the elements are stored as class variables.
+This way, the subcircuit elements are shared amongst all instances of the same subcircuit.
+At this point the created subcircuit class has no instances.
+In order to use the subcircuit, it needs to be instantiated:</p>
+<pre><code class="language-python">inv_par_inst = inv_par_cls('instanceName', ('in', 'out', 'VDD', 'VSS'), {'WN':300e-9, 'WP':600e-9})
+</code></pre>
+<p>By creating a subcircuit instance, it is given a name, connected to given nodes and optionally default parameters are overridden.
+The subcircuit instance can then be added to a other subcircuit to form a hierarchy:</p>
+<pre><code class="language-python">subckt_cls.addElement( inv_par_inst )
+</code></pre>
+<p>Function <code>ipar</code> can be used to fetch the value of instance parameter,
+and <code>ipar('parameter_name')</code> evaluates to the value of instance parameter <code>'parameter_name'</code>.
+For example, NMOS instance with parameters</p>
+<pre><code class="language-python">{'w': 'WN', 'l': 'L', 
+  'as': "ipar('w')*310e-9", 'ad': "ipar('w')*310e-9", 
+  'ps': "2*(ipar('w')+310e-9)", 'pd': "2*(ipar('w')+310e-9)"}
+</code></pre>
+<p>uses ipar function in expressions for <code>as</code>, <code>ad</code>, <code>ps</code> and <code>pd</code>.
+In this example, <code>ipar('w')</code> evaluates to the value of instance parameter <code>'w'</code>, so <code>ipar('w') = 'WN'</code>.
+Symbolic value <code>'WN'</code> can further be evaluated to other expressions or a number, depending on the upper level subcircuit parameters.</p>
+<p>Function <code>ppar</code> can be used to fetch the value of instance parent, which is usually a subcircuit.
+For example, a CMOS inverter</p>
+<pre><code class="language-python">inv_par = Symsubcircuit("inv_par", ['A', 'Y', 'VDD', 'VSS'], {'WN' : 300e-9, 'WP' : 450e-9, 'L' : 130e-9, 'NGN' : 1, 'NGP' : 1})
+n = SymNMOS("N0", ['Y', 'A', 'VSS', 'VSS'], {'w' : 'ppar("WN")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGN")'})
+p = SymPMOS("P0", ['Y', 'A', 'VDD', 'VDD'], {'w' : 'ppar("WP")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGP")'})
+inv_par.addElement([n, p])
+</code></pre>
+<p>uses <code>ppar</code> to evaluate the value of <code>'WN'</code>, <code>'L'</code> and <code>'NGN'</code> for a given subcircuit instance.
+Continuing the example with two instances of <code>inv_par</code> that have different values of parameters:</p>
+<pre><code class="language-python">inv1 = inv_par("inv1", ['A', 'net1', 'VDD', 'VSS'], {'WN' : '1e-6', 'WP' : '2e-6', 'NGN' : 2, 'NGP' : 2, 'L' : 130e-9})
+inv2 = inv_par("inv2", ['net1', 'Y', 'VDD', 'VSS'], {'WN' : '1.5e-6', 'WP' : '3e-6', 'NGN' : 4, 'NGP' : 4, 'L' : 130e-9})
+</code></pre>
+<p>we have that ppar evaluates to different values in different instances:</p>
+<pre><code class="language-python">inv1:  ppar("WN") = 1e-6
+inv2:  ppar("WN") = 2e-6
+</code></pre>
+<p>Use of <code>ppar</code> enables creation of parametrized hierarchical circuits.</p>
+<p>Dictionary of all defined subcircuits can be obtained as</p>
+<pre><code class="language-python">subckt_cls_all = Symsubcircuit.getSubckts()
+</code></pre>
+<p>In this example the variable <code>subckt_cls_all</code> would be a dictionary with keys that are subcircuit names and values that are references to subcircuit classes that can be used for instance creation.</p>
+<p>Subcircuit can be netlisted with <code>netlist_SPICE</code> or <code>netlist_CDL</code> methods. These methods netlist the subcircuit definition, not a particular instance.</p>
+<pre><code class="language-python">from glow_utils import *
+inv_par = Symsubcircuit("inv_par", ['A', 'Y', 'VDD', 'VSS'], {'WN' : 300e-9, 'L' : 130e-9})
+n = SymNMOS("N0", ['Y', 'A', 'VSS', 'VSS'], {'w' : 'ppar("WN")', 'l' : 'ppar("L")'})
+p = SymPMOS("P0", ['Y', 'A', 'VDD', 'VDD'], {'w' : '1.5*ppar("WN")', 'l' : 'ppar("L")'})
+inv_par.addElement([n, p])
+
+buff_par = Symsubcircuit("buff_par", ['in', 'out', 'VDD', 'VSS'], {'WN' : 1e-6})
+inv1 = inv_par("inv1", ['in', 'net1', 'VDD', 'VSS'], {'WN' : 'ppar("WN")'})
+inv2 = inv_par("inv2", ['net1', 'out', 'VDD', 'VSS'], {'WN' : '2*ppar("WN")'})
+buff_par.addElement([inv1, inv2])
+print(buff_par.netlist_SPICE())
+</code></pre>
+<p>The output of previous Python code is</p>
+<pre><code class="language-spice">.subckt buff_par in out VDD VSS WN=1e-06
+Xinv1 in net1 VDD VSS inv_par WN={WN} 
+Xinv2 net1 out VDD VSS inv_par WN={2*WN} 
+.ends
+</code></pre>
+<p>Subcircuit can be flattened as</p>
+<pre><code class="language-python">flat = buff_par.flat()
+print(flat.netlist_SPICE())
+</code></pre>
+<p>The flattened circuit netlist is</p>
+<pre><code class="language-spice">.subckt buff_par_flat in out VDD VSS WN=1e-06
+Minv1N0 net1 in VSS VSS sg13g2_lvnmos w=1e-06 l=1.3e-07 ad=3.1e-13 as=3.1e-13 pd=2.62e-06 ps=2.62e-06 
+Minv1P0 net1 in VDD VDD sg13g2_lvpmos w=1.5e-06 l=1.3e-07 ad=4.65e-13 as=4.65e-13 pd=3.62e-06 ps=3.62e-06 
+Minv2N0 out net1 VSS VSS sg13g2_lvnmos w=2e-06 l=1.3e-07 ad=6.2e-13 as=6.2e-13 pd=4.62e-06 ps=4.62e-06 
+Minv2P0 out net1 VDD VDD sg13g2_lvpmos w=3e-06 l=1.3e-07 ad=9.3e-13 as=9.3e-13 pd=6.62e-06 ps=6.62e-06 
+.ends
+</code></pre>
+<p>Device and node names in a flat circuit are built as hierarchical names, concatenating the names of instance names at each level of hierarchy, and can be impractically long.
+Subcircuit method <code>anonimize</code> can be used to assign short names to devices and nets by assigning them sequential integer names.
+Only the nets connecting to subcircuit terminals are not renamed to preserve meaningfull names.
+Continuing the buffer example, calling</p>
+<pre><code class="language-python">flat.anonimize()
+print(flat.netlist_SPICE())
+</code></pre>
+<p>results in</p>
+<pre><code class="language-spice">.subckt buff_par_flat in out VDD VSS WN=1e-06
+MN0 n0 in VSS VSS sg13g2_lvnmos w=1e-06 l=1.3e-07 ad=3.1e-13 as=3.1e-13 pd=2.62e-06 ps=2.62e-06 
+MP0 n0 in VDD VDD sg13g2_lvpmos w=1.5e-06 l=1.3e-07 ad=4.65e-13 as=4.65e-13 pd=3.62e-06 ps=3.62e-06 
+MN1 out n0 VSS VSS sg13g2_lvnmos w=2e-06 l=1.3e-07 ad=6.2e-13 as=6.2e-13 pd=4.62e-06 ps=4.62e-06 
+MP1 out n0 VDD VDD sg13g2_lvpmos w=3e-06 l=1.3e-07 ad=9.3e-13 as=9.3e-13 pd=6.62e-06 ps=6.62e-06 
+.ends
+</code></pre>
 <h2 id="symcheck-class"><a class="header" href="#symcheck-class">Symcheck class</a></h2>
 
                     </main>
