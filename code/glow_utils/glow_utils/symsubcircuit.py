@@ -132,6 +132,8 @@ class Symsubcircuit(object):
         if globalScope:
             globals()[subCktClassName]=newClass # Add class to global symbols
         # Add newly created subcircuit class to dictionary of available subcircuits
+        if subCktClassName in cls.subCkts:
+            raise ValueError("Subcircuit name" + subCktClassName + "is not unique.")
         cls.subCkts.update({subCktClassName : newClass})
         return newClass
 
@@ -141,6 +143,11 @@ class Symsubcircuit(object):
 
     @classmethod
     def getSubckts(cls):
+        """
+        Returns a dictionary of all defined subcircuit classes.
+        Dictionary keys are subcircuit names, while the values are refrerences
+        to subcircuit classes that can be used for instance creation.
+        """
         return cls.subCkts
 
     @classmethod
