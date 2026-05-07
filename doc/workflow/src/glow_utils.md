@@ -424,3 +424,50 @@ MP1 out n0 VDD VDD sg13g2_lvpmos w=3e-06 l=1.3e-07 ad=9.3e-13 as=9.3e-13 pd=6.62
 
 ## Symcheck class
 
+`Symcheck` class implements various circuit level checks and utility functions that faciliate circuit inspection and verification.
+It works only on flat circuits so the circuit should be flattened before use.
+Class is used by instantiating an object with a circuit to be inspected as an argument
+```python
+from glow_utils.symcheck import Symcheck
+from glow_utils.symsubcircuit import Symsubcircuit
+from glow_utils.symmosfet import SymNMOS, SymPMOS
+
+inv_par = Symsubcircuit("inv_par", ['A', 'Y', 'VDD', 'VSS'], {'WN' : 300e-9, 'WP' : 450e-9, 'L' : 130e-9, 'NGN' : 1, 'NGP' : 1})
+n = SymNMOS("N0", ['Y', 'A', 'VSS', 'VSS'], {'w' : 'ppar("WN")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGN")'})
+p = SymPMOS("P0", ['Y', 'A', 'VDD', 'VDD'], {'w' : 'ppar("WP")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGP")'})
+inv_par.addElement([n, p])
+buff_par = Symsubcircuit("buff_par", ['A', 'Y', 'VDD', 'VSS', ], {'WN' : 1e-6, 'WP' : 2e-6, 'NGN' : 2, 'NGP' : 2})
+inv1 = inv_par("inv1", ['A', 'net1', 'VDD', 'VSS'], {'WN' : '1.5*ppar("WN")', 'WP' : '1.75*ppar("WP")', 'NGN' : 2, 'NGP' : 2, 'L' : 130e-9})
+inv2 = inv_par("inv2", ['net1', 'Y', 'VDD', 'VSS'], {'WN' : '2*ppar("WN")', 'WP' : '2*ppar("WP")', 'NGN' : 4, 'NGP' : 4, 'L' : 130e-9})
+buff_par.addElement([inv1, inv2])
+flat_buff = buff_par.flat()
+check = Symcheck(flat_buff)
+```
+Basic usage of `Symcheck` is to identify circuit inputs, outputs, power and ground nets:
+```python
+id = check.identifyTerminals()
+print("Inputs  : ", " ".join(id['I']))
+print("Outputs : ", " ".join(id['O']))
+print("Power   : ", " ".join(id['P']))
+print("Ground  : ", " ".join(id['G']))
+```
+Previous code produces output
+```
+Inputs  :  A
+Outputs :  Y
+Power   :  VDD
+Ground  :  VSS
+```
+Node connectivity is identified by examining the circuit: power node is identified as the node connected to PMOS bulks, ground node is identified as the node connected to NMOS bulks. Input nodes are connected to gates and circuit terminals, while ouptut nodes are connected to drain or source and circuit terminals.
+Node identification can be carried out as operatons on sets, so it is not computationaly expensive.
+
+Electrical Rules Check (ERC) can be performed on a circuit by running
+```python
+ercOK = check.ERC()
+```
+If all ERC checks pass the result is `ercOK = True`. If any of checks fail, the result is `ercOK = False` and the error message(s) is (are) printed.
+
+ERC performs the following checks:
+  1. Check if there are multiple nodes connected to NMOS or PMOS bulks. This is a so-called 'soft bulk' connect error, where NMOS or PMOS bulk conctacts are connected to different nets. This is a violation of electrical rules because all NMOS bulks are connected via conductive substrate, so there would be an electrical short between nets connected to bulks. The same happens in the case of PMOS transistors, where bulks are connected via conductive N well.
+  2. Check if gate is directly connected to ground or power. This rule is an ERC error because power and ground nets form a large metal area in all metal layers, and connecting a transistor gate directly to ground or power net would result in antenna violation. If there is a need to connect a gate to constant '1' or '0' special cells should be used - `tie_hi` for logic '1' or `tie_low` for logic '0'.
+  3. Check if there are floating gates. Floating gates are not permitted as they result in unpredictable behavior due to random gate voltage. Gates can only be connected to drains or sources of other transistors or to subcircuit terminals.
