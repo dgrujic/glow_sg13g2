@@ -151,8 +151,11 @@ class Symsim:
         """
         Returns symbols for circuit inputs
         """
-        inputs = " ".join(self.inputs)
-        return symbols(inputs)
+        if len(self.inputs) > 0:
+            inputs = " ".join(self.inputs)
+            return symbols(inputs)
+        else:
+            return None
 
     def getOutputValues(self):
         """
@@ -227,12 +230,15 @@ class Symsim:
         inputs, outputs = self.combSim()
         inputSymbols = self.getInputSymbols()
         res = []
-        for outputName in self.outputs:
-            # Determine a Boolean expression for each output
-            minterms = self.minterms(inputs, outputs, outputName)
-            logicExpr = simplify_logic(SOPform(inputSymbols, minterms))
-            res.append(logicExpr)
-        return res
+        if inputSymbols is not None:
+            for outputName in self.outputs:
+                # Determine a Boolean expression for each output
+                minterms = self.minterms(inputs, outputs, outputName)
+                logicExpr = simplify_logic(SOPform(inputSymbols, minterms))
+                res.append(logicExpr)
+            return res
+        else:
+            return IEEE1164.toList(outputs[0])
 
     def simstep(self, printDelta = False):
         """
