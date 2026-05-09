@@ -65,8 +65,8 @@ class Symsim:
         self.ground = id['G'][0]
         self.msg("Symsim::Elaborate: Inputs  : " + " ".join(self.inputs))
         self.msg("Symsim::Elaborate: Outputs : " + " ".join(self.outputs))
-        self.msg("Symsim::Elaborate: Power   : " + " ".join(self.power))
-        self.msg("Symsim::Elaborate: Ground  : " + " ".join(self.ground))
+        self.msg("Symsim::Elaborate: Power   : " + " ".join([self.power]))
+        self.msg("Symsim::Elaborate: Ground  : " + " ".join([self.ground]))
         # Make a dictionary of all nodes
         nodes = set()
         for elem in self.circuit.getElements():
