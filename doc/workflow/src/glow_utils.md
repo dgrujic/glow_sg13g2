@@ -471,3 +471,123 @@ ERC performs the following checks:
   1. Check if there are multiple nodes connected to NMOS or PMOS bulks. This is a so-called 'soft bulk' connect error, where NMOS or PMOS bulk conctacts are connected to different nets. This is a violation of electrical rules because all NMOS bulks are connected via conductive substrate, so there would be an electrical short between nets connected to bulks. The same happens in the case of PMOS transistors, where bulks are connected via conductive N well.
   2. Check if gate is directly connected to ground or power. This rule is an ERC error because power and ground nets form a large metal area in all metal layers, and connecting a transistor gate directly to ground or power net would result in antenna violation. If there is a need to connect a gate to constant '1' or '0' special cells should be used - `tie_hi` for logic '1' or `tie_low` for logic '0'.
   3. Check if there are floating gates. Floating gates are not permitted as they result in unpredictable behavior due to random gate voltage. Gates can only be connected to drains or sources of other transistors or to subcircuit terminals.
+
+## Symsim class
+
+`Symsim` class implements a simple logic simulator that can simulate static CMOS logic gates on a transistor level.
+An example of `Symsim` usage is shown in the Python code below.
+```python
+from glow_utils import *
+
+nand2_par = Symsubcircuit("nand2_par", ['A', 'B', 'Y', 'VDD', 'VSS'], {'WN' : 300e-9, 'WP' : 450e-9, 'L' : 130e-9, 'NGN' : 1, 'NGP' : 1})
+n0 = SymNMOS("N0", ['n0', 'A', 'VSS', 'VSS'], {'w' : '2*ppar("WN")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGN")'})
+n1 = SymNMOS("N1", ['Y', 'B', 'n0', 'VSS'], {'w' : '2*ppar("WN")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGN")'})
+p0 = SymPMOS("P0", ['Y', 'A', 'VDD', 'VDD'], {'w' : 'ppar("WP")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGP")'})
+p1 = SymPMOS("P1", ['Y', 'B', 'VDD', 'VDD'], {'w' : 'ppar("WP")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGP")'})
+nand2_par.addElement([n0, n1, p0, p1])
+
+sim = Symsim(nand2_par)
+logicExpr = sim.combFunc()
+print("Gate logic function is", logicExpr[0])
+```
+In this example a two input NAND gate `nand2_par` is made from NMOS and PMOS transistors.
+The circuit is then used as an argument to `Symsim` constructor to create the `sim` instance.
+Constructor method performs circuit elaboration: identifies circuit inputs, outputs and power and ground nets and performs an ERC checks.
+After elaboration, a dictionary of all nodes in a given circuit is created and initialized.
+
+Boolean function of a given combinatorial circuit is determined by executing `combFunc` method of `sim`.
+The `combFunc` method calls the `combSim` method to simulate the circuit for all possible input values, and uses
+input and output values to determine a symbolic Boolean expression. 
+In case of circuits with multiple outputs a Boolean expression is determined for each output.
+
+For the previous example the output of the Python script is
+```
+Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : B A
+Symsim::Elaborate: Outputs : Y
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : VSS VDD n0 A Y B
+Symsim::Elaborate: Elaboration OK.
+****************************************
+Determining gate logic function.
+Symsim::combSim: Simulating circuit with 2 inputs and 1 outputs.
+Symsim::combSim: | 11 | 0
+Symsim::combSim: | 10 | 1
+Symsim::combSim: | 01 | 1
+Symsim::combSim: | 00 | 1
+Gate logic function is ~A | ~B
+```
+The expression `~A | ~B` is equivalent to NAND gate function `~(A & B)`, so the circuit works as intended.
+In a simple example of NAND gate it is easy to see that `~A | ~B = ~(A & B)`, but it might not be trivial
+to establish equivalence for complex expressions, so it would be desirable to perform the check by code.
+The following code does exatly that - performs an equivalency check of two Boolean expressions
+```python
+from sympy import bool_map, Nand, Nor
+from sympy.abc import x, y
+expectedFn = Nand(x, y)
+mapping = bool_map(expectedFn, logicExpr[0])
+```
+The function `bool_map` tries to match two boolean expressions and returns variable correspondence information if two expressions are equivalent, or None if they are not equivalent.
+
+Simulation of a circuit logic function is performed in the `combSim` method. The simulation algorithm is straight forward: it goes through all circuit elements, gets the values of circuit nodes connected to device terminals, and calls the device `sim` method that calculates new node values.
+Since the change of node values can result in change of other node values, the evaluation is performed in a 'delta-cycle' manner until all node values settle to their final values.
+
+Device code that evaluates new node values is also simple: if the gate of an NMOS (PMOS) device is at high (low) value the device is evaluated, otherwise the node values are not changed.
+When NMOS or PMOS device is turned on, and there is no current flowing - which is true for static CMOS logic - the drain and source terminals are at the same potential.
+Since drain and source should be at the same potential, the new value of source and drain terminal nodes is determined by IEEE1164 rules for signal resolution.
+If there is a conflicting condition, such as a direct path from power to ground, the node values would resolve to 'X' and indicate that there is a problem with a circuit.
+
+The folloing example shows a malformed circuit that can create a short between power and ground:
+```python
+from glow_utils import *
+# This circuit exhibits a short circuit between VDD and VSS for input values A=1, B=0
+shortcircuit_par = Symsubcircuit("shortcircuit_par", ['A', 'B', 'Y', 'VDD', 'VSS'], {'WN' : 300e-9, 'WP' : 450e-9, 'L' : 130e-9, 'NGN' : 1, 'NGP' : 1})
+n0 = SymNMOS("N0", ['Y', 'A', 'VSS', 'VSS'], {'w' : '2*ppar("WN")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGN")'})
+p0 = SymPMOS("P0", ['Y', 'A', 'VDD', 'VDD'], {'w' : 'ppar("WP")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGP")'})
+p1 = SymPMOS("P1", ['Y', 'B', 'VDD', 'VDD'], {'w' : 'ppar("WP")', 'l' : 'ppar("L")', 'ng' : 'ppar("NGP")'})
+shortcircuit_par.addElement([n0, p0, p1])
+
+sim = Symsim(shortcircuit_par)
+print("*"*40)
+print("Determining gate logic function.")
+logicExpr = sim.combFunc()
+print("Gate logic function is", logicExpr[0])
+if sim.error:
+    print("ERROR : There is an error in the circuit.")
+else:
+    print("Circuit is OK")
+```
+The circuit is similar to two input NAND gate, but with only one NMOS transistor `N0` that conducts whenever input `A` is high. If input `B` is low the transistor `P1` is turned on, forming a short circuit between power and ground through `N0` and `P1`.
+Short condition can happen when pull-up part of the logic gate that is made with PMOS transistors is not
+complimentary to pull-down part made with NMOS transistors.
+
+Running the previous Python code prints the following output:
+```
+Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : A B
+Symsim::Elaborate: Outputs : Y
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : Y VSS A B VDD
+Symsim::Elaborate: Elaboration OK.
+****************************************
+Determining gate logic function.
+Symsim::combSim: Simulating circuit with 2 inputs and 1 outputs.
+Symsim::combSim: | 11 | 0
+Symsim::simstep: WARNING : Nodes contain invalid values.
+Symsim::combSim: | 10 | X
+Symsim::simstep: WARNING : Nodes contain invalid values.
+Symsim::combSim: | 01 | X
+Symsim::simstep: WARNING : Nodes contain invalid values.
+Symsim::combSim: | 00 | X
+Gate logic function is False
+ERROR : There is an error in the circuit.
+```
+Short circuit condition occurs in the second simulation step for the value of inputs `[A, B] = [1, 0]` and it is indicated by the value `X` at the output.
+Occurence of illegal values, such as `X` sets the value of variable `error = True`, that persists until the simulation is re-initialized.
+This flag can, and should, be checked after a simulation to ensure that there are no issues with a circuit.
+In the presented case, the `X` value is visible at the output, but there might be a problem with an internal node that does not interact with the output and might not be discovered without detailed examination of all node values at all simulation steps.
+The `error` flag captures that something went wrong, and that detailed examination should be performed.
