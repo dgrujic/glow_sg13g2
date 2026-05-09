@@ -18,6 +18,7 @@
 
 from glow_utils.symdevice import Symdevice
 from glow_utils.symtech import SymTech
+from glow_utils.symieee1164 import IEEE1164
 
 #
 # MOSFET base class
@@ -45,6 +46,7 @@ class SymMOSFET(Symdevice):
             self.parameters.update({'ps' : self.defaultPS() })
         if not self.hasParameter('pd'):
             self.parameters.update({'pd' : self.defaultPD() })
+        self.isWeak = False # indicates if MOSFET is has low W/L ratio
 
     def defaultAS(self):
         return 0.0 
@@ -114,7 +116,30 @@ class SymNMOS(SymMOSFET, SymTech):
         return SymTech.nmosPD()
     def info(self):
         return "NMOS with 4 terminals"
-    
+    def sim(self, nodeVals):
+        """
+        Simulate NMOS
+        """
+        d, g, s, b = nodeVals
+        # Special case for diode connected NMOS
+        nodes = self.getNodes()
+        if (nodes[0] == nodes[1]):
+            # Drain-gate connection
+            if (s == IEEE1164.L) or (s == IEEE1164.ZERO):
+                d = s
+                g = s
+        elif (nodes[2] == nodes[1]):
+            # Sorce-gate connection
+            if (d == IEEE1164.L) or (d == IEEE1164.ZERO):
+                s = d
+                g = d
+        elif (g == IEEE1164.ONE) or (g == IEEE1164.H):
+            # NMOS gate is high - device in ON
+            val = IEEE1164.resolve(d, s)
+            d = val
+            s = val
+        return [d, g, s, b]
+
 #
 # PMOS class
 #
@@ -135,3 +160,26 @@ class SymPMOS(SymMOSFET, SymTech):
         return SymTech.pmosPD()
     def info(self):
         return "PMOS with 4 terminals"
+    def sim(self, nodeVals):
+        """
+        Simulate PMOS
+        """
+        d, g, s, b = nodeVals
+        # Special case for diode connected PMOS
+        nodes = self.getNodes()
+        if (nodes[0] == nodes[1]):
+            # Drain-gate connection
+            if (s == IEEE1164.H) or (s == IEEE1164.ONE):
+                d = s
+                g = s
+        elif (nodes[2] == nodes[1]):
+            # Sorce-gate connection
+            if (d == IEEE1164.H) or (d == IEEE1164.ONE):
+                s = d
+                g = d
+        elif (g == IEEE1164.ZERO) or (g == IEEE1164.L):
+            # PMOS gate is low - device in ON
+            val = IEEE1164.resolve(d, s)
+            d = val
+            s = val
+        return [d, g, s, b]

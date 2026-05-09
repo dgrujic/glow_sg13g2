@@ -216,3 +216,9 @@ class Symdevice(object):
         res += "Parameters      : " + self.parameters.__repr__()
         res += "\n"
         return res
+
+    def sim(self, nodeVals):
+        """
+        Simulate a device with given node values
+        """
+        raise ValueError("Not implemented")

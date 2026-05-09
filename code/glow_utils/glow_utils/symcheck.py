@@ -149,5 +149,4 @@ class Symcheck():
         if len(floatingGates) > 0:
             print("ERROR : Circuit ", self.circuit.getClassName(), "has floating gates connected to nodes :", " ".join(floatingGates) )
             res = False
-        return res        
-
+        return res

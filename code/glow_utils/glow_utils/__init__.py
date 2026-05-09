@@ -19,3 +19,5 @@ from .symparam import *
 from .symtech import *
 from .symsubcircuit import *
 from .symcheck import *
+from .symieee1164 import *
+from .symsim import *
