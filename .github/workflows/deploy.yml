@@ -29,9 +29,9 @@ jobs:
       - name: Build mdBook
         run: |
           cd ${{ matrix.book_dir }}
-          mdbook build
           mdbook-mermaid install .
-
+          mdbook build
+          
       # Step to move index.html from /doc/ to site root
       - name: Deploy Landing Page to Root
         uses: peaceiris/actions-gh-pages@v3
