@@ -24,8 +24,6 @@ jobs:
         uses: peaceiris/actions-mdbook@v2
         with:
           mdbook-version: 'latest'
-      - name: Generate Mermaid Assets
-        run: mdbook-mermaid install .
       - name: Build mdBook
         run: |
           cd ${{ matrix.book_dir }}
