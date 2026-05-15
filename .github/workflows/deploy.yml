@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable        
       - name: Install mdbook-mermaid
         run: |
           cargo install mdbook-mermaid
@@ -22,7 +24,8 @@ jobs:
         uses: peaceiris/actions-mdbook@v2
         with:
           mdbook-version: 'latest'
-
+      - name: Generate Mermaid Assets
+        run: mdbook-mermaid install .
       - name: Build mdBook
         run: |
           cd ${{ matrix.book_dir }}
