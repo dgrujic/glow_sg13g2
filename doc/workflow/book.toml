@@ -1,4 +1,10 @@
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
 [book]
 title = "GLOW Workflow"
 authors = ["Dr. Dušan Grujić"]
 language = "en"
+
+[output.html]
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
