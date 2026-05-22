@@ -89,7 +89,9 @@ This area is not wasted for several reasons (numbers for DRC rules are for IHP S
 - More space for routing of complex logic inside a standard cell, potentially reducing cell width and overall area.
 - Flexibility of via endcaps in both horizontal and vertical tracks might reduce routing obstructions.
 
-# Design flow for standard digital cells
+# Design of a standard cell
+
+The following sections contain the design flow for a single standard cell.
 
 ## Netlist design
 
@@ -102,8 +104,6 @@ This area is not wasted for several reasons (numbers for DRC rules are for IHP S
 
 ## Abstract view generation
 
-
-## Standard cell library assembly
 
 
 
