@@ -13,6 +13,15 @@ license = {text = "APACHE 2.0"}
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "sympy"
+    "sympy",
+    "gdstk"
 ]
+
+[tool.setuptools.package-dir]
+"glow_utils" = "glow_utils"
+"glow_tools" = "glow_tools"
+
+[project.scripts]
+gdsinfo = "glow_tools.gdsinfo:main"
+gdsutil = "glow_tools.gdsutil:main"
 
