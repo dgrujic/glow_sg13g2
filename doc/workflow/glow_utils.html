@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-057eebe8.js";
+            window.path_to_searchindex_js = "searchindex-f30d1304.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a293eaf0.js"></script>
@@ -678,6 +678,168 @@ Occurence of illegal values, such as <code>X</code> sets the value of variable <
 This flag can, and should, be checked after a simulation to ensure that there are no issues with a circuit.
 In the presented case, the <code>X</code> value is visible at the output, but there might be a problem with an internal node that does not interact with the output and might not be discovered without detailed examination of all node values at all simulation steps.
 The <code>error</code> flag captures that something went wrong, and that detailed examination should be performed.</p>
+<h2 id="gdsinfo"><a class="header" href="#gdsinfo">gdsinfo</a></h2>
+<p>Script <code>gdsinfo</code> is an utility to print cell information and perform basic checks on GDSII files.
+It is developed to aid automatic checks of standard cell layouts to ensure that they conform to set rules.</p>
+<p>Standard cell layouts should be flat, i.e. should not contain hierarchical references, and this can be checked by the <code>--noref</code> command that raises error if layout is hierarchical.
+Also, standard cell layout should contain only certain layers that are used for transistors and metal 1 interconnect. The presence of any other layer in a standard cell layout is probably an error and should be flagged.</p>
+<p>Layers can be forbidden with a <code>--errlay</code> command that specifies layers for which an error is raised if they are present in a layout. This command is usually used with a  specifier <code>*,*</code> that forbids all layers, and only specific layers are allowed with a <code>--uselay</code> command.
+This way an error is triggered if a layout contains a shape or a label on unexpected layer.</p>
+<p>All cells should contain power and ground labels, and this can be checked with a <code>--label</code> command that raises an error if a label is not present in a cell.</p>
+<p>Some labels should not be present in a cell, for example a global <code>sub!</code> label.
+Command <code>--nolabel</code> forbids a label name and raises an error if it is present in a cell.</p>
+<p>Script is invoked as:</p>
+<pre><code class="language-sh">gdsinfo input_file.gds [commands]
+</code></pre>
+<p>Commands are summarized in the following table</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Command</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>–printcells</td><td>Print names of all cells in a library</td></tr>
+<tr><td>–cells</td><td>Specify cells to work on, default is all cells</td></tr>
+<tr><td>–noref</td><td>Raise error if a cell contans a reference (cell has hierarchy)</td></tr>
+<tr><td>–errlay</td><td>Raise error if a cell contains a layer/datatype</td></tr>
+<tr><td>–uselay</td><td>Allow layer/datatype in a cell</td></tr>
+<tr><td>–label</td><td>Require that label is present in a cell</td></tr>
+<tr><td>–nolabel</td><td>Forbid label in a cell</td></tr>
+</tbody>
+</table>
+</div>
+<p>Examples:</p>
+<p>Print a list of all cells in a GDSII library</p>
+<pre><code class="language-sh">gdsinfo infile.gds --printcells
+</code></pre>
+<p>By default checks are performed on all cells.
+To perform checks only on cell1 and cell2 use</p>
+<pre><code class="language-sh">gdsinfo infile.gds --cels \"cell1 cell2\"
+</code></pre>
+<p>Trigger an error if a cell contains references to other cells</p>
+<pre><code class="language-sh">gdsinfo infile.gds --noref
+</code></pre>
+<p>Forbid all layer/datatypes and explicitly allow any layer with datatype 0
+Result is that any layer with datatype 0 is allowed</p>
+<pre><code class="language-sh">gdsinfo infile.gds --errlay *,* --uselay *,0
+</code></pre>
+<p>Forbid all layer/datatypes and explicitly allow any layer only datatype 0
+Additionally, allow layer 10 with datatype 2
+Result is that any layer with datatype=0 is allowed and layer 10 with datatype 2</p>
+<pre><code class="language-sh">gdsinfo infile.gds --errlay *,* --uselay *,0 --uselay 10,2
+</code></pre>
+<p>Check if a cell contains power and ground labels <code>vdd</code> and <code>vss</code> can be performed with a command:</p>
+<pre><code class="language-sh">gdsinfo infile.gds --label vdd --label vss
+</code></pre>
+<p>Check if a cell does not contain a label, for example a global <code>sub!</code>, can be performed with a command:</p>
+<pre><code class="language-sh">gdsinfo infile.gds --nolabel 'sub!'
+</code></pre>
+<h2 id="gdsutil"><a class="header" href="#gdsutil">gdsutil</a></h2>
+<p><code>gdsutil</code> is an utility to manipulate GDSII libraries.
+In the simplest case it can be used to read in many individual GDSII files and output all cells in a single GDSII library.
+Besides simple copy, additional operations can be performed on the cells:</p>
+<ul>
+<li>Flatten. Cell is flattened so it does not contain hierarchical instances.</li>
+<li>Convert paths to polygons.</li>
+<li>Remap layers. Layers and datatypes can be remapped to other layers and datatypes.</li>
+<li>Merge layers. Shapes on specified layers can be merged to reduce tha number of shapes and simplify the layout.</li>
+<li>Delete layers. Shapes on specified layers can be deleted to remove features that are used in cell developments, such as keep out areas, but are not needed in final cells.</li>
+<li>Rename labels. This command is usefull for power and ground labels renaming.</li>
+</ul>
+<p>Usage:</p>
+<pre><code class="language-sh">gdsutil [commands]
+</code></pre>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Command</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>-i, –infile</td><td>Input files. At least one input file is required.</td></tr>
+<tr><td>-o, –outfile</td><td>Output file. If exists, output file will be overwritten.</td></tr>
+<tr><td>-a, –append</td><td>Output file for append write.</td></tr>
+<tr><td>-c, –cells</td><td>Cells to work on. Single cells or a list of cell can be given.</td></tr>
+<tr><td>–warn_duplicate</td><td>Only issue a warning if duplicate cells are found in different libraries.</td></tr>
+<tr><td>–flatten</td><td>Flatten the cells.</td></tr>
+<tr><td>–to_polygons</td><td>Convert paths to polygons.</td></tr>
+<tr><td>-r, –remap</td><td>Remap layers per given rules.</td></tr>
+<tr><td>-m, –merge</td><td>Merge shapes on specified layers. Shapes on the same layer and datatype are merged.</td></tr>
+<tr><td>-d, –delete</td><td>Delete shapes on specified layers.</td></tr>
+<tr><td>-l, –label</td><td>Rename labels per given rules</td></tr>
+</tbody>
+</table>
+</div>
+<p>Remap rules are specified as:</p>
+<pre><code>src_lay,src_dt dst_lay,dst_dt [polygon | path | label]
+</code></pre>
+<ul>
+<li><code>src_lay</code> and <code>src_dt</code> are source layer and datatype.
+Asterisk <code>*</code> can be used to specify any layer or datatype</li>
+<li><code>dst_lay</code>, <code>dst_dt</code> are destination layer and datatype
+Destination layer/datatype can be <code>*</code> only if a matching source is also <code>*</code>, and then the source is copied to destination.</li>
+</ul>
+<p>Remap rule examples</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Rule</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>1,* 1,0 polygon</td><td>remaps polygons on layer 1 and any datatype to layer 1 and datatype 0</td></tr>
+<tr><td>*,2 *,0 polygon</td><td>remaps polygons on any layer and datatype 2 to the same layer and datatype 0</td></tr>
+</tbody>
+</table>
+</div>
+<p>Merge rule examples</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Rule</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><em>,</em></td><td>merges shapes on all layers and datatypes</td></tr>
+<tr><td>5,*</td><td>merges shapes on layer 5 and any datatype</td></tr>
+</tbody>
+</table>
+</div>
+<p>Delete rule example</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Rule</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>5,*</td><td>deletes shapes on layer 5 and any datatype</td></tr>
+</tbody>
+</table>
+</div>
+<p>Rename label example:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Rule</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>vsup,vdd</td><td>renames label text vsup with vdd</td></tr>
+</tbody>
+</table>
+</div>
+<p>Only selected operations are performed in the following order:</p>
+<ul>
+<li>Flatten cell</li>
+<li>Convert paths to polygons</li>
+<li>Delete layers</li>
+<li>Remap layers</li>
+<li>Merge layers</li>
+<li>Rename labels</li>
+</ul>
+<p>Examples:</p>
+<p>Read in.gds, flatten cell1 and cell2 and write these cells to out.gds</p>
+<pre><code class="language-sh">gdsutil -i in.gds -o out.gds --flatten --cels "cell1 cell2"
+</code></pre>
+<p>Read in.gds, flatten cell1 and cell2, merge shapes and write these cells to out.gds</p>
+<pre><code class="language-sh">gdsutil -i in.gds -o out.gds --merge *,* --flatten --cels "cell1 cell2"
+</code></pre>
 
                     </main>
 
