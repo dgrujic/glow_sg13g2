@@ -591,3 +591,160 @@ Occurence of illegal values, such as `X` sets the value of variable `error = Tru
 This flag can, and should, be checked after a simulation to ensure that there are no issues with a circuit.
 In the presented case, the `X` value is visible at the output, but there might be a problem with an internal node that does not interact with the output and might not be discovered without detailed examination of all node values at all simulation steps.
 The `error` flag captures that something went wrong, and that detailed examination should be performed.
+
+## gdsinfo
+
+Script `gdsinfo` is an utility to print cell information and perform basic checks on GDSII files.
+It is developed to aid automatic checks of standard cell layouts to ensure that they conform to set rules.
+
+Standard cell layouts should be flat, i.e. should not contain hierarchical references, and this can be checked by the `--noref` command that raises error if layout is hierarchical.
+Also, standard cell layout should contain only certain layers that are used for transistors and metal 1 interconnect. The presence of any other layer in a standard cell layout is probably an error and should be flagged.
+
+Layers can be forbidden with a `--errlay` command that specifies layers for which an error is raised if they are present in a layout. This command is usually used with a  specifier `*,*` that forbids all layers, and only specific layers are allowed with a `--uselay` command.
+This way an error is triggered if a layout contains a shape or a label on unexpected layer.
+
+All cells should contain power and ground labels, and this can be checked with a `--label` command that raises an error if a label is not present in a cell.
+
+Some labels should not be present in a cell, for example a global `sub!` label.
+Command `--nolabel` forbids a label name and raises an error if it is present in a cell.
+
+Script is invoked as:
+```sh
+gdsinfo input_file.gds [commands]
+```
+
+Commands are summarized in the following table
+| Command     | Description |
+|-------------|-------------|
+|--printcells | Print names of all cells in a library |
+|--cells      | Specify cells to work on, default is all cells |
+|--noref      | Raise error if a cell contans a reference (cell has hierarchy) |
+|--errlay     | Raise error if a cell contains a layer/datatype |
+|--uselay     | Allow layer/datatype in a cell |
+|--label      | Require that label is present in a cell |
+|--nolabel    | Forbid label in a cell |
+
+Examples:
+
+Print a list of all cells in a GDSII library
+```sh
+gdsinfo infile.gds --printcells
+```
+
+By default checks are performed on all cells.
+To perform checks only on cell1 and cell2 use
+```sh
+gdsinfo infile.gds --cels \"cell1 cell2\"
+```
+
+Trigger an error if a cell contains references to other cells
+```sh
+gdsinfo infile.gds --noref
+```
+
+Forbid all layer/datatypes and explicitly allow any layer with datatype 0
+Result is that any layer with datatype 0 is allowed
+```sh
+gdsinfo infile.gds --errlay *,* --uselay *,0
+```
+
+Forbid all layer/datatypes and explicitly allow any layer only datatype 0
+Additionally, allow layer 10 with datatype 2
+Result is that any layer with datatype=0 is allowed and layer 10 with datatype 2
+```sh
+gdsinfo infile.gds --errlay *,* --uselay *,0 --uselay 10,2
+```
+
+Check if a cell contains power and ground labels `vdd` and `vss` can be performed with a command:
+```sh
+gdsinfo infile.gds --label vdd --label vss
+```
+
+Check if a cell does not contain a label, for example a global `sub!`, can be performed with a command:
+```sh
+gdsinfo infile.gds --nolabel 'sub!'
+```
+
+## gdsutil
+
+`gdsutil` is an utility to manipulate GDSII libraries.
+In the simplest case it can be used to read in many individual GDSII files and output all cells in a single GDSII library.
+Besides simple copy, additional operations can be performed on the cells:
+- Flatten. Cell is flattened so it does not contain hierarchical instances.
+- Convert paths to polygons.
+- Remap layers. Layers and datatypes can be remapped to other layers and datatypes.
+- Merge layers. Shapes on specified layers can be merged to reduce tha number of shapes and simplify the layout.
+- Delete layers. Shapes on specified layers can be deleted to remove features that are used in cell developments, such as keep out areas, but are not needed in final cells.
+- Rename labels. This command is usefull for power and ground labels renaming.
+
+Usage:
+```sh
+gdsutil [commands]
+```
+
+| Command       | Description |
+|---------------|-------------|
+|-i, --infile    | Input files. At least one input file is required. |
+|-o, --outfile   | Output file. If exists, output file will be overwritten. |
+|-a, --append    | Output file for append write. |
+|-c, --cells     | Cells to work on. Single cells or a list of cell can be given. |
+|--warn_duplicate | Only issue a warning if duplicate cells are found in different libraries. |
+|--flatten       | Flatten the cells. |
+|--to_polygons   | Convert paths to polygons. |
+|-r, --remap     | Remap layers per given rules. |
+|-m, --merge     | Merge shapes on specified layers. Shapes on the same layer and datatype are merged. |
+|-d, --delete    | Delete shapes on specified layers. |
+|-l, --label     | Rename labels per given rules |
+
+Remap rules are specified as:
+```
+src_lay,src_dt dst_lay,dst_dt [polygon | path | label]
+```
+- `src_lay` and `src_dt` are source layer and datatype.
+Asterisk `*` can be used to specify any layer or datatype
+- `dst_lay`, `dst_dt` are destination layer and datatype
+Destination layer/datatype can be `*` only if a matching source is also `*`, and then the source is copied to destination.
+    
+Remap rule examples
+| Rule    | Description |
+|---------|-------------|
+|1,* 1,0 polygon | remaps polygons on layer 1 and any datatype to layer 1 and datatype 0 |
+|*,2 *,0 polygon | remaps polygons on any layer and datatype 2 to the same layer and datatype 0 |
+
+Merge rule examples
+| Rule    | Description |
+|---------|-------------|
+| *,*     | merges shapes on all layers and datatypes |
+| 5,*     | merges shapes on layer 5 and any datatype |
+
+Delete rule example
+| Rule    | Description |
+|---------|-------------|
+| 5,*     |deletes shapes on layer 5 and any datatype |
+
+Rename label example:
+| Rule    | Description |
+|---------|-------------|
+|vsup,vdd | renames label text vsup with vdd |
+
+Only selected operations are performed in the following order:
+- Flatten cell
+- Convert paths to polygons
+- Delete layers
+- Remap layers
+- Merge layers
+- Rename labels
+
+Examples:
+
+Read in.gds, flatten cell1 and cell2 and write these cells to out.gds
+```sh
+gdsutil -i in.gds -o out.gds --flatten --cels "cell1 cell2"
+```
+
+Read in.gds, flatten cell1 and cell2, merge shapes and write these cells to out.gds
+```sh
+gdsutil -i in.gds -o out.gds --merge *,* --flatten --cels "cell1 cell2"
+```
+
+
