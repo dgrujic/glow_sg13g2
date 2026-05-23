@@ -22,6 +22,8 @@ def printusage():
     print("\t--noref\t\tRaise error if a cell contans a reference (cell has hierarchy)")
     print("\t--errlay\tRaise error if a cell contains a layer/datatype")
     print("\t--uselay\tAllow layer/datatype in a cell")
+    print("\t--label\tRequire that a label exists in a cell")
+    print("\t--nolabel\tRequire that a label does not exist in a cell")
     print("See examples for uses of errlay and uselay")
     print("")
     print("Examples:")
@@ -44,6 +46,12 @@ def printusage():
     print("Additionally, allow layer 10 with datatype 2")
     print("Result is that any layer with datatype=0 is allowed and layer 10 with datatype 2")
     print("gdsinfo infile.gds --errlay *,* --uselay *,0 --uselay 10,2")
+    print("")
+    print("Require that power and supply labels are in a cell")
+    print("gdsinfo infile.gds --label vdd --label vss")
+    print("")
+    print("Forbid a global label sub!")
+    print("gdsinfo infile.gds --nolabel 'sub!'")
     print("*"*80)
 
 def is_layer_allowed(layer : int, datatype : int, args):
@@ -136,7 +144,7 @@ def get_layer_info(cell : gdstk.Cell):
             layer_set.add( (layer, dt) )
     for label in fcell.labels:
         layer = label.layer
-        dt = label.datatype
+        dt = label.texttype
         layer_set.add( (layer, dt) )
     return layer_set
 
@@ -167,6 +175,16 @@ def process_cell(cell : gdstk.Cell, args):
                 print("\t" + l.text + " ("+str(l.layer) + "," + str(l.texttype) +")")
             else:
                 print("\t" + l.text + " ("+str(l.layer) + "," + str(l.texttype) +")"+"   \tERROR : this layer/data type combination is not allowed")
+    # Check labels
+    label_set = set([l.text for l in labels])
+    for label in args.label:
+        if label not in label_set:
+            print("ERROR : Label", label, "not found.")
+            err = True
+    for label in args.nolabel:
+        if label in label_set:
+            print("ERROR : Label", label, "found in cell labels.")
+            err = True
 
     # Get used layer info
     layer_set = get_layer_info(cell)
@@ -192,6 +210,8 @@ def main():
     parser.add_argument('--noref', action='store_true')
     parser.add_argument('--errlay', action='append', default=[])
     parser.add_argument('--uselay', action='append', default=[])
+    parser.add_argument('--label', action='append', default=[])
+    parser.add_argument('--nolabel', action='append', default=[])
     try:
         args = parser.parse_args()
     except:
