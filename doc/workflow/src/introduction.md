@@ -17,6 +17,8 @@ In principle, any digital circuit can be implemented with only a NAND (or a NOR)
 Better PPA can be achieved if the standard cell library has more logic gate types in various drive strengths.
 Therefore, it is desirable for a digital standard cell library to have as many logic gates and storage elements in different drive strengths as possible.
 
+Recommended environment installation is covered [here](./installation.md).
+
 The following sections cover the role and uses of a digital standard cell library in a digital design flow.
 A [short overview of digital design flow](./digital_flow_overview.md) summarizes the steps and tools used in the design of digital SoC.
 The section on [design of a standard cell](./standard_cell_design.md) goes into details of all aspects of cell design.
