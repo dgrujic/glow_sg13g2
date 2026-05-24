@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - GLOW Workflow</title>
-        <base href="/">
+        <title>Installation - GLOW Workflow</title>
 
 
         <!-- Custom HTML head -->
@@ -175,14 +174,88 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<p>This section covers steps to install and setup GLOW SG13G2 flow.</p>
+<p>First a Python virtual environment should be installed.
+Steps for <a href="https://www.anaconda.com/docs/getting-started/miniconda/main">Miniconda</a> are given in the following text, although any other alternative should work equally well.
+After the Miniconda is installed, it should be activated</p>
+<pre><code class="language-sh">source &lt;path_to_miniconda&gt;/bin/activate
+</code></pre>
+<p>Optinally restrict Miniconda to only use free community packages with</p>
+<pre><code class="language-sh">conda config --add channels conda-forge
+conda config --set channel_priority strict
+</code></pre>
+<p>Create a new environment called <code>glow</code> with Python version 3.12:</p>
+<pre><code class="language-sh">conda create -n glow python=3.12
+</code></pre>
+<p>If the environment was created previously skip this step.</p>
+<p>Activate the <code>glow</code> environment</p>
+<pre><code class="language-sh">conda activate glow
+</code></pre>
+<p>and then install <code>pip</code></p>
+<pre><code class="language-sh">conda install pip
+</code></pre>
+<p>Set the variable pointing to GLOW path</p>
+<pre><code class="language-sh">export GLOW_ROOT=&lt;path_to_GLOW&gt;
+</code></pre>
+<p>Install <code>glow_utils</code> package</p>
+<pre><code class="language-sh">cd $GLOW_ROOT/code/glow_utils
+pip install -e .
+</code></pre>
+<p>Flag <code>-e</code> is usefull for development as changes in package’s Python files are immediatelly visible, without the need for package reinstallation. Omit <code>-e</code> flag if you don’t plan to change the source code.</p>
+<p>GLOW can be tested by running test scripts, for example:</p>
+<pre><code class="language-sh">python test_symsim_nand2.py
+</code></pre>
+<p>that produces the output</p>
+<pre><code>Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : A B
+Symsim::Elaborate: Outputs : Y
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : VDD A B Y n0 VSS
+Symsim::Elaborate: Elaboration OK.
+****************************************
+Determining gate logic function.
+Symsim::combSim: Simulating circuit with 2 inputs and 1 outputs.
+Symsim::combSim: | 11 | 0
+Symsim::combSim: | 10 | 1
+Symsim::combSim: | 01 | 1
+Symsim::combSim: | 00 | 1
+Gate logic function is ~A | ~B
+Circuit is OK
+Circuit function matches the expected Boolean function.
+Circuit function does not match the wrong Boolean function.
+</code></pre>
+<p>GLOW targets IHP SG13G2 process and its PDK should be downloaded from</p>
+<pre><code>https://github.com/IHP-GmbH/IHP-Open-PDK
+</code></pre>
+<p>and installed per <a href="https://ihp-open-pdk-docs.readthedocs.io/en/latest/install.html">installation instructions</a>.
+Setup of IHP PDK exports two variables <code>PDK</code> and <code>PDK_ROOT</code> and we will assume that they are correctly set.
+If not already installed, IHP PDK Python requirements can be installed in <code>glow</code> environment as</p>
+<pre><code class="language-sh">pip install -r $PDK_ROOT/requirements.txt
+</code></pre>
+<p>This commands installs, amongst other things, KLayout Python bindings that are used for DRC and LVS checks.</p>
+<p>Testing of DRC and LVS can be performed with the following commands:</p>
+<pre><code class="language-sh">cd $GLOW_ROOT/cells/INV_D1
+$GLOW_ROOT/code/scripts/check_cell.sh INV_D1.gds INV_D1
+</code></pre>
+<p>that run <code>gdsinfo</code> based checks, DRC and LVS, and should produce an output</p>
+<pre><code>Checking INV_D1	 | GDSINFO OK	 | DRC OK	 | LVS OK	 | ALL OK
+</code></pre>
+<p>meaning that all checks have passed.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
 
+                            <a rel="next prefetch" href="digital_flow_overview.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -190,7 +263,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
 
+                    <a rel="next prefetch" href="digital_flow_overview.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
             </nav>
 
         </div>

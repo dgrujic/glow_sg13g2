@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c42b5ecb.js";
+            window.path_to_searchindex_js = "searchindex-b93ceb5a.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-a293eaf0.js"></script>
+        <script src="toc-9e19758c.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -189,10 +189,82 @@ Power, performance and area (PPA) are metrics of digital IPs that not only depen
 In principle, any digital circuit can be implemented with only a NAND (or a NOR) gate and a storage element (flip-flop), but that would result in a suboptimal design.
 Better PPA can be achieved if the standard cell library has more logic gate types in various drive strengths.
 Therefore, it is desirable for a digital standard cell library to have as many logic gates and storage elements in different drive strengths as possible.</p>
+<p>Recommended environment installation is covered <a href="#installation">here</a>.</p>
 <p>The following sections cover the role and uses of a digital standard cell library in a digital design flow.
 A <a href="#a-short-overview-of-asic-digital-design-flow">short overview of digital design flow</a> summarizes the steps and tools used in the design of digital SoC.
 The section on <a href="#standard-cell-design">design of a standard cell</a> goes into details of all aspects of cell design.
 <a href="#design-flow">Design flow</a> section covers the details of generating the standard cell library from individual cell netlists and layouts.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<p>This section covers steps to install and setup GLOW SG13G2 flow.</p>
+<p>First a Python virtual environment should be installed.
+Steps for <a href="https://www.anaconda.com/docs/getting-started/miniconda/main">Miniconda</a> are given in the following text, although any other alternative should work equally well.
+After the Miniconda is installed, it should be activated</p>
+<pre><code class="language-sh">source &lt;path_to_miniconda&gt;/bin/activate
+</code></pre>
+<p>Optinally restrict Miniconda to only use free community packages with</p>
+<pre><code class="language-sh">conda config --add channels conda-forge
+conda config --set channel_priority strict
+</code></pre>
+<p>Create a new environment called <code>glow</code> with Python version 3.12:</p>
+<pre><code class="language-sh">conda create -n glow python=3.12
+</code></pre>
+<p>If the environment was created previously skip this step.</p>
+<p>Activate the <code>glow</code> environment</p>
+<pre><code class="language-sh">conda activate glow
+</code></pre>
+<p>and then install <code>pip</code></p>
+<pre><code class="language-sh">conda install pip
+</code></pre>
+<p>Set the variable pointing to GLOW path</p>
+<pre><code class="language-sh">export GLOW_ROOT=&lt;path_to_GLOW&gt;
+</code></pre>
+<p>Install <code>glow_utils</code> package</p>
+<pre><code class="language-sh">cd $GLOW_ROOT/code/glow_utils
+pip install -e .
+</code></pre>
+<p>Flag <code>-e</code> is usefull for development as changes in package’s Python files are immediatelly visible, without the need for package reinstallation. Omit <code>-e</code> flag if you don’t plan to change the source code.</p>
+<p>GLOW can be tested by running test scripts, for example:</p>
+<pre><code class="language-sh">python test_symsim_nand2.py
+</code></pre>
+<p>that produces the output</p>
+<pre><code>Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : A B
+Symsim::Elaborate: Outputs : Y
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : VDD A B Y n0 VSS
+Symsim::Elaborate: Elaboration OK.
+****************************************
+Determining gate logic function.
+Symsim::combSim: Simulating circuit with 2 inputs and 1 outputs.
+Symsim::combSim: | 11 | 0
+Symsim::combSim: | 10 | 1
+Symsim::combSim: | 01 | 1
+Symsim::combSim: | 00 | 1
+Gate logic function is ~A | ~B
+Circuit is OK
+Circuit function matches the expected Boolean function.
+Circuit function does not match the wrong Boolean function.
+</code></pre>
+<p>GLOW targets IHP SG13G2 process and its PDK should be downloaded from</p>
+<pre><code>https://github.com/IHP-GmbH/IHP-Open-PDK
+</code></pre>
+<p>and installed per <a href="https://ihp-open-pdk-docs.readthedocs.io/en/latest/install.html">installation instructions</a>.
+Setup of IHP PDK exports two variables <code>PDK</code> and <code>PDK_ROOT</code> and we will assume that they are correctly set.
+If not already installed, IHP PDK Python requirements can be installed in <code>glow</code> environment as</p>
+<pre><code class="language-sh">pip install -r $PDK_ROOT/requirements.txt
+</code></pre>
+<p>This commands installs, amongst other things, KLayout Python bindings that are used for DRC and LVS checks.</p>
+<p>Testing of DRC and LVS can be performed with the following commands:</p>
+<pre><code class="language-sh">cd $GLOW_ROOT/cells/INV_D1
+$GLOW_ROOT/code/scripts/check_cell.sh INV_D1.gds INV_D1
+</code></pre>
+<p>that run <code>gdsinfo</code> based checks, DRC and LVS, and should produce an output</p>
+<pre><code>Checking INV_D1	 | GDSINFO OK	 | DRC OK	 | LVS OK	 | ALL OK
+</code></pre>
+<p>meaning that all checks have passed.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="a-short-overview-of-asic-digital-design-flow"><a class="header" href="#a-short-overview-of-asic-digital-design-flow">A short overview of ASIC digital design flow</a></h1>
 <p>The objective of this section is to give a short overview of ASIC digital design flow and the role, uses and different libraries and formats that make a digital standard cell library.</p>
