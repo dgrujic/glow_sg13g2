@@ -20,6 +20,7 @@ dependencies = [
 [tool.setuptools.package-dir]
 "glow_utils" = "glow_utils"
 "glow_tools" = "glow_tools"
+"glow_parcells" = "glow_parcells"
 
 [project.scripts]
 gdsinfo = "glow_tools.gdsinfo:main"

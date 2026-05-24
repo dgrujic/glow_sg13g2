@@ -29,15 +29,15 @@ print(inv_par.netlist_SPICE())
 The output of this Python code is
 ```spice
 .subckt inv_par A Y VDD VSS WN=3e-07 WP=4.5e-07 L=1.3e-07 NGN=1 NGP=1
-MN0 Y A VSS VSS sg13g2_lvnmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN}
-MP0 Y A VDD VDD sg13g2_lvpmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP}
+MN0 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN}
+MP0 Y A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP}
 .ends
 ```
 A simple CMOS inverter testbench can be made by creating an instance of the inverter and defining transistor models - in this case a dummy `LEVEL 1` MOSFET model.
 ```spice
 X1 in out vdd 0 inv_par
-.model sg13g2_lvnmos NMOS (LEVEL=1 VTO=0.3 KP=50u)
-.model sg13g2_lvpmos PMOS (LEVEL=1 VTO=-0.3 KP=20u)
+.model sg13_lv_nmos NMOS (LEVEL=1 VTO=0.3 KP=50u)
+.model sg13_lv_pmos PMOS (LEVEL=1 VTO=-0.3 KP=20u)
 ```
 What is left is to define voltage sources and simulations
 ```spice
@@ -64,13 +64,13 @@ This error is a consequence of a chosen inadequate MOSFET model that does not su
 ```spice
 * CMOS Inverter Testbench
 .subckt inv_par A Y VDD VSS WN=3e-07 WP=4.5e-07 L=1.3e-07
-MN0 Y A VSS VSS sg13g2_lvnmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)}
-MP0 Y A VDD VDD sg13g2_lvpmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)}
+MN0 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)}
+MP0 Y A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)}
 .ends
 
 X1 in out vdd 0 inv_par
-.model sg13g2_lvnmos NMOS (LEVEL=1 VTO=0.3 KP=50u)
-.model sg13g2_lvpmos PMOS (LEVEL=1 VTO=-0.3 KP=20u)
+.model sg13_lv_nmos NMOS (LEVEL=1 VTO=0.3 KP=50u)
+.model sg13_lv_pmos PMOS (LEVEL=1 VTO=-0.3 KP=20u)
 Vdd vdd 0 1.2
 Vin in 0 PULSE(0 1.2 0 1n 1n 10n 20n)
 Cl out 0 10f

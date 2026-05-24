@@ -1,7 +1,7 @@
 {
     "processName" : "sg13g2",
-    "nmosModelName" : "sg13g2_lvnmos",
-    "pmosModelName" : "sg13g2_lvpmos",
+    "nmosModelName" : "sg13_lv_nmos",
+    "pmosModelName" : "sg13_lv_pmos",
     "nmosAS" : "ipar('w') * 310e-9",
     "nmosAD" : "ipar('w') * 310e-9",
     "nmosPS" : "2 * (ipar('w') + 310e-9)",

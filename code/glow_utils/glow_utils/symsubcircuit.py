@@ -494,6 +494,15 @@ class Symsubcircuit(object):
                 res += elem.to_SPICE()
         res += ".ends\n"
         return res
+    
+    @classmethod
+    def write_SPICE(cls, fileName, printOutput=True):
+        netlist = cls.netlist_SPICE()
+        if printOutput:
+            print("SPICE netlist\n")
+            print(netlist)
+        with open(fileName + ".sp", "w") as f:
+            f.write(netlist)
 
     @classmethod
     def netlist_CDL(cls, printParams=False):
@@ -532,6 +541,16 @@ class Symsubcircuit(object):
                 res += elem.to_CDL()
         res += ".ENDS\n"
         return res
+
+    @classmethod
+    def write_CDL(cls, fileName, printOutput=True):
+        netlist = cls.netlist_CDL()
+        if printOutput:
+            print("CDL netlist\n")
+            print(netlist)
+        with open(fileName + ".cdl", "w") as f:
+            f.write(netlist)
+
 
     #************************
     # SPICE conversion

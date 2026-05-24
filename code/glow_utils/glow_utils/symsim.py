@@ -25,6 +25,7 @@ from itertools import product
 from sympy import symbols
 from sympy.logic import SOPform
 from sympy.logic import simplify_logic
+from sympy import bool_map
 
 class Symsim:
     def __init__(self, circuit : Symsubcircuit, verbose = True):
@@ -244,6 +245,33 @@ class Symsim:
             return res
         else:
             return IEEE1164.toList(outputs[0])
+
+    def combCheck(self, expectedFns):
+        """
+        Simulate the function of a combinatorial circuit and check if the output function(s)
+        are equivalent to the expected functions.
+        expectedFns is a list of expected logic functions of a circuit.
+        Returns True if the circuit is sucessfully simulated and simulated logic functions
+        are equivalent to Boolean functions given in expectedFns.
+        """
+        self.msg("*"*80)
+        self.msg("Working on circuit : " + self.circuit.getClassName() + "\n")
+        logicExpr = self.combFunc()
+        self.msg("")
+        if not self.error:
+            self.msg("Gate logic functions :")
+            for fn in logicExpr:
+                self.msg("\t"+str(fn))
+        else:
+            self.msg("ERROR : Simulation error.")
+            return False
+
+        for i in range(len(expectedFns)):
+            mapping = bool_map(expectedFns[i], logicExpr[i])
+            if mapping is None:
+                self.msg("ERROR : Circuit function #" + str(i) +" "+str(expectedFns[i])+" does not operate as expected.")
+                return False
+        return True
 
     def simstep(self, printDelta = False):
         """

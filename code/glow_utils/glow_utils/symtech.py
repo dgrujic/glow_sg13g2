@@ -21,8 +21,8 @@ import json
 class SymTech:
     technology = {
         "processName" : "sg13g2",
-        "nmosModelName" : "sg13g2_lvnmos",
-        "pmosModelName" : "sg13g2_lvpmos",
+        "nmosModelName" : "sg13_lv_nmos",
+        "pmosModelName" : "sg13_lv_pmos",
         "nmosAS" : "ipar('w')*310e-9",
         "nmosAD" : "ipar('w')*310e-9",
         "nmosPS" : "2*(ipar('w')+310e-9)",
@@ -30,7 +30,10 @@ class SymTech:
         "pmosAS" : "ipar('w')*310e-9",
         "pmosAD" : "ipar('w')*310e-9",
         "pmosPS" : "2*(ipar('w')+310e-9)",
-        "pmosPD" : "2*(ipar('w')+310e-9)"        
+        "pmosPD" : "2*(ipar('w')+310e-9)",
+        # Cell sizing
+        "invx1WN": 640e-9,
+        "invx1WP": 980e-9
     }
     processName = technology["processName"]
     nmosModelName = technology["nmosModelName"]
