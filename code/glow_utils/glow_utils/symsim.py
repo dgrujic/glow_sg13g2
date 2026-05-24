@@ -155,9 +155,9 @@ class Symsim:
         if len(self.inputs) > 0:
             inputs = " ".join(self.inputs)
             res = symbols(inputs)
-            # Ensure that return type is always a list, even if only one element is returned
-            if not isinstance(res, list):
-                return [res]
+            # Ensure that return type is always a tuple, even if only one element is returned
+            if not isinstance(res, tuple):
+                return (res,)
             else:
                 return res
         else:
