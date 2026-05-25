@@ -370,6 +370,8 @@ class Symsubcircuit(object):
                         terminalIndex = self.getTerminals().index(node)
                         pinName = self.nodes[terminalIndex]
                         node = pinName
+                    else:
+                        node = hierPath + node
                     newNodeNames.append(node)
                 newElement.putNodes(tuple(newNodeNames))
                 newElement.setParameterEvaluator(parameterEvaluator)

@@ -26,6 +26,7 @@ from sympy import symbols
 from sympy.logic import SOPform
 from sympy.logic import simplify_logic
 from sympy import bool_map
+import numpy as np
 
 class Symsim:
     def __init__(self, circuit : Symsubcircuit, verbose = True):
@@ -38,6 +39,11 @@ class Symsim:
         self.error = False
         self.elaborate()
         self.initSim()
+
+        self.rinit = 1e4
+
+        self.highThreshold = 0.9
+        self.lowThreshold = 0.1
 
     def msg(self, text):
         if self.verbose:
@@ -60,8 +66,8 @@ class Symsim:
         self.msg("Symsim::Elaborate: Circuit passes ERC.")
         # Identify inputs, outputs, power and ground
         id = check.identifyTerminals()
-        self.inputs = id['I']
-        self.outputs = id['O']
+        self.inputs = sorted(id['I'])
+        self.outputs = sorted(id['O'])
         self.power = id['P'][0]
         self.ground = id['G'][0]
         self.msg("Symsim::Elaborate: Inputs  : " + " ".join(self.inputs))
@@ -82,7 +88,8 @@ class Symsim:
         """
         Print node states
         """
-        for node in self.nodes.keys():
+        nodes = sorted(self.nodes.keys())
+        for node in nodes:
             print(f"{node:<15} : {self.nodes[node].value:<5}")
 
     def initSim(self):
@@ -105,6 +112,13 @@ class Symsim:
         self.nodes[self.power] = IEEE1164.ONE
         self.nodes[self.ground] = IEEE1164.ZERO
 
+    def iterNodes(self):
+        nodes = self.nodes.copy()
+        for node in nodes.keys():
+            if (node not in self.inputs) and (node != self.power) and (node != self.ground):
+                nodes[node] = IEEE1164.Z
+
+
     def propagateNodes(self):
         """
         Propagate node values from previous simulation step.
@@ -114,10 +128,27 @@ class Symsim:
         for node in self.nodes.keys():
             if (node not in self.inputs) and (node != self.power) and (node != self.ground):
                 val = self.nodes[node]
+#                if val == IEEE1164.X or val == IEEE1164.WEAK:
+#                    self.nodes[node] = IEEE1164.Z
+#                continue
                 if val == IEEE1164.ONE:
                     self.nodes[node] = IEEE1164.H
                 elif val == IEEE1164.ZERO:
                     self.nodes[node] = IEEE1164.L
+                elif val == IEEE1164.X or val == IEEE1164.WEAK:
+                    self.nodes[node] = IEEE1164.Z
+
+    def deltapropagateNodes(self):
+        """
+        Propagate node values from previous simulation step.
+        Node values are propagated by converting '1' to 'H'
+        and '0' to 'L'. Inputs, power and ground are not changed.
+        """
+        for node in self.nodes.keys():
+            if (node not in self.inputs) and (node != self.power) and (node != self.ground):
+                val = self.nodes[node]
+                if val == IEEE1164.X or val == IEEE1164.WEAK:
+                    self.nodes[node] = IEEE1164.Z
 
     def setNode(self, node, value : IEEE1164):
         """
@@ -128,8 +159,18 @@ class Symsim:
         if (node != self.power) and (node != self.ground) and (node not in self.inputs):
             if (self.nodes[node] != value):
                 self.nodeChanged = True
-                self.nodes[node] = value
-    
+                #self.nodes[node] = value
+                self.nodes[node] = IEEE1164.resolve(self.nodes[node], value)
+
+    def setIntNode(self, nodes, node, value : IEEE1164):
+        """
+        Set the node to a given value.
+        Does not allow to change the value of power and ground.
+        Keeps track if node value has actually changed.
+        """
+        if (node != self.power) and (node != self.ground) and (node not in self.inputs):
+            nodes[node] = IEEE1164.resolve(nodes[node], value)
+
     def setInput(self, node, value : IEEE1164):
         if node in self.inputs:
             self.nodes[node] = value
@@ -278,33 +319,140 @@ class Symsim:
         Simulation step. Update nodes until their values settle or 
         the maximum number of delta iterations has been reached.
         """
-        self.propagateNodes()
         ndelta = 0
         while ndelta < self.maxDelta:
             # Perform a delta simulation step
-            self.nodeChanged = False
-            # Go through all devices and simulate their response
-            for elem in self.circuit.getElements():
-                elem : Symdevice
-                nodeVals = []
-                nodes = elem.getNodes()
-                for node in nodes:
-                    # Get current node values
-                    nodeVals.append( self.nodes[node] )
-                newNodeVals = elem.sim(nodeVals)
-                for i in range(len(newNodeVals)):
-                    self.setNode(nodes[i], newNodeVals[i])
-            # Print delta step if requested
+            newNodes = self.simMNA(self.nodes)
+            ndelta += 1
             if printDelta:
                 self.msg("Delta step      : " + str(ndelta))
-                self.msg("Node changed    : " + str(self.nodeChanged))
                 self.printNodes()
-            ndelta += 1
             # Check if steady state has been reached
-            if not self.nodeChanged:
+            if self.nodes == newNodes:
                 # Steady state, save node values from this step and exit
+                self.nodes = newNodes
                 self.results.append( copy(self.nodes) )
                 if not self.areNodeValuesValid():
                     print("Symsim::simstep: WARNING : Nodes contain invalid values.")
                 return
+            # Update node values and execute a new delta step
+            self.nodes = newNodes
         raise ValueError("Symsim::simstep: ERROR : Circuit didn't converge in " + str(self.maxDelta) +" delta steps.")
+
+    def simMNA(self, initialState):
+        """
+        Construct MNA for this circuit and solve it.
+        initialState is a dictionary of node names as keys and node values as values.
+        initialState determines if node should be connected to ground or power
+        through weak resistor to define the state of floating nodes.
+        """
+        allNodeNames = sorted(self.nodes.keys())
+        # Internal nodes
+        intNodes = []
+        for node in allNodeNames:
+            if (node not in self.inputs) and (node not in self.power) and (node not in self.ground):
+                intNodes.append(node)
+        numIntNodes = len(intNodes)
+        indIntNodes = {item: index for index, item in enumerate(intNodes)}
+
+        inputNodes = sorted(self.inputs)
+        numInputs = len(self.inputs)    
+
+        numPower = 1
+        powerNode = self.power
+        groundNode = self.ground
+        
+        mnaSize = numIntNodes + 2*numInputs + 2*numPower
+        indPower = numIntNodes + numInputs
+        
+        baseInput = numIntNodes
+        indInputs = {item: (baseInput+index) for index, item in enumerate(inputNodes)}
+
+        # indNodes is a dictionary of node indexes in MNA
+        indNodes = {}
+        indNodes.update(indIntNodes)
+        indNodes.update(indInputs)
+        indNodes.update( {powerNode : indPower} )
+
+        # Create MNA
+        mna = np.zeros( (mnaSize, mnaSize) )
+        # Fill mna with initial state
+        for node in initialState.keys():
+            #if (node not in self.inputs) and (node not in self.power) and (node not in self.ground):
+            if (node not in self.ground):
+                state = initialState[node]
+                if (state == IEEE1164.H) or (state == IEEE1164.ONE):
+                    # Add weak resistor from node to power supply
+                    mna[ indNodes[node], indNodes[node] ] += 1.0/self.rinit
+                    mna[ indNodes[powerNode], indNodes[powerNode] ] += 1.0/self.rinit
+                    mna[ indNodes[node], indNodes[powerNode] ] += -1.0/self.rinit
+                    mna[ indNodes[powerNode], indNodes[node] ] += -1.0/self.rinit
+                else:
+                    # Add weak resistor from node to ground
+                    mna[ indNodes[node], indNodes[node] ] += 1.0/self.rinit
+        # Fill MNA with transistor equivalents
+        for elem in self.circuit.getElements():
+            d, g, s, b = elem.getNodes()
+            nodeVals = []
+            nodes = elem.getNodes()
+            for node in nodes:
+                # Get current node values
+                nodeVals.append( initialState[node] )
+            r = elem.simR(nodeVals)
+            if d == groundNode:
+                # Drain is grounded, add r from source to ground
+                mna[ indNodes[s], indNodes[s] ] += 1.0/r
+            elif s == groundNode:
+                # Source is grounded, add r from drain to ground
+                mna[ indNodes[d], indNodes[d] ] += 1.0/r
+            else:
+                # Floating element
+                mna[ indNodes[s], indNodes[s] ] += 1.0/r
+                mna[ indNodes[d], indNodes[d] ] += 1.0/r
+                mna[ indNodes[s], indNodes[d] ] += -1.0/r
+                mna[ indNodes[d], indNodes[s] ] += -1.0/r
+        # Add entries for independent voltage sources
+        nNodes = indPower + 1
+        for node in inputNodes:
+            ind = indNodes[node] # node index of input
+            mna[ ind, nNodes + ind - baseInput ] = 1.0
+            mna[ nNodes + ind - baseInput, ind ] = 1.0
+        # Add entry for power
+        mna[ indPower, nNodes + indPower - baseInput  ] = 1.0
+        mna[ nNodes + indPower -baseInput, indPower ] = 1.0
+
+        # Fill RHS with input values
+        rhs = np.zeros( mnaSize )
+        for node in inputNodes:
+            if (initialState[node] == IEEE1164.ONE) or (initialState[node] == IEEE1164.H):
+                inVal = 1.0
+            else:
+                inVal = 0.0
+            rhs[ indNodes[node] - baseInput + nNodes ] = inVal
+        # Add power
+        rhs[ indNodes[powerNode] - baseInput + nNodes ] = 1.0
+        try:
+            sol = np.linalg.solve(mna, rhs)
+        except:
+            # Failed to solve the system, possibly a singular matrix
+            self.msg("Symsim::simMNA:ERROR : MNA solving failed, possibly a singular matrix.")
+            res = dict.fromkeys(initialState.keys(), IEEE1164.X)
+            return res
+        # Construct output value
+        res = {}
+        for i in range(numIntNodes):
+            x = sol[i]
+            if x > self.highThreshold:
+                val = IEEE1164.ONE
+            elif x < self.lowThreshold:
+                val = IEEE1164.ZERO
+            else:
+                val = IEEE1164.X
+            res.update( {intNodes[i] : val} )
+        for i in range(numInputs):
+            node = inputNodes[i]
+            res.update( {node : initialState[node]} )
+        
+        res.update( {powerNode : IEEE1164.ONE} )
+        res.update( {groundNode : IEEE1164.ZERO} )
+        return res

@@ -29,6 +29,10 @@ class SymMOSFET(Symdevice):
     terminals = ['D', 'G', 'S', 'B']
     terminalNumbers = {name: index for index, name in enumerate(terminals)}
 
+    ron = 1.0
+    roff = 1e6
+    rweak = 100.0
+
     def initInstance(self):
         # Custom device initialization code
         # Check if w and l are given
@@ -46,7 +50,17 @@ class SymMOSFET(Symdevice):
             self.parameters.update({'ps' : self.defaultPS() })
         if not self.hasParameter('pd'):
             self.parameters.update({'pd' : self.defaultPD() })
-        self.isWeak = False # indicates if MOSFET is has low W/L ratio
+
+    def isWeak(self):
+        if self.hasParameter('weak'):
+            if self.parameters['weak'] == '0':
+                # Strong MOSFET
+                return False
+            else:
+                # Weak MOSFET
+                return True
+        else:
+            return False
 
     def defaultAS(self):
         return 0.0 
@@ -116,7 +130,8 @@ class SymNMOS(SymMOSFET, SymTech):
         return SymTech.nmosPD()
     def info(self):
         return "NMOS with 4 terminals"
-    def sim(self, nodeVals):
+
+    def simR(self, nodeVals):
         """
         Simulate NMOS
         """
@@ -126,19 +141,20 @@ class SymNMOS(SymMOSFET, SymTech):
         if (nodes[0] == nodes[1]):
             # Drain-gate connection
             if (s == IEEE1164.L) or (s == IEEE1164.ZERO):
-                d = s
-                g = s
+                return self.ron
         elif (nodes[2] == nodes[1]):
             # Sorce-gate connection
             if (d == IEEE1164.L) or (d == IEEE1164.ZERO):
-                s = d
-                g = d
+                return self.ron
         elif (g == IEEE1164.ONE) or (g == IEEE1164.H):
             # NMOS gate is high - device in ON
-            val = IEEE1164.resolve(d, s)
-            d = val
-            s = val
-        return [d, g, s, b]
+            if not self.isWeak():
+                # Strong NMOS
+                return self.ron
+            else:
+                return self.rweak
+        return self.roff
+
 
 #
 # PMOS class
@@ -160,7 +176,8 @@ class SymPMOS(SymMOSFET, SymTech):
         return SymTech.pmosPD()
     def info(self):
         return "PMOS with 4 terminals"
-    def sim(self, nodeVals):
+
+    def simR(self, nodeVals):
         """
         Simulate PMOS
         """
@@ -170,16 +187,16 @@ class SymPMOS(SymMOSFET, SymTech):
         if (nodes[0] == nodes[1]):
             # Drain-gate connection
             if (s == IEEE1164.H) or (s == IEEE1164.ONE):
-                d = s
-                g = s
+                return self.ron
         elif (nodes[2] == nodes[1]):
             # Sorce-gate connection
             if (d == IEEE1164.H) or (d == IEEE1164.ONE):
-                s = d
-                g = d
+                return self.ron
         elif (g == IEEE1164.ZERO) or (g == IEEE1164.L):
             # PMOS gate is low - device in ON
-            val = IEEE1164.resolve(d, s)
-            d = val
-            s = val
-        return [d, g, s, b]
+            if not self.isWeak():
+                # Strong PMOS
+                return self.ron
+            else:
+                return self.rweak
+        return self.roff
