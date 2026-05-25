@@ -83,7 +83,7 @@ Testing of DRC and LVS can be performed with the following commands:
 cd $GLOW_ROOT/cells/INV_D1
 $GLOW_ROOT/code/scripts/check_cell.sh INV_D1.gds INV_D1
 ```
-that run `gdsinfo` based checks, DRC and LVS, and should produce an output
+that runs `gdsinfo` based checks, DRC and LVS, and should produce an output
 ```
 Checking INV_D1	 | GDSINFO OK	 | DRC OK	 | LVS OK	 | ALL OK
 ```
