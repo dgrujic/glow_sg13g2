@@ -19,6 +19,7 @@
 from glow_utils.symdevice import Symdevice
 from glow_utils.symtech import SymTech
 from glow_utils.symieee1164 import IEEE1164
+import math
 
 #
 # MOSFET base class
@@ -32,6 +33,7 @@ class SymMOSFET(Symdevice):
     ron = 1.0
     roff = 1e6
     rweak = 100.0
+    vscale = 13.0
 
     def initInstance(self):
         # Custom device initialization code
@@ -133,28 +135,33 @@ class SymNMOS(SymMOSFET, SymTech):
 
     def simR(self, nodeVals):
         """
-        Simulate NMOS
+        Simulate NMOS.
+        Returns channel resistance based on terminal states
         """
         d, g, s, b = nodeVals
         # Special case for diode connected NMOS
         nodes = self.getNodes()
         if (nodes[0] == nodes[1]):
             # Drain-gate connection
-            if (s == IEEE1164.L) or (s == IEEE1164.ZERO):
-                return self.ron
+                return 1.0/self.ron
         elif (nodes[2] == nodes[1]):
             # Sorce-gate connection
-            if (d == IEEE1164.L) or (d == IEEE1164.ZERO):
-                return self.ron
-        elif (g == IEEE1164.ONE) or (g == IEEE1164.H):
-            # NMOS gate is high - device in ON
+                return 1.0/self.ron
+        else:
             if not self.isWeak():
                 # Strong NMOS
-                return self.ron
+                ron = self.ron
             else:
-                return self.rweak
-        return self.roff
-
+                ron = self.rweak
+            vgs = g - s
+            vgd = g - d
+            if (vgs > vgd):
+                vg = vgs
+            else:
+                vg = vgd
+            a = self.vscale
+            r = (self.roff * ron*(1-math.tanh(a * (vg-0.5))))/2
+            return r
 
 #
 # PMOS class
@@ -179,24 +186,32 @@ class SymPMOS(SymMOSFET, SymTech):
 
     def simR(self, nodeVals):
         """
-        Simulate PMOS
+        Simulate PMOS.
+        Returns channel resistance based on terminal states
         """
         d, g, s, b = nodeVals
         # Special case for diode connected PMOS
         nodes = self.getNodes()
         if (nodes[0] == nodes[1]):
             # Drain-gate connection
-            if (s == IEEE1164.H) or (s == IEEE1164.ONE):
-                return self.ron
+                return 1.0/self.ron
         elif (nodes[2] == nodes[1]):
             # Sorce-gate connection
-            if (d == IEEE1164.H) or (d == IEEE1164.ONE):
-                return self.ron
-        elif (g == IEEE1164.ZERO) or (g == IEEE1164.L):
-            # PMOS gate is low - device in ON
+                return 1.0/self.ron
+        else:
             if not self.isWeak():
                 # Strong PMOS
-                return self.ron
+                ron = self.ron
             else:
-                return self.rweak
-        return self.roff
+                ron = self.rweak
+            vgs = g - s
+            vgd = g - d
+            if (vgs < vgd):
+                vg = vgs
+            else:
+                vg = vgd
+            a = self.vscale
+            r = (self.roff * ron*(1-math.tanh(a * (-vg-0.5))))/2
+            return r
+
+

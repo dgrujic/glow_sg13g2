@@ -40,6 +40,8 @@ class Symsim:
         self.elaborate()
         self.initSim()
 
+        self.maxNRiter = 3
+
         self.rinit = 1e4
 
         self.highThreshold = 0.9
@@ -324,9 +326,6 @@ class Symsim:
             # Perform a delta simulation step
             newNodes = self.simMNA(self.nodes)
             ndelta += 1
-            if printDelta:
-                self.msg("Delta step      : " + str(ndelta))
-                self.printNodes()
             # Check if steady state has been reached
             if self.nodes == newNodes:
                 # Steady state, save node values from this step and exit
@@ -337,6 +336,9 @@ class Symsim:
                 return
             # Update node values and execute a new delta step
             self.nodes = newNodes
+            if printDelta:
+                self.msg("Delta step      : " + str(ndelta))
+                self.printNodes()
         raise ValueError("Symsim::simstep: ERROR : Circuit didn't converge in " + str(self.maxDelta) +" delta steps.")
 
     def simMNA(self, initialState):
@@ -374,14 +376,21 @@ class Symsim:
         indNodes.update(indInputs)
         indNodes.update( {powerNode : indPower} )
 
-        # Create MNA
+        state = copy(initialState)
+        for node in initialState.keys():
+            if (initialState[node] == IEEE1164.H) or (initialState[node] == IEEE1164.ONE):
+                state[node] = 1.0
+            else:
+                state[node] = 0.0
+
+        # Fill MNA with weak pullup or pulldown resistors to match initial state 
         mna = np.zeros( (mnaSize, mnaSize) )
         # Fill mna with initial state
-        for node in initialState.keys():
+        for node in state.keys():
             #if (node not in self.inputs) and (node not in self.power) and (node not in self.ground):
             if (node not in self.ground):
-                state = initialState[node]
-                if (state == IEEE1164.H) or (state == IEEE1164.ONE):
+                val = state[node]
+                if (val > self.highThreshold):
                     # Add weak resistor from node to power supply
                     mna[ indNodes[node], indNodes[node] ] += 1.0/self.rinit
                     mna[ indNodes[powerNode], indNodes[powerNode] ] += 1.0/self.rinit
@@ -390,6 +399,7 @@ class Symsim:
                 else:
                     # Add weak resistor from node to ground
                     mna[ indNodes[node], indNodes[node] ] += 1.0/self.rinit
+
         # Fill MNA with transistor equivalents
         for elem in self.circuit.getElements():
             d, g, s, b = elem.getNodes()
@@ -397,20 +407,21 @@ class Symsim:
             nodes = elem.getNodes()
             for node in nodes:
                 # Get current node values
-                nodeVals.append( initialState[node] )
-            r = elem.simR(nodeVals)
+                nodeVals.append( state[node] )
+            rval = elem.simR(nodeVals)
             if d == groundNode:
                 # Drain is grounded, add r from source to ground
-                mna[ indNodes[s], indNodes[s] ] += 1.0/r
+                mna[ indNodes[s], indNodes[s] ] += 1.0/rval
             elif s == groundNode:
                 # Source is grounded, add r from drain to ground
-                mna[ indNodes[d], indNodes[d] ] += 1.0/r
+                mna[ indNodes[d], indNodes[d] ] += 1.0/rval
             else:
                 # Floating element
-                mna[ indNodes[s], indNodes[s] ] += 1.0/r
-                mna[ indNodes[d], indNodes[d] ] += 1.0/r
-                mna[ indNodes[s], indNodes[d] ] += -1.0/r
-                mna[ indNodes[d], indNodes[s] ] += -1.0/r
+                mna[ indNodes[s], indNodes[s] ] += 1.0/rval
+                mna[ indNodes[d], indNodes[d] ] += 1.0/rval
+                mna[ indNodes[s], indNodes[d] ] += -1.0/rval
+                mna[ indNodes[d], indNodes[s] ] += -1.0/rval
+
         # Add entries for independent voltage sources
         nNodes = indPower + 1
         for node in inputNodes:
@@ -431,6 +442,7 @@ class Symsim:
             rhs[ indNodes[node] - baseInput + nNodes ] = inVal
         # Add power
         rhs[ indNodes[powerNode] - baseInput + nNodes ] = 1.0
+
         try:
             sol = np.linalg.solve(mna, rhs)
         except:
@@ -438,7 +450,8 @@ class Symsim:
             self.msg("Symsim::simMNA:ERROR : MNA solving failed, possibly a singular matrix.")
             res = dict.fromkeys(initialState.keys(), IEEE1164.X)
             return res
-        # Construct output value
+
+        # Construct the output values
         res = {}
         for i in range(numIntNodes):
             x = sol[i]
