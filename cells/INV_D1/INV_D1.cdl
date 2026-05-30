@@ -1,5 +1,0 @@
-.SUBCKT INV_D1 A Y VDD VSS
-*.PININFO A:I Y:O VDD:B VSS:B 
-MN0 Y A VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
-MP0 Y A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
-.ENDS

@@ -6,4 +6,7 @@ dist/
 build/
 lvs/
 drc/
+*.sp
+*.cdl
+*.lef
 

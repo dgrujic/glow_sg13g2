@@ -22,31 +22,65 @@ from glow_utils.symtech import SymTech
 from sympy import Not
 from sympy.abc import x
 
-wn = SymTech.technology["invx1WN"]
-wp = SymTech.technology["invx1WP"]
-expectedFns = [Not(x)]
+def info():
+    """
+    Returns a dictionary with cell information
+    Key         Value
+    name        Cell name
+    pinList     List of cell pins
+    description Cell description
+    """
+    cellInfo = { 'name' : 'INV_D1',
+                 'pinList' : ['A', 'Y', 'VDD', 'VSS'],
+                 'description' : 'Inverter with drive strength x1'
+    }
+    return cellInfo
 
-INV_D1 = Symsubcircuit("INV_D1", ['A', 'Y', 'VDD', 'VSS'])
-inv1 = inv_par("inv1", ['A', 'Y', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
-INV_D1.addElement(inv1)
+def generate(genFlat = True, anonimize = True):
+    """
+    Generate the circuit structure.
+    If genFlat = True generate a flat circuit with suffix _flat
+    If anonimize = True anonimize devices and nodes in the generated flat circuit
+    """
+    cellInfo = info()
+    wn = SymTech.technology['invx1WN']
+    wp = SymTech.technology['invx1WP']
 
-# Flatten the circuit
-INV_D1_flat = INV_D1.flat()
-INV_D1_flat.anonimize()
+    INV_D1 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
+    inv1 = inv_par('inv1', ['A', 'Y', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
+    INV_D1.addElement(inv1)
 
-circuit = INV_D1_flat
-circuitName = circuit.getClassName()
+    # Flatten the circuit
+    if genFlat:
+        INV_D1_flat = INV_D1.flat()
+    if anonimize:
+        INV_D1_flat.anonimize()
 
-print("#"*80)
-# Simulate the circuit to check the logic function
-sim = Symsim(circuit)
-if sim.combCheck(expectedFns):
-    print("\nCircuit function OK")
-else:
-    print("\nERROR : Circuit does not work as expected.")
-    exit(1)
-print("*"*80)
-circuit.write_SPICE(circuitName)
-print("*"*80)
-circuit.write_CDL(circuitName)
-print("#"*80)
+def check(verbose = False):
+    """
+    Check if the circuit works as expected
+    """
+    expectedFns = [ Not(x) ]
+    cellInfo = info()
+    name = cellInfo["name"]
+    allCircuits = Symsubcircuit.getSubckts()
+    circuit = allCircuits[ name + "_flat" ]
+    sim = Symsim(circuit, verbose = verbose)
+    return sim.combCheck(expectedFns)
+
+def writeNetlist(flat = True, SPICE = True, CDL = True, verbose = False):
+    """
+    Write the circuit netlist
+    """
+    cellInfo = info()
+    name = cellInfo["name"]
+    allCircuits = Symsubcircuit.getSubckts()
+    if flat:
+        circuit = allCircuits[ name + "_flat" ]
+    else:
+        circuit = allCircuits[ name + "_flat" ]
+    if SPICE:
+        circuit.write_SPICE(name, printOutput = verbose)
+    if CDL:
+        circuit.write_CDL(name, printOutput = verbose)
+
