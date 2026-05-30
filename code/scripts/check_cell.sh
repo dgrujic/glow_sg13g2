@@ -23,6 +23,16 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 
+# Check if PDK_ROOT and PDK are set
+if [ -z "$PDK_ROOT" ]; then
+    echo "PDK_ROOT is not set"
+    exit 1
+fi
+if [ -z "$PDK" ]; then
+    echo "PDK is not set"
+    exit 1
+fi
+
 echo -n "Checking $2"
 
 echo -e -n "\t | GDSINFO "
