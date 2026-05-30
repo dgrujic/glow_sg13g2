@@ -26,3 +26,4 @@ dependencies = [
 gdsinfo = "glow_tools.gdsinfo:main"
 gdsutil = "glow_tools.gdsutil:main"
 absgen  = "glow_tools.absgen:main"
+gencell = "glow_tools.gencell:main"
