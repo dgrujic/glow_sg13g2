@@ -33,7 +33,11 @@ class SymTech:
         "pmosPD" : "2*(ipar('w')+310e-9)",
         # Cell sizing
         "invx1WN": 640e-9,
-        "invx1WP": 980e-9
+        "invx1WP": 980e-9,
+        # LEF related
+        "LEF_siteName" : "GLOW_SITE",
+        "LEF_siteSize" : "0.48 4.32",
+        "LEF_prBoundary" : "189"
     }
     processName = technology["processName"]
     nmosModelName = technology["nmosModelName"]
