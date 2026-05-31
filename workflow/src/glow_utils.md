@@ -641,6 +641,62 @@ Gate logic functions :
 Circuit function OK
 ```
 
+## Netlist class
+
+`Netlist` class is used to read LVS extracted netlists and calculate information needed by abstract generator tool [`absgen`](#absgen).
+The implemented netlist parser is basic and supports a very small subset of SPICE language, just enough to read the LVS extracted netlist.
+
+`Netlist` class takes an input file name as an argument for constructor
+```python
+from glow_utils.netlist import Netlist
+netlist = Netlist('lvs/INV_D1_extracted.cir')
+```
+Constructor reads the SPICE netlist and stores information about subcircuits and their elements internally.
+Names of read-in subcircuits can be retreived as
+```python
+netlist.getSubcircuitNames()
+> ['INV_D1']
+```
+A specific subcircuit can be fetched as:
+```python
+cir_dict = netlist.getSubcircuit('INV_D1')
+```
+Variable `cir_dict` is a dictionary that contains all information from the extracted netlist, and has a content
+```python
+{'name': 'INV_D1',
+ 'devices': {'M$1': {'name': 'M$1',
+   'nodes': ['VSS', 'A', 'Y', 'VSS'],
+   'model': 'sg13_lv_nmos',
+   'L': '1.300000e-07',
+   'W': '6.400000e-07',
+   'AS': '3.682000e-13',
+   'AD': '2.176000e-13',
+   'PS': '3.580000e-06',
+   'PD': '1.960000e-06',
+   'rfmode': '0'},
+  'M$2': {'name': 'M$2',
+   'nodes': ['VDD', 'A', 'Y', 'VDD'],
+   'model': 'sg13_lv_pmos',
+   'L': '1.300000e-07',
+   'W': '9.800000e-07',
+   'AS': '4.784000e-13',
+   'AD': '3.332000e-13',
+   'PS': '4.360000e-06',
+   'PD': '2.640000e-06',
+   'rfmode': '0'}},
+ 'nodes': ['VSS', 'VDD', 'Y', 'A']}
+```
+Information can be used to construct a circuit that can be checked and pin functions identified:
+```python
+circuit = netlist.makeCircuit('INV_D1')
+from glow_utils.symcheck import Symcheck
+check = Symcheck(circuit)
+id = check.identifyTerminals()
+id
+> {'I': ['A'], 'O': ['Y'], 'P': ['VDD'], 'G': ['VSS']}
+```
+Functions `calcGateArea` and `calcDiffArea` can be used to calculate gate and diffusion areas during abstract generation.
+
 ## glow_parcells
 
 `glow_parcells` is a package that contains code for basic gates that are commonly used as building blocks for complex gates.
@@ -833,5 +889,227 @@ Read in.gds, flatten cell1 and cell2, merge shapes and write these cells to out.
 ```sh
 gdsutil -i in.gds -o out.gds --merge *,* --flatten --cels "cell1 cell2"
 ```
+
+## gencell
+
+`gencell` is an utility to generate cells from Python code.
+It should be run in the directory where the cell Python code resides.
+
+The `gencell` script performs these tasks:
+- Tries to dynamically import the cell Python code,
+- Runs the imported `info` function to get basic information,
+- Runs the imported `generate` function to generate the cell,
+- Runs the imported `check` function to check the cell for ERC and to confirm that the cell test passes,
+- Exports SPICE and/or CDL netlists.
+
+Usage:
+```sh
+gencell cell_name [options]
+```
+
+| Option    | Description |
+|-----------|-------------|
+| --quiet   | Print only essential info. |
+| --nospice | Don't write SPICE netlist. |
+| --nocdl   | Don't write CDL netlist.   |
+
+Running the following command in the `$GLOW_ROOT/cells/INV_D1` directory
+```sh
+gencell INV_D1
+```
+produces the output
+```
+********************************************************************************
+	                            _ _ 
+	   __ _  ___ _ __   ___ ___| | |
+	  / _` |/ _ \ '_ \ / __/ _ \ | |
+	 | (_| |  __/ | | | (_|  __/ | |
+	  \__, |\___|_| |_|\___\___|_|_|
+	  |___/                         
+
+Generating cell INV_D1
+Cell info :
+	Name        : INV_D1
+	Terminals   : ['A', 'Y', 'VDD', 'VSS']
+	Description : Inverter with drive strength x1
+INFO : Generated cell  INV_D1
+INFO : Checks passed on cell INV_D1
+SPICE netlist
+
+.subckt INV_D1 A Y VDD VSS
+MN0 Y A VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ad=1.984e-13 as=1.984e-13 pd=1.9e-06 ps=1.9e-06 ng=1 
+MP0 Y A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=2.58e-06 ps=2.58e-06 ng=1 
+.ends
+
+CDL netlist
+
+.SUBCKT INV_D1 A Y VDD VSS
+*.PININFO A:I Y:O VDD:B VSS:B 
+MN0 Y A VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
+MP0 Y A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
+.ENDS
+
+INFO : Writing SPICE netlist INV_D1.sp
+INFO : Writing CLD netlist INV_D1.cdl
+All OK
+********************************************************************************
+```
+Besides the `All OK` text output the `gencell` script returns a zero if everything is OK, and a non-zero value on error that can be used in other scripts to determine if the operation was sucessfull.
+
+## gds2svg
+
+`gds2svg` produces SVG graphics from GDSII layouts for documentation purposes. It is made specifically for rendering standard cell layouts in IHP SG13G2 process, and it supports only a small subset of layers.
+
+Usage:
+```sh
+gds2svg input_file [options]
+```
+| Option | Description |
+|--------|-------------|
+| -c, --cells | Cells to work on. Single cells or a list of cell can be given. |
+| -n, --no_stipple | Don't use stipple, draw all layers as solid filled. |
+| -x, --no_cross | Don't draw x over contacts.|
+
+Running the following command in the `$GLOW_ROOT/cells/INV_D1` directory
+```sh
+gds2svg INV_D1.gds -c INV_D1
+```
+produces the output
+```
+Cells to work on [1]
+	 INV_D1
+Generating SVG for cell INV_D1
+```
+Option `--no_stipple` turns off the use of stipple and produces uniformly filled polygons, while the `--no_cross` option turs of cross mark on contacts.
+Examples of outputs produced from the same GDSII file with different options are given in the following table.
+
+| no options | `--no_stipple` | `--no_stipple`<br>`--no_cross` |
+|:----------:|:-----------:|:-----------------------:|
+| <img src="figs/INV_D1_stipple_cross.svg" height="400" /> | <img src="figs/INV_D1_cross.svg" height="400" /> | <img src="figs/INV_D1.svg" height="400" /> |
+
+## absgen
+
+`absgen` is a tool to generate abstract views for LEF library.
+Abstract views are simplified cell layouts that only contain information needed by digital place and route tools:
+- Cell size, type,
+- Pin information: name, type, geometry and gate or diffusion area for antenna checks,
+- Obstructions in cells.
+
+Pins and obstructions are usually only in metal 1, so abstract views usually contain only place and route boundary rectangle and pin/obstruction shapes on metal 1.
+
+`absgen` should be run in the cell directory to generate the abstract view. The script uses the cell GDSII layout to generate pin/obstruction geometries, and extracted netlist from KLayout LVS run to calculate gate or diffusion area.
+The GDSII layout should be flat for the script to work properly.
+
+Internally the LEF classes are used to construct abstract views and ouptut string representations.
+
+Usage:
+```sh
+absgen cell_name
+```
+
+absgen cell_name [options]
+| Option        | Description       |
+|---------------|-------------------|
+|--quiet        |  Print only essential info. |
+|--keep_polygons | Don't convert polygons to rectangles |
+
+Running the following command in the `$GLOW_ROOT/cells/INV_D1` directory
+```sh
+absgen INV_D1
+```
+produces the output
+```
+********************************************************************************
+	         _                          
+	    __ _| |__  ___  __ _  ___ _ __  
+	   / _` | '_ \/ __|/ _` |/ _ \ '_ \ 
+	  | (_| | |_) \__ \ (_| |  __/ | | |
+	   \__,_|_.__/|___/\__, |\___|_| |_|
+	                   |___/            
+
+Generating abstract view for cell INV_D1
+INFO : Converting polygons to rectangles in LEF abstract
+Using GDSII file INV_D1.gds
+Extracted netlist not found, running check_cell...
+Checking INV_D1	 | GDSINFO OK	 | DRC OK	 | LVS OK	 | ALL OK
+Using extracted netlist lvs/INV_D1_extracted.cir
+Cell summary :
+	Transistors      : 2
+	Input terminals  : A
+	Output terminals : Y
+	Power terminal   : VDD
+	Ground terminal  : VSS
+Cell size is (0.96, 4.32)
+Writing LEF to file INV_D1.lef
+********************************************************************************
+```
+Script looks for `<cell_name>.gds`, in the previous example `INV_D1.gds` that contains cell `<cell_name>` (`INV_D1`) to process geometry, and `lvs/<cell_name>_extracted.cir` (`lvs/INV_D1_extracted.cir`) for LVS extracted netlist.
+Extracted netlist is read-in and the circuit is reconstructed.
+Then an instance of `Symcheck` class is used to identify inputs, outputs, power and ground pins, as shown in the code snippet:
+```python
+circuit = netlist.makeCircuit(cell_name)
+check = Symcheck(circuit)
+id = check.identifyTerminals()
+inputs = id['I']
+outputs = id['O']
+power = id['P']
+ground = id['G']
+```
+Antenna calculations require a total gate area connected to input pins, and a total diffusion area connected to outputs.
+Information from extracted netlist is used to calculate gate/diffusion area.
+
+The content of the generated INV_D1.lef file is
+```
+MACRO INV_D1
+	CLASS CORE ;
+	ORIGIN 0 0 ;
+	FOREIGN INV_D1 0 0 ;
+	SIZE 0.96 BY 4.32 ;
+	SYMMETRY X Y ;
+	SITE GLOW_SITE ;
+	PIN VDD
+		DIRECTION INOUT ;
+		USE POWER ;
+		SHAPE ABUTMENT ;
+		NETEXPR "VDD VDD!" ;
+		PORT
+			LAYER Metal1 ;
+			RECT 0.0 4.07 0.96 4.57 ;
+			RECT 0.125 3.77 0.385 4.07 ;
+		END
+	END VDD
+	PIN Y
+		DIRECTION OUTPUT ;
+		USE SIGNAL ;
+		ANTENNADIFFAREA 0.8466 LAYER Metal1 ;
+		PORT
+			LAYER Metal1 ;
+			RECT 0.575 0.95 0.835 3.27 ;
+		END
+	END Y
+	PIN A
+		DIRECTION INPUT ;
+		USE SIGNAL ;
+		ANTENNAMODEL OXIDE1 ;
+		ANTENNAGATEAREA 0.2106 LAYER Metal1 ;
+		PORT
+			LAYER Metal1 ;
+			RECT 0.115 1.93 0.36 2.32 ;
+		END
+	END A
+	PIN VSS
+		DIRECTION INOUT ;
+		USE GROUND ;
+		SHAPE ABUTMENT ;
+		NETEXPR "VSS VSS!" ;
+		PORT
+			LAYER Metal1 ;
+			RECT 0.0 -0.25 0.96 0.25 ;
+			RECT 0.125 0.25 0.385 0.48 ;
+		END
+	END VSS
+END INV_D1
+```
+
 
 
