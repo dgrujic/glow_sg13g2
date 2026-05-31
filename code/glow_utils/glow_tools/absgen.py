@@ -190,6 +190,12 @@ def main():
         print("ERROR : Cell", cell_name, "not found in GDSII library.")
         exit(1)
 
+    ref_names = [ref.cell_name for ref in cell.references]
+    nrefs = len(ref_names)
+    if nrefs > 0:
+        print("ERROR : cell contains references ", " ".join(ref_names))
+        exit(1)
+
     prBoundary = int(SymTech.technology['LEF_prBoundary'])
     pr_size = cellSize(cell, prBoundary)
     if pr_size is None:
