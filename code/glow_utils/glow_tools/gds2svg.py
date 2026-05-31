@@ -22,8 +22,8 @@ import gdstk
 settings = {
     "scale" : 1000,
     "background" : "000000",
-    "zorder-nostipple" : ["nwell", "activ", "psd", "poly", "m1", "contact", "prBoundary"],
-    "zorder-stipple" : ["nwell-stipple", "activ", "psd", "poly", "m1-stipple", "contact", "prBoundary"],
+    "zorder-nostipple" : ["nwell", "activ", "psd", "poly", "m1", "contact", "text", "prBoundary"],
+    "zorder-stipple" : ["nwell-stipple", "activ", "psd", "poly", "m1-stipple", "contact", "text", "prBoundary"],
     "nwell" : { "layer" : 31, "datatype" : 0, "fill" : "#268c6b", "stroke" : "#268c6b", "stroke_width" : 1.0, "opacity" : 0.5},
     "nwell-stipple" : { "layer" : 31, "datatype" : 0, "fill" : "url(#nwell-stipple)", "stroke" : "#268c6b", "stroke_width" : 1.0, "opacity" : 1.0},
     "activ" : { "layer" : 1, "datatype" : 0, "fill" : "#00ff00", "stroke" : "#00ff00", "stroke_width" : 1.0, "opacity" : 0.5},
@@ -35,6 +35,7 @@ settings = {
     "m1-stipple" : { "layer" : 8, "datatype" : 0, "fill" : "url(#m1-stipple)", "stroke" : "#39bfff", "stroke_width" : 1.0, "opacity" : 1.0},
     "contact" : { "layer" : 6, "datatype" : 0, "fill" : "#ffffff", "stroke" : "#000000", "stroke_width" : 1.0, "opacity" : 1.0},
     "prBoundary" : { "layer" : 189, "datatype" : 0, "fill" : None, "stroke" : "#9900e6", "stroke_width" : 1.0, "opacity" : 0.5},
+    "text" : { "layer" : 63, "datatype" : 0, "fill" : None, "stroke" : "#ffffff", "stroke_width" : 1.0, "opacity" : 0.8},
     "labelColor" : "#000000",
     "labelColor-stipple" :"#FFEE00",
     "labelSize"  : 160.0,
