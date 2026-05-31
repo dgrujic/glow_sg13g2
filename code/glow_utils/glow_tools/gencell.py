@@ -16,14 +16,10 @@
 #
 ########################################################################
 
-from glow_utils.netlist import Netlist
-from glow_utils.symcheck import Symcheck
-from glow_utils.symtech import SymTech
 from glow_utils.lef import *
 
 import argparse
 from pathlib import Path
-import subprocess
 
 import importlib
 import os
