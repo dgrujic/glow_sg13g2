@@ -221,19 +221,52 @@ def process_cell(cell : gdstk.Cell, args):
             err = True
     return err
 
+def is_merged(lay_dt, merge_rules):
+    # Determine if layer is merged per merge rules
+    layer, datatype = lay_dt
+    for rule in merge_rules:
+        lay, dt = rule
+        if (lay == '*') or (lay == layer):
+            if (dt == '*') or (dt == datatype):
+                return True
+    return False
+
+def merge_layers(cell : gdstk.Cell, merge_rules):
+    # Merge specified layers in a cell
+    lay_dt_set = get_layer_info(cell)
+    # Make a dictonary of used layer/datatypes to group shapes
+    lay_dict = {lay_dt: [] for lay_dt in lay_dt_set}
+    # Separate polygons per layer
+    for poly in cell.polygons:
+        lay = poly.layer
+        dt = poly.datatype
+        lay_dt = (lay, dt)
+        lay_dict[lay_dt].append(poly)    
+    
+    for lay_dt in lay_dict.keys():
+        if is_merged(lay_dt, merge_rules):
+            lay, dt = lay_dt
+            polygons = lay_dict[lay_dt]
+            merged = gdstk.boolean(polygons, [], "or", layer=lay, datatype=dt)
+            cell.remove(*polygons)
+            cell.add(*merged)
+
 def reportArea(lib, cell_list, lay_dt):
     lay, dt = (int(x) for x in lay_dt.split(","))
     for cell_name in cell_list:
         cell = lib[cell_name]
+        cell.flatten()
+        merge_layers(cell, [(lay, dt)])
         # Find polygon on given layer/datatype
         for poly in cell.polygons:
-            if poly.layer == lay and poly.datatype == dt:
+            if poly.layer == lay:
                 bl, tr = poly.bounding_box()
                 x0, y0 = bl
                 x1, y1 = tr
                 w = x1-x0
                 h = y1-y0
-        print(cell.name, round(w,4), round(h,4), round(w*h,4))
+                print(cell.name, round(w,4), round(h,4), round(w*h,4))
+                break
 
 #
 # Main code
