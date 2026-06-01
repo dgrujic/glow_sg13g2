@@ -641,6 +641,109 @@ Gate logic functions :
 Circuit function OK
 ```
 
+Memory elements, such as flip-flops, can also be checked for correctness with specialized methods.
+`dffCheck` is the method for checking a D flip-flop that accepts a dictionary with pin specifications:
+| Key   |   Description                 |
+|-------|-------------------------------|
+|'D'    | Name of data input pin or None |
+|'DN'   | Name of inverted data input pin or None |
+|'Q'    | Name of output or None |
+|'QN'   | Name of inverted output or None |
+|'CLK'  | Name of clock input or None |
+|'CLKN' | Name of inverted clock input or None |
+|'ACLR' | Name of asynchronous active high clear pin or None |
+|'ACLRN'| Name of asynchronous active low clear pin or None |
+|'CLR'  | Name of synchronous active high clear pin or None |
+|'CLRN' | Name of synchronous active low clear pin or None | 
+|'ASET' | Name of asynchronous active high set pin or None |
+|'ASETN'| Name of asynchronous active low set pin or None |
+|'SET'  | Name of synchronous active high set pin or None |
+|'SETN' | Name of synchronous active low set pin or None |
+|'EN'   | Name of synchronous active high enable pin or None |
+|'ENB'  | Name of synchronous active low enable pin or None |
+|'SCVAL'| Value of output when both set and clear are active or None |
+
+An incomplete dictionary can be given, containing only the pins that D flip-flop has, and the `dffCheck` will perform simulations to check the functionality.
+For example, if a D flip-flop has an input 'din', clock 'ck' and only an inverted output 'qoutn', a specification is
+```python
+spec = { 'D' : 'din', 'CLK' : 'ck', 'QN' : 'qoutn' }
+```
+and the corresponding checks will be performed.
+
+A flip-flop `DFQQN_D1` that contains both `Q` and `QN` outputs can be checked as:
+```python
+# Simulate the circuit to check the logic function
+allCircuits = Symsubcircuit.getSubckts()
+circuit = allCircuits[ "DFQQN_D1_flat" ]
+
+sim = Symsim(circuit, verbose=verbose)
+spec = { 'D' : 'D', 'Q' : 'Q', 'QN' : 'QN', 'CLK' : 'CLK' }
+res = sim.dffCheck(spec)
+
+if verbose:
+    # Plot waveforms
+    res = sim.filterResults( ['D', 'CLK', 'Q', 'QN'] )
+    print("Simulation waveform")
+    sres = sim.plotResults(res)
+    for name in sres.keys():
+        print(sres[name])
+```
+Previous code produces the output
+```
+Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : CLK D
+Symsim::Elaborate: Outputs : Q QN
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : CLK D Q QN VDD VSS n0 n1 n10 n11 n12 n13 n2 n3 n4 n5 n6 n7 n8 n9
+Symsim::Elaborate: Elaboration OK.
+Symsim::dffCheck: Simulating D flip-flop with specification
+	dPin : D
+	dInv : False
+	qPin : Q
+	qnPin : QN
+	clkPin : CLK
+	clkInv : False
+	hasEn : False
+	enPin : None
+	enInv : None
+	enAct : None
+	enIdle : None
+	hasSCVAL : False
+	SCVAL : None
+	hasClr : False
+	clrPin : None
+	clrInv : None
+	hasSet : False
+	setPin : None
+	setInv : None
+	asyncClr : None
+	asyncSet : None
+	dAct : IEEE1164.ONE
+	dIdle : IEEE1164.ZERO
+	clkAct : IEEE1164.ONE
+	clkIdle : IEEE1164.ZERO
+	clrAct : None
+	clrIdle : None
+	setAct : None
+	setIdle : None
+Symsim::dffCheck: Writing values to DFF works as expected. PASS.
+Symsim::dffCheck: DFF retains value on input change. PASS.
+Symsim::dffCheck: DFF does not have an EN input.
+Symsim::dffCheck: DFF does not have a CLR input.
+Symsim::dffCheck: DFF does not have a SET input.
+Symsim::dffCheck: DFF does not have a SCVAL condition.
+Symsim::dffCheck: All checks passed.
+Simulation waveform
+D    ______|‾‾‾|_____|‾|_|‾|_|‾|_|‾‾‾‾‾|_|‾|_|‾|_|‾|_|‾
+CLK  ____|‾|_|‾|_|‾‾‾‾‾‾‾‾‾|_________|‾‾‾‾‾‾‾‾‾|_______
+Q    ‾‾‾‾|___|‾‾‾|___________________|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+QN   ____|‾‾‾|___|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|_________________
+INFO : Checks passed on cell DFQQN_D1
+```
+Checks shown in the previous code are a part of `DFQQN_D1` cell Python code that is run by the `gencell` utility, so the flip-flop is automatically verified during the cell generation step.
+
 ## Netlist class
 
 `Netlist` class is used to read LVS extracted netlists and calculate information needed by abstract generator tool [`absgen`](#absgen).

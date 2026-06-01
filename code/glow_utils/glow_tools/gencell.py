@@ -115,7 +115,7 @@ def main():
         exit(1)
     
     try:
-        res = cell_module.check()
+        res = cell_module.check(verbose=not(quiet))
         if res:
             if not quiet:
                 print("INFO : Checks passed on cell", cell_name)
