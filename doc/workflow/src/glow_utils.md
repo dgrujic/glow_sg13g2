@@ -744,6 +744,86 @@ INFO : Checks passed on cell DFQQN_D1
 ```
 Checks shown in the previous code are a part of `DFQQN_D1` cell Python code that is run by the `gencell` utility, so the flip-flop is automatically verified during the cell generation step.
 
+Latches can be checked by using a `latchCheck` method of `Symsim` class, which accepts a dictionary with pin specifications:
+| Key   |   Description                 |
+|-------|-------------------------------|
+| 'D'   |  Name of data input pin or None |
+| 'DN'  |  Name of inverted data input pin or None |
+| 'Q'   |  Name of output or None |
+| 'QN'  |  Name of inverted output or None |
+| 'G'   |  Name of latch input or None |
+| 'GN'  |  Name of inverted latch input or None |
+| 'ACLR'|  Name of asynchronous active high clear pin or None |
+| 'ACLRN' | Name of asynchronous active low clear pin or None |
+| 'ASET' |  Name of asynchronous active high set pin or None |
+| 'ASETN' | Name of asynchronous active low set pin or None |
+| 'EN'   | Name of active high enable pin or None |
+| 'ENB'  | Name of active low enable pin or None |
+| 'SCVAL' | Value of output when both set and clear are active or None |
+
+Running a `gencell` utility in `DLN_D1` directory
+```sh
+gencell DLN_D1
+```
+produces an output that shows the steps in verifying the latch:
+```
+Generating cell DLN_D1
+Cell info :
+	Name        : DLN_D1
+	Terminals   : ['D', 'GN', 'Q', 'QN', 'VDD', 'VSS']
+	Description : Latch with inverted control, Q and QN outputs and drive strength x1
+INFO : Generated cell  DLN_D1
+Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : D GN
+Symsim::Elaborate: Outputs : Q QN
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : D GN Q QN VDD VSS n0 n1 n2 n3 n4 n5 n6 n7
+Symsim::Elaborate: Elaboration OK.
+Symsim::latchCheck: Simulating latch with specification
+	dPin : D
+	dInv : False
+	qPin : Q
+	qnPin : QN
+	gPin : GN
+	gInv : True
+	hasEn : False
+	enPin : None
+	enInv : None
+	enAct : None
+	enIdle : None
+	hasSCVAL : False
+	SCVAL : None
+	hasClr : False
+	clrPin : None
+	clrInv : None
+	hasSet : False
+	setPin : None
+	setInv : None
+	dAct : IEEE1164.ONE
+	dIdle : IEEE1164.ZERO
+	gAct : IEEE1164.ZERO
+	gIdle : IEEE1164.ONE
+	clrAct : None
+	clrIdle : None
+	setAct : None
+	setIdle : None
+Symsim::latchCheck: Writing values to latch works as expected. PASS.
+Symsim::latchCheck: Latch retains value on input change. PASS.
+Symsim::latchCheck: Latch does not have an EN input.
+Symsim::latchCheck: Latch does not have a CLR input.
+Symsim::latchCheck: Latch does not have a SET input.
+Symsim::latchCheck: Latch does not have a SCVAL condition.
+Symsim::latchCheck: All checks passed.
+Simulation waveform
+D   ______|‾‾‾|_____|‾|_|‾‾‾‾‾|_|‾|_|‾
+GN  ‾‾‾‾|_|‾|___|‾‾‾‾‾‾‾‾‾|_|‾‾‾‾‾‾‾‾‾
+Q   ‾‾‾‾|___|‾|___________|‾‾‾‾‾‾‾‾‾‾‾
+QN  ____|‾‾‾|_|‾‾‾‾‾‾‾‾‾‾‾|___________
+INFO : Checks passed on cell DLN_D1
+```
+
 ## Netlist class
 
 `Netlist` class is used to read LVS extracted netlists and calculate information needed by abstract generator tool [`absgen`](#absgen).
