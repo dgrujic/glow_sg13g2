@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2846c8cf.js";
+            window.path_to_searchindex_js = "searchindex-d20ced3d.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9e19758c.js"></script>
@@ -721,6 +721,110 @@ Gate logic functions :
 
 Circuit function OK
 </code></pre>
+<p>Memory elements, such as flip-flops, can also be checked for correctness with specialized methods.
+<code>dffCheck</code> is the method for checking a D flip-flop that accepts a dictionary with pin specifications:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Key</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>‘D’</td><td>Name of data input pin or None</td></tr>
+<tr><td>‘DN’</td><td>Name of inverted data input pin or None</td></tr>
+<tr><td>‘Q’</td><td>Name of output or None</td></tr>
+<tr><td>‘QN’</td><td>Name of inverted output or None</td></tr>
+<tr><td>‘CLK’</td><td>Name of clock input or None</td></tr>
+<tr><td>‘CLKN’</td><td>Name of inverted clock input or None</td></tr>
+<tr><td>‘ACLR’</td><td>Name of asynchronous active high clear pin or None</td></tr>
+<tr><td>‘ACLRN’</td><td>Name of asynchronous active low clear pin or None</td></tr>
+<tr><td>‘CLR’</td><td>Name of synchronous active high clear pin or None</td></tr>
+<tr><td>‘CLRN’</td><td>Name of synchronous active low clear pin or None</td></tr>
+<tr><td>‘ASET’</td><td>Name of asynchronous active high set pin or None</td></tr>
+<tr><td>‘ASETN’</td><td>Name of asynchronous active low set pin or None</td></tr>
+<tr><td>‘SET’</td><td>Name of synchronous active high set pin or None</td></tr>
+<tr><td>‘SETN’</td><td>Name of synchronous active low set pin or None</td></tr>
+<tr><td>‘EN’</td><td>Name of synchronous active high enable pin or None</td></tr>
+<tr><td>‘ENB’</td><td>Name of synchronous active low enable pin or None</td></tr>
+<tr><td>‘SCVAL’</td><td>Value of output when both set and clear are active or None</td></tr>
+</tbody>
+</table>
+</div>
+<p>An incomplete dictionary can be given, containing only the pins that D flip-flop has, and the <code>dffCheck</code> will perform simulations to check the functionality.
+For example, if a D flip-flop has an input ‘din’, clock ‘ck’ and only an inverted output ‘qoutn’, a specification is</p>
+<pre><code class="language-python">spec = { 'D' : 'din', 'CLK' : 'ck', 'QN' : 'qoutn' }
+</code></pre>
+<p>and the corresponding checks will be performed.</p>
+<p>A flip-flop <code>DFQQN_D1</code> that contains both <code>Q</code> and <code>QN</code> outputs can be checked as:</p>
+<pre><code class="language-python"># Simulate the circuit to check the logic function
+allCircuits = Symsubcircuit.getSubckts()
+circuit = allCircuits[ "DFQQN_D1_flat" ]
+
+sim = Symsim(circuit, verbose=verbose)
+spec = { 'D' : 'D', 'Q' : 'Q', 'QN' : 'QN', 'CLK' : 'CLK' }
+res = sim.dffCheck(spec)
+
+if verbose:
+    # Plot waveforms
+    res = sim.filterResults( ['D', 'CLK', 'Q', 'QN'] )
+    print("Simulation waveform")
+    sres = sim.plotResults(res)
+    for name in sres.keys():
+        print(sres[name])
+</code></pre>
+<p>Previous code produces the output</p>
+<pre><code>Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : CLK D
+Symsim::Elaborate: Outputs : Q QN
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : CLK D Q QN VDD VSS n0 n1 n10 n11 n12 n13 n2 n3 n4 n5 n6 n7 n8 n9
+Symsim::Elaborate: Elaboration OK.
+Symsim::dffCheck: Simulating D flip-flop with specification
+	dPin : D
+	dInv : False
+	qPin : Q
+	qnPin : QN
+	clkPin : CLK
+	clkInv : False
+	hasEn : False
+	enPin : None
+	enInv : None
+	enAct : None
+	enIdle : None
+	hasSCVAL : False
+	SCVAL : None
+	hasClr : False
+	clrPin : None
+	clrInv : None
+	hasSet : False
+	setPin : None
+	setInv : None
+	asyncClr : None
+	asyncSet : None
+	dAct : IEEE1164.ONE
+	dIdle : IEEE1164.ZERO
+	clkAct : IEEE1164.ONE
+	clkIdle : IEEE1164.ZERO
+	clrAct : None
+	clrIdle : None
+	setAct : None
+	setIdle : None
+Symsim::dffCheck: Writing values to DFF works as expected. PASS.
+Symsim::dffCheck: DFF retains value on input change. PASS.
+Symsim::dffCheck: DFF does not have an EN input.
+Symsim::dffCheck: DFF does not have a CLR input.
+Symsim::dffCheck: DFF does not have a SET input.
+Symsim::dffCheck: DFF does not have a SCVAL condition.
+Symsim::dffCheck: All checks passed.
+Simulation waveform
+D    ______|‾‾‾|_____|‾|_|‾|_|‾|_|‾‾‾‾‾|_|‾|_|‾|_|‾|_|‾
+CLK  ____|‾|_|‾|_|‾‾‾‾‾‾‾‾‾|_________|‾‾‾‾‾‾‾‾‾|_______
+Q    ‾‾‾‾|___|‾‾‾|___________________|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+QN   ____|‾‾‾|___|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|_________________
+INFO : Checks passed on cell DFQQN_D1
+</code></pre>
+<p>Checks shown in the previous code are a part of <code>DFQQN_D1</code> cell Python code that is run by the <code>gencell</code> utility, so the flip-flop is automatically verified during the cell generation step.</p>
 <h2 id="netlist-class"><a class="header" href="#netlist-class">Netlist class</a></h2>
 <p><code>Netlist</code> class is used to read LVS extracted netlists and calculate information needed by abstract generator tool <a href="#absgen"><code>absgen</code></a>.
 The implemented netlist parser is basic and supports a very small subset of SPICE language, just enough to read the LVS extracted netlist.</p>
