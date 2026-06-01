@@ -21,6 +21,7 @@ from glow_utils.symcheck import Symcheck
 from glow_utils.symtech import SymTech
 from glow_utils.lef import *
 
+import os
 import gdstk
 import argparse
 from pathlib import Path
@@ -124,6 +125,12 @@ def main():
         print("ERROR : GDSII file " + gds_name + " not found!")
         exit(1)
 
+    glow_root = os.environ.get("GLOW_ROOT", default=None)
+    if glow_root is None:
+        glow_root = Path.cwd().parent.parent
+        if not quiet:
+            print("WARNING : GLOW_ROOT is not set, using " + str(glow_root))
+
     # Check if extracted netlist already exists, and generate it if not
     if dir_exists("lvs") and file_exists( "lvs/" + extracted_name ):
         if not quiet:
@@ -131,9 +138,9 @@ def main():
     else:
         if not quiet:
             print("Extracted netlist not found, running check_cell...")
-            res = subprocess.run(["$GLOW_ROOT/code/scripts/check_cell.sh " + gds_name + " " + cell_name], shell=True)
+            res = subprocess.run(["$GLOW_ROOT/code/scripts/check_cell.sh " + gds_name + " " + cell_name], shell=True, env = os.environ | {'GLOW_ROOT' : glow_root})
         else:
-            res = subprocess.run(["$GLOW_ROOT/code/scripts/check_cell.sh " + gds_name + " " + cell_name + " > /dev/null"], shell=True)
+            res = subprocess.run(["$GLOW_ROOT/code/scripts/check_cell.sh " + gds_name + " " + cell_name + " > /dev/null"], shell=True, env = os.environ | {'GLOW_ROOT' : glow_root})
         if res.returncode != 0:
             print("Cell checking failed, please run check_cell.sh to debug the issue")
             exit(1)
