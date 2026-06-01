@@ -994,8 +994,8 @@ class Symsim:
         'ACLRN' Name of asynchronous active low clear pin or None
         'ASET'  Name of asynchronous active high set pin or None
         'ASETN' Name of asynchronous active low set pin or None
-        'EN'    Name of synchronous active high enable pin or None
-        'ENB'   Name of synchronous active low enable pin or None
+        'EN'    Name of active high enable pin or None
+        'ENB'   Name of active low enable pin or None
         'SCVAL' Value of output when both set and clear are active or None
         """
 
