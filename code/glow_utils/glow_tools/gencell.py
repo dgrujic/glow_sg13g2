@@ -16,7 +16,7 @@
 #
 ########################################################################
 
-from glow_utils.lef import *
+from glow_utils.symsubcircuit import Symsubcircuit
 
 import argparse
 from pathlib import Path
@@ -55,6 +55,22 @@ def file_exists(file_name):
     if Path(file_name).is_file():
         return True
     return False
+
+def writeNetlist(cell_module, flat = True, SPICE = True, CDL = True, verbose = False):
+    """
+    Write the circuit netlist
+    """
+    cellInfo = cell_module.info()
+    name = cellInfo["name"]
+    allCircuits = Symsubcircuit.getSubckts()
+    if flat:
+        circuit = allCircuits[ name + "_flat" ]
+    else:
+        circuit = allCircuits[ name + "_flat" ]
+    if SPICE:
+        circuit.write_SPICE(name, printOutput = verbose)
+    if CDL:
+        circuit.write_CDL(name, printOutput = verbose)
 
 #
 # Main code
@@ -127,7 +143,7 @@ def main():
         exit(1)
 
     try:
-        cell_module.writeNetlist(SPICE=not(nospice), CDL=not(nocdl), verbose=not(quiet))
+        writeNetlist(cell_module, SPICE=not(nospice), CDL=not(nocdl), verbose=not(quiet))
         if not nospice and not quiet:
             print("INFO : Writing SPICE netlist", cell_name + ".sp")
         if not nocdl and not quiet:

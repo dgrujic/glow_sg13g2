@@ -68,19 +68,3 @@ def check(verbose = False):
     sim = Symsim(circuit, verbose = verbose)
     return sim.combCheck(expectedFns)
 
-def writeNetlist(flat = True, SPICE = True, CDL = True, verbose = False):
-    """
-    Write the circuit netlist
-    """
-    cellInfo = info()
-    name = cellInfo["name"]
-    allCircuits = Symsubcircuit.getSubckts()
-    if flat:
-        circuit = allCircuits[ name + "_flat" ]
-    else:
-        circuit = allCircuits[ name + "_flat" ]
-    if SPICE:
-        circuit.write_SPICE(name, printOutput = verbose)
-    if CDL:
-        circuit.write_CDL(name, printOutput = verbose)
-

@@ -78,26 +78,10 @@ def check(verbose = False):
 
     if verbose:
         # Plot waveforms
-        res = sim.filterResults( ['D', 'CLK', 'Q', 'QN'] )
+        wave = sim.filterResults( ['D', 'CLK', 'Q', 'QN'] )
         print("Simulation waveform")
-        sres = sim.plotResults(res)
+        sres = sim.plotResults(wave)
         for name in sres.keys():
             print(sres[name])
     return res
-
-def writeNetlist(flat = True, SPICE = True, CDL = True, verbose = False):
-    """
-    Write the circuit netlist
-    """
-    cellInfo = info()
-    name = cellInfo["name"]
-    allCircuits = Symsubcircuit.getSubckts()
-    if flat:
-        circuit = allCircuits[ name + "_flat" ]
-    else:
-        circuit = allCircuits[ name + "_flat" ]
-    if SPICE:
-        circuit.write_SPICE(name, printOutput = verbose)
-    if CDL:
-        circuit.write_CDL(name, printOutput = verbose)
 
