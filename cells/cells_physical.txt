@@ -1,0 +1,5 @@
+#
+# GLOW SG13G2 Standard digital library
+# Physical cell list
+#
+

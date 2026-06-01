@@ -1,0 +1,23 @@
+#
+# GLOW SG13G2 Standard digital library
+# Core logic cell list
+#
+
+#
+# Inverters
+#
+
+INV_D1
+
+
+#
+# Latches
+#
+
+DLN_D1
+
+#
+# Flip-flops
+#
+
+DFQQN_D1
