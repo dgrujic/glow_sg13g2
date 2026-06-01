@@ -100,7 +100,7 @@ def main():
     if not quiet:
         print("Generating cell",cell_name)
     else:
-        print("GENCELL",cell_name, "\t",end="")
+        print("GENCELL",cell_name.ljust(10), "\t",end="")
 
 
     if not file_exists(cell_name + ".py"):
