@@ -41,6 +41,7 @@ def printusage():
     print("\t--uselay\tAllow layer/datatype in a cell")
     print("\t--label\tRequire that a label exists in a cell")
     print("\t--nolabel\tRequire that a label does not exist in a cell")
+    print("\t--area\t\tOnly print cell area and exit")
     print("See examples for uses of errlay and uselay")
     print("")
     print("Examples:")
@@ -69,6 +70,9 @@ def printusage():
     print("")
     print("Forbid a global label sub!")
     print("gdsinfo infile.gds --nolabel 'sub!'")
+    print("")
+    print("Return cell area")
+    print("gdsinfo infile.gds --cells cell_name --area 189,0")
     print("*"*80)
 
 def is_layer_allowed(layer : int, datatype : int, args):
@@ -216,6 +220,21 @@ def process_cell(cell : gdstk.Cell, args):
             print("\t" + str(layer)+"   \tERROR : this layer/data type combination is not allowed")
             err = True
     return err
+
+def reportArea(lib, cell_list, lay_dt):
+    lay, dt = (int(x) for x in lay_dt.split(","))
+    for cell_name in cell_list:
+        cell = lib[cell_name]
+        # Find polygon on given layer/datatype
+        for poly in cell.polygons:
+            if poly.layer == lay and poly.datatype == dt:
+                bl, tr = poly.bounding_box()
+                x0, y0 = bl
+                x1, y1 = tr
+                w = x1-x0
+                h = y1-y0
+        print(cell.name, round(w,4), round(h,4), round(w*h,4))
+
 #
 # Main code
 #
@@ -229,32 +248,40 @@ def main():
     parser.add_argument('--uselay', action='append', default=[])
     parser.add_argument('--label', action='append', default=[])
     parser.add_argument('--nolabel', action='append', default=[])
+    parser.add_argument('--area', action='append', default=[])
     try:
         args = parser.parse_args()
     except:
         printusage()
         exit(1)
 
-    print(args)
-
     try:
         gds = gdstk.read_gds(args.infile)
     except:
         print('Input file not found.')
         exit(1)
-
-    print("Reading file " + args.infile)
+    
     ncells = len(gds.cells)
-    print("Found " + str(ncells) + " cells.")
     cell_names = [cell.name for cell in gds.cells]
-    if args.printcells:
-        for s in cell_names:
-            print(s, end=' ')
-        print("")
+    
+    # If cell area is requested just return it and exit
+    if len(args.area) > 0:
+        onlyArea = True
+    else:
+        onlyArea = False
+
+    if not onlyArea:
+        print("Reading file " + args.infile)
+        print("Found " + str(ncells) + " cells.")
+        if args.printcells:
+            for s in cell_names:
+                print(s, end=' ')
+            print("")
 
     # Generate list of cells to process
     if args.cells == "*":
-        print("Processing all cells")
+        if not onlyArea:
+            print("Processing all cells")
         to_process = cell_names
     else:
         if ' ' in args.cells:
@@ -269,10 +296,15 @@ def main():
                 else:
                     tmp += to_process[i] + " "
                     i += 1
-            print("Processing cells : ", tmp)
+            if not onlyArea:
+                print("Processing cells : ", tmp)
         else:
             # Single cell name is given
             to_process = [args.cells]    
+
+    if onlyArea:
+        reportArea(gds, to_process, args.area[0])
+        exit(0)
 
     errors = 0
     err_cells = []
