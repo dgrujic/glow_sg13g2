@@ -343,15 +343,21 @@ class Symsim:
             self.msg("ERROR : Simulation error.")
             return False
 
+        self.msg("Expected logic functions :")
+        for i in range(len(expectedFns)):
+            self.msg("\t" + str(expectedFns[i]))
+
         for i in range(len(expectedFns)):
             mapping = bool_map(expectedFns[i], logicExpr[i])
             if mapping is None:
                 self.msg("ERROR : Circuit function #" + str(i) +" "+str(expectedFns[i])+" does not operate as expected.")
                 return False
+            else:
+                self.msg("Function " + str(expectedFns[i]) + " successfully mapped to " + str(logicExpr[i]))
         return True
 
     #######################################
-    # Sequential circuits
+    # D flip-flop
     #######################################
 
     def dffParse(self, spec):
@@ -521,7 +527,7 @@ class Symsim:
             setAct = None
             setIdle = None  
         
-        res = { 'dPin' : d, 'dInv' : dInv, 'qPin' : qPin, 'qnPin' : qnPin,
+        res = { 'dPin' : dPin, 'dInv' : dInv, 'qPin' : qPin, 'qnPin' : qnPin,
                 'clkPin' : clkPin, 'clkInv' : clkInv,
                 'hasEn' : hasEn, 'enPin' : enPin, 'enInv' : enInv,
                 'enAct' : enAct, 'enIdle' : enIdle,
@@ -794,6 +800,398 @@ class Symsim:
         return resOK
 
     def dffGetQ(self):
+        # Return Q value
+        qPin = self.pspec['qPin']
+        qnPin = self.pspec['qnPin']
+        if qPin is not None:
+            if self.getOutputValue(qPin) == IEEE1164.ONE:
+                return True
+            else:
+                return False        
+        if qnPin is not None:
+            if self.getOutputValue(qnPin) == IEEE1164.ZERO:
+                return True
+            else:
+                return False
+        return None
+
+    #######################################
+    # Latch
+    #######################################
+
+    def latchParse(self, spec):
+        # Parse given latch specification
+
+        # Parse specification and make a dictionary with the following keys
+        # | Variable  | Description                                 |
+        # |-----------|---------------------------------------------|
+        # |   dPin    | Pin name for D input                        |
+        # |   dInv    | Is data input inverted?                     |
+        # |   qPin    | Pin name for Q output. None if not present. |
+        # |   qnPin   | Pin name for QN output. None if not present.|
+        # |  gPin     | Pin name for latch input.                   |
+        # |  gInv     | Is latch inverted?                          |
+        # |  hasEn    | Latch has an enable pin?                    |
+        # |  enPin    | Pin name for enable.                        |
+        # |  enInv    | Is enable inverted?                         |
+        # | hasSCVAL  | Is value for simultaneous set/clear given?  |
+        # |  SCVAL    | Output value for simultaneous set/clear.    |
+        # | hasClr    | latch has CLR pin?                          |
+        # | clrPin    | Pin name for CLR.                           |
+        # | clrInv    | Is CLR inverted?                            |
+        # | hasSet    | Latch has SET pin?                          |
+        # | setPin    | Pin name for SET.                           |
+        # | setInv    | Is SET inverted?                            |
+        #
+        # Based on these flags, active/inactive signal values are determined
+        # | Variable  | Description                                 |
+        # |-----------|---------------------------------------------|
+        # |   dAct    | Active ('1') value for data input.          |
+        # |   dIdle   | Idle ('0') value for data input.            |
+        # |   gAct    | Active value for clock input.               |
+        # |  gIdle    | Idle value for clock input.                 |
+        # |  enAct    | Active value for enable input.              |
+        # |  enIdle   | Idle value for enable input.                |
+        # |  clrAct   | Active value for clear input.               |
+        # | clrIdle   | Idle value for clear input.                 |
+        # |  setAct   | Active value for set input.                 |
+        # | setIdle   | Idle value for set input.                   |
+
+        # Make a dictionary containing all valid keys with value None to avoid errors from missing keys
+        keys = ['D', 'DN', 'Q', 'QN', 'G', 'GN',
+                'ACLR', 'ACLRN',
+                'ASET', 'ASETN',
+                'EN', 'ENB', 'SCVAL']
+        ispec = dict.fromkeys(keys, None)
+        # Update specification with given values
+        ispec.update(spec)
+        
+        # Check if the specification is valid
+        # Check D/DN
+        d, dn = ispec['D'], ispec['DN']
+
+        if (d is None) == (dn is None):
+            error_msg = 'Input is not specified' if d is None else 'Both D and DN are given'
+            self.msg(f'Symsim::latchCheck:ERROR: {error_msg}')
+            return False
+
+        dPin = dn if d is None else d
+        dInv = d is None
+
+        # Check Q/QN
+        if ispec['Q'] is None and ispec['QN'] is None:
+            self.msg('Symsim::latchCheck:ERROR: Output is not specified')
+            return False
+
+        qPin = ispec.get('Q')
+        qnPin = ispec.get('QN')
+
+        # Check CLK/CLKN
+        g = ispec['G']
+        gn = ispec['GN']
+
+        if g is None and gn is None:
+            self.msg('Symsim::latchCheck:ERROR: Latch inputs G/GN are not specified')
+            return False
+        
+        if g is not None and gn is not None:
+            self.msg('Symsim::latchCheck:ERROR: Both G and GN are given')
+            return False
+
+        gPin = g if g is not None else gn
+        gInv = g is None
+        
+        # Check EN/ENB
+        if ispec['EN'] is not None and ispec['ENB'] is not None:
+            self.msg('Symsim::latchCheck:ERROR: Both EN and ENB are given')
+            return False
+
+        hasEn = ispec['EN'] is not None or ispec['ENB'] is not None
+        enPin = ispec['EN'] or ispec['ENB'] if hasEn else None
+        enInv = False if ispec['EN'] is not None else (True if hasEn else None)
+        
+        # Check SCVAL
+        SCVAL = ispec['SCVAL']
+        hasSCVAL = SCVAL is not None
+
+        # Check CLR
+        # Check for mutually exclusive sets upfront
+        has_clr = (ispec['ACLR'] is not None) and (ispec['ACLRN'] is not None)
+
+        # Extract the appropriate pins based on availability
+        if has_clr:
+            clrPin = ispec['ACLR'] if ispec['ACLR'] is not None else ispec['ACLRN']
+            clrInv = False if ispec['ACLR'] is not None else True
+            hasClr = True
+        else:
+            hasClr, clrPin, clrInv = False, None, None
+
+        # Check SET
+        # Check for mutually exclusive sets upfront
+        has_set = (ispec['ASET'] is not None) and (ispec['ASETN'] is not None)
+
+        # Extract the appropriate pins based on availability
+        if has_set:
+            setPin = ispec['ASET'] if ispec['ASET'] is not None else ispec['ASETN']
+            setInv = False if ispec['ASET'] is not None else True
+            hasSet = True
+        else:
+            hasSet, setPin, setInv = False, None, None
+
+        # Determine active/inactive signal values
+        gAct = IEEE1164.ZERO if gInv else IEEE1164.ONE
+        gIdle = IEEE1164.ONE if gInv else IEEE1164.ZERO
+        
+        dAct = IEEE1164.ZERO if dInv else IEEE1164.ONE
+        dIdle = IEEE1164.ONE if dInv else IEEE1164.ZERO
+
+        if hasEn:
+            enAct = IEEE1164.ZERO if enInv else IEEE1164.ONE
+            enIdle = IEEE1164.ONE if enInv else IEEE1164.ZERO
+        else:
+            enAct = None
+            enIdle = None
+            
+        if hasClr:
+            clrAct  = IEEE1164.ZERO if clrInv else IEEE1164.ONE
+            clrIdle = IEEE1164.ONE  if clrInv else IEEE1164.ZERO
+        else:
+            clrAct = None
+            clrIdle = None
+
+        if hasSet:
+            setAct = IEEE1164.ZERO if setInv else IEEE1164.ONE
+            setIdle = IEEE1164.ONE if setInv else IEEE1164.ZERO
+        else:
+            setAct = None
+            setIdle = None  
+        
+        res = { 'dPin' : dPin, 'dInv' : dInv, 'qPin' : qPin, 'qnPin' : qnPin,
+                'gPin' : gPin, 'gInv' : gInv,
+                'hasEn' : hasEn, 'enPin' : enPin, 'enInv' : enInv,
+                'enAct' : enAct, 'enIdle' : enIdle,
+                'hasSCVAL' : hasSCVAL, 'SCVAL' : SCVAL,
+                'hasClr' : hasClr, 'clrPin' : clrPin , 'clrInv' : clrInv,
+                'hasSet' : hasSet, 'setPin' : setPin , 'setInv' : setInv,
+                'dAct' : dAct, 'dIdle' : dIdle,
+                'gAct' : gAct, 'gIdle' : gIdle,
+                'clrAct' : clrAct, 'clrIdle' : clrIdle,
+                'setAct' : setAct, 'setIdle' : setIdle}
+        return res
+
+    def latchCheck(self, spec):
+        """
+        Check a latch according to a given specification spec.
+        spec is a dictionary containing a description of a latch
+        Key     Description
+        'D'     Name of data input pin or None
+        'DN'    Name of inverted data input pin or None
+        'Q'     Name of output or None
+        'QN'    Name of inverted output or None
+        'G'     Name of latch input or None
+        'GN'    Name of inverted latch input or None
+        'ACLR'  Name of asynchronous active high clear pin or None
+        'ACLRN' Name of asynchronous active low clear pin or None
+        'ASET'  Name of asynchronous active high set pin or None
+        'ASETN' Name of asynchronous active low set pin or None
+        'EN'    Name of synchronous active high enable pin or None
+        'ENB'   Name of synchronous active low enable pin or None
+        'SCVAL' Value of output when both set and clear are active or None
+        """
+
+        self.initSim()
+
+        self.pspec = self.latchParse(spec)
+
+        self.msg("Symsim::latchCheck: Simulating latch with specification")
+        self.msg("\n".join(f"\t{key} : {value}" for key, value in self.pspec.items()))
+
+        # Set all inputs to inactive values
+        self.latchInactive()
+        # Set enable to active
+        self.latchEN(True)
+        self.simstep()
+
+        for val in [False, True]:
+            # Check if data writing works
+            self.latchD(val)
+            self.latchG(False)
+            self.simstep()
+            self.latchG(True)
+            self.simstep()
+            if not self.latchCheckQ(val):
+                self.msg("Symsim::latchCheck: ERROR : Write value " + str(val) + "failed")
+                return False
+        self.msg("Symsim::latchCheck: Writing values to latch works as expected. PASS.")
+
+        # Check if changing the data with inactive latch input changes the output
+        for val in [False, True]:
+            # Check if data retention works
+            self.latchD(val)
+            self.latchG(True)
+            self.simstep()
+            self.latchG(False)
+            self.simstep()
+            for x in [False, True, False, True]:
+                self.latchD(x)
+                self.simstep()
+                if not self.latchCheckQ(val):
+                    self.msg("Symsim::latchCheck: ERROR :  Check on value " + str(val) + " failed")
+                    return False
+        self.msg("Symsim::latchCheck: Latch retains value on input change. PASS.")
+        
+        # Check if EN works
+        if self.pspec['hasEn']:
+            self.latchEN(False)
+            expected = self.latchGetQ()
+            for val in [False, True]:
+                # Check if data writing works
+                self.latchD(val)
+                self.latchG(False)
+                self.simstep()
+                self.latchG(True)
+                self.simstep()
+                if not self.latchCheckQ(expected):
+                    self.msg("Symsim::latchCheck: ERROR : Enable check failed")
+                    return False
+            self.msg("Symsim::latchCheck: Latch enable works as expected. PASS.")
+            self.latchEN(True)
+        else:
+            self.msg("Symsim::latchCheck: Latch does not have an EN input.")
+
+        # Check if CLR works
+        if self.pspec['hasClr']:
+            # Set output to 1 so it can be cleared
+            self.latchD(True)
+            self.latchG(False)
+            self.simstep()
+            self.latchG(True)
+            self.simstep()
+            self.latchG(False)
+            self.simstep()
+
+            self.latchCLR(True)
+            self.simstep()
+            if not self.latchCheckQ(False):
+                self.msg("Symsim::latchCheck: ERROR : Asynchronous clear is not working as expected.")
+                return False
+            else:
+                self.msg("Symsim::latchCheck: Asynchronous clear is working as expected. PASS.")
+
+            self.latchCLR(False)
+            self.simstep()
+        else:
+            self.msg("Symsim::latchCheck: Latch does not have a CLR input.")
+
+        # Check if SET works
+        if self.pspec['hasSet']:
+            # Set output to 0 so it can be cleared
+            self.latchD(False)
+            self.latchG(False)
+            self.simstep()
+            self.latchG(True)
+            self.simstep()
+            self.latchG(False)
+            self.simstep()
+
+            self.latchSET(True)
+            self.simstep()
+            if not self.latchCheckQ(True):
+                self.msg("Symsim::latchCheck: ERROR : Asynchronous set is not working as expected.")
+                return False
+            else:
+                self.msg("Symsim::latchCheck: Asynchronous set is working as expected. PASS.")
+            self.latchSET(False)
+            self.simstep()
+        else:
+            self.msg("Symsim::latchCheck: Latch does not have a SET input.")
+
+        # Check if simultaneous CLR and SET works as expected
+        if self.pspec['hasSet'] and self.pspec['hasClr'] and (self.pspec['SCVAL'] is not None):
+            self.latchSET(True)
+            self.latchCLR(True)
+            self.latchG(False)
+            self.simstep()
+            if not self.latchCheckQ(self.pspec['SCVAL']):
+                self.msg("Symsim::latchCheck: ERROR : SCVAL is not working as expected.")
+                return False
+            else:
+                self.msg("Symsim::latchCheck: ERROR : SCVAL is working as expected. PASS.")
+        else:
+            self.msg("Symsim::latchCheck: Latch does not have a SCVAL condition.")
+        self.msg("Symsim::latchCheck: All checks passed.")
+        return True
+
+    def latchInactive(self):
+        # Set all inputs to inactive values
+        self.latchG(False)
+        self.latchD(False)
+        self.latchEN(False)
+        self.latchCLR(False)
+        self.latchSET(False)
+
+    def latchG(self, val):
+        # If val = True set latch inpu to active value, otherwise to inactive value
+        if val:
+            self.setInput(self.pspec['gPin'], self.pspec['gAct'])
+        else:
+            self.setInput(self.pspec['gPin'], self.pspec['gIdle'])
+
+    def latchD(self, val):
+        # If val = True set latch data to active value, otherwise to inactive value
+        if val:
+            self.setInput(self.pspec['dPin'], self.pspec['dAct'])
+        else:
+            self.setInput(self.pspec['dPin'], self.pspec['dIdle'])
+
+    def latchEN(self, val):
+        # If val = True set latch enable to active value, otherwise to inactive value
+        if self.pspec['hasEn']:
+            if val:
+                self.setInput(self.pspec['enPin'], self.pspec['enAct'])
+            else:
+                self.setInput(self.pspec['enPin'], self.pspec['enIdle'])
+
+    def latchCLR(self, val):
+        # If val = True set latch clear to active value, otherwise to inactive value
+        if self.pspec['hasClr']:
+            if val:
+                self.setInput(self.pspec['clrPin'], self.pspec['clrAct'])
+            else:
+                self.setInput(self.pspec['clrPin'], self.pspec['clrIdle'])
+
+    def latchSET(self, val):
+        # If val = True set latch set to active value, otherwise to inactive value
+        if self.pspec['hasSet']:
+            if val:
+                self.setInput(self.pspec['setPin'], self.pspec['setAct'])
+            else:
+                self.setInput(self.pspec['setPin'], self.pspec['setIdle'])
+
+    def latchCheckQ(self, val):
+        # Check if outputs have expected values.
+        # If val = True => Q = IEEE1164.ONE and QN = IEEE1164.ZERO
+        # If val = False => Q = IEEE1164.ZERO and QN = IEEE1164.ONE
+        qPin = self.pspec['qPin']
+        qnPin = self.pspec['qnPin']
+        resOK = True
+        if qPin is not None:
+            if val:
+                if self.getOutputValue(qPin) != IEEE1164.ONE:
+                    resOK = False
+            else:
+                if self.getOutputValue(qPin) != IEEE1164.ZERO:
+                    resOK = False
+        if qnPin is not None:
+            if val:
+                if self.getOutputValue(qnPin) != IEEE1164.ZERO:
+                    resOK = False
+            else:
+                if self.getOutputValue(qnPin) != IEEE1164.ONE:
+                    resOK = False
+        return resOK
+
+    def latchGetQ(self):
         # Return Q value
         qPin = self.pspec['qPin']
         qnPin = self.pspec['qnPin']
