@@ -1195,6 +1195,8 @@ absgen cell_name [options]
 |---------------|-------------------|
 |--quiet        |  Print only essential info. |
 |--keep_polygons | Don't convert polygons to rectangles |
+|--antenna		| Set macro class to CORE ANTENNACELL |
+|--spacer		| Set macro class to CORE SPACER |
 
 Running the following command in the `$GLOW_ROOT/cells/INV_D1` directory
 ```sh
