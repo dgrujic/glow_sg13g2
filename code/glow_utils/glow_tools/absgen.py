@@ -45,6 +45,9 @@ def printusage():
     print("Options:")
     print("--quiet          Print only essential info.")
     print("--keep_polygons  Don't convert polygons to rectangles")
+    print("--antenna        Set macro class to CORE ANTENNACELL")
+    print("--spacer         Set macro class to CORE SPACER")
+    print("")
     print("*"*80)
 
 def dir_exists(dir_name):
@@ -90,6 +93,8 @@ def main():
     parser.add_argument('cell_name')
     parser.add_argument('--quiet', action='store_true')
     parser.add_argument('--keep_polygons', action='store_true')
+    parser.add_argument('--antenna', action='store_true')
+    parser.add_argument('--spacer', action='store_true')
     try:
         args = parser.parse_args()
     except:
@@ -98,6 +103,12 @@ def main():
 
     usePolygons = True if args.keep_polygons else False
     quiet = True if args.quiet else False
+    antenna = True if args.antenna else False
+    spacer = True if args.spacer else False
+
+    if antenna and spacer:
+        print("ERROR : Both antenna and spacer type given.")
+        exit(1)
 
     if not quiet:
         print("*"*80)
@@ -110,12 +121,6 @@ def main():
     else:
         print("ABSGEN",cell_name, "\t",end="")
 
-    if not quiet:
-        if usePolygons:
-            print("INFO : Using polygons in LEF abstract")
-        else:
-            print("INFO : Converting polygons to rectangles in LEF abstract")
-
     gds_name = cell_name + ".gds"
     extracted_name = cell_name + "_extracted.cir"
     if file_exists( gds_name ):
@@ -124,6 +129,18 @@ def main():
     else:
         print("ERROR : GDSII file " + gds_name + " not found!")
         exit(1)
+
+    if not quiet:
+        if usePolygons:
+            print("INFO : Using polygons in LEF abstract")
+        else:
+            print("INFO : Converting polygons to rectangles in LEF abstract")
+
+    if not quiet:
+        if antenna:
+            print("INFO : Using CORE ANTENNACELL as macro class")
+        if spacer:
+            print("INFO : Using CORE SPACER as macro class")
 
     glow_root = os.environ.get("GLOW_ROOT", default=None)
     if glow_root is None:
@@ -213,6 +230,11 @@ def main():
         print("Cell size is", pr_size)
 
     macro = LEF_macro(cell_name, lef_site, pr_size, [])
+
+    if antenna:
+        macro.macro_class = "CORE ANTENNACELL"
+    if spacer:
+        macro.macro_class = "CORE SPACER"
 
     # Check if all labels are on the same layer
     labels = cell.labels
