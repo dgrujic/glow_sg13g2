@@ -127,7 +127,7 @@ def main():
         if not quiet:
             print("INFO : Generated cell ", cell_name)
     except:
-        print("ERROR : Unable generate cell", cell_name)
+        print("ERROR : Unable to generate cell", cell_name)
         exit(1)
     
     try:
