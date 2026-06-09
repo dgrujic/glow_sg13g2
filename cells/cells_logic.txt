@@ -11,6 +11,12 @@ INV_D1
 
 
 #
+# NAND
+#
+
+NAND2_D1
+
+#
 # Latches
 #
 
