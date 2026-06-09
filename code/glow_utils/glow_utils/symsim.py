@@ -208,7 +208,6 @@ class Symsim:
     def filterResults(self, nodeNames):
         """
         Extract simulation results node values given in nodeNames.
-        Convert to 1/0 if toLogic = True.
         """
         res = {}
         for node in nodeNames:
