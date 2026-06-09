@@ -23,3 +23,5 @@ from .symieee1164 import *
 from .symsim import *
 from .netlist import *
 from .lef import *
+from .ngspice import *
+
