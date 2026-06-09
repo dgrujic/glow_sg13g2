@@ -35,9 +35,13 @@ class Netlist:
         """
         Read-in LVS (no parasitic) extracted SPICE netlist
         """
-        self.verbose = {}
+        self.verbose = verbose
         self.subcircuits = {}
         self.readSPICE(fileName, self.verbose)
+        # Remove resistors from circuit
+        circuits = self.subcircuits.keys()
+        for name in circuits:
+            self.collapseResistors(name)
 
     @staticmethod
     def eng2sci(text):
@@ -102,7 +106,7 @@ class Netlist:
                             name, val = tmp[i].split('=')
                             val = self.eng2sci(val)
                             device.update( {name : val} )
-                elif (line[0] == 'M'):
+                elif (line[0] == 'M') or (line.startswith('XM')):
                     # MOSFET, create new device and add it
                     if device is not None:
                         # Save previous device
@@ -117,11 +121,25 @@ class Netlist:
                         name, val = tmp[i].split('=')
                         val = self.eng2sci(val)
                         device.update( {name : val} )
+                elif (line[0] == 'R'):
+                    # Parasitic resistor, create new device and add it
+                    if device is not None:
+                        # Save previous device
+                        devices.update( {device['name'] : device} )
+                    device = {}
+                    tmp = line.split()
+                    device.update( {'name' : tmp[0]})
+                    nodes = [tmp[1], tmp[2]]
+                    device.update( {'nodes' : nodes} )
+                    device.update( {'model' : 'R'} )
+                elif (line[0] == 'C'):
+                    # Parasitic capacitor, skip
+                    continue
                 elif (".SUBCKT" in line):
                     # Subcircuit
                     tmp = line.split()
                     if subcircuit != {}:
-                        self.subcircuits.update( { subcircuit['__name__'] : subcircuit } )
+                        self.subcircuits.update( { subcircuit['name'] : subcircuit } )
                         subcircuit = {}
                     subcircuit.update({ 'name' : tmp[1] })
                     devices = {}
@@ -148,6 +166,44 @@ class Netlist:
             devices.update( {device['name'] : device} )
         if subcircuit != {}:
             self.subcircuits.update( { subcircuit['name'] : subcircuit } )
+
+    def collapseNode(self, circuit, newNodeName, replaceNode):
+        # Replace 'replaceNode' with 'keepNode' in the whole circuit
+        for name in circuit['devices'].keys():
+            element = circuit['devices'][name]
+            nodes = element['nodes']
+            for i in range(len(nodes)):
+                if nodes[i] == replaceNode:
+                    nodes[i] = newNodeName
+
+    def collapseResistors(self, circuitName):
+        # Remove resistors from netlist by replacing them with short circuits
+        # Replacing resistors with short circuits collapses circuit nodes,
+        # but terminal nodes are kept.
+        circuit = self.getSubcircuit(circuitName)
+        terminals = circuit['nodes']
+        while True:
+            nodeChanged = False
+            elementNames = list(circuit['devices'].keys())
+            for name in elementNames:
+                elem = circuit['devices'][name]
+                if elem['model'] == 'R':
+                    # Encountered a resistor in a netlist, remove it
+                    elemNodes = elem['nodes']
+                    if elemNodes[0] in terminals:
+                        # node 0 is connected to a top level terminal, keep it
+                        self.collapseNode(circuit, elemNodes[0], elemNodes[1])
+                        nodeChanged = True
+                        # Remove resistor from circuit
+                        circuit['devices'].pop(name)
+                    else:
+                        # keep node 1, as it may be connected to top level terminal
+                        self.collapseNode(circuit, elemNodes[1], elemNodes[0])
+                        nodeChanged = True
+                        # Remove resistor from circuit
+                        circuit['devices'].pop(name)
+            if not nodeChanged:
+                break
 
     def getSubcircuitNames(self):
         return list(self.subcircuits.keys())
@@ -221,10 +277,22 @@ class Netlist:
             element = subcircuit['devices'][elementName]
             w = element['W']
             l = element['L']
-            areaS = element['AS']
-            areaD = element['AD']
-            periS = element['PS']
-            periD = element['PD']
+            if 'AS' in element.keys():
+                areaS = element['AS']
+            else:
+                areaS = 0.0
+            if 'AD' in element.keys():
+                areaD = element['AD']
+            else:
+                areaD = 0.0
+            if 'PS' in element.keys():
+                periS = element['PS']
+            else:
+                periS = 0.0
+            if 'PD' in element.keys():
+                periD = element['PD']
+            else:
+                periD = 0.0
             name = element['name']
             nodes = element['nodes']
             model = element['model']
