@@ -26,6 +26,7 @@ from glow_utils.symtech import SymTech
 from glow_utils.symsubcircuit import Symsubcircuit
 from glow_utils.symmosfet import SymNMOS, SymPMOS
 
+import os
 import re
 import random
 import string
@@ -89,7 +90,8 @@ class Netlist:
         subcircuit = {}
         devices = None
         device = None
-        with open(fileName, 'r') as file:
+        expandedFileName = os.path.expandvars(fileName)
+        with open(expandedFileName, 'r') as file:
             for line in file:
                 line = line.strip()
                 if (line == ""):
@@ -105,7 +107,7 @@ class Netlist:
                         for i in range(len(tmp)):
                             name, val = tmp[i].split('=')
                             val = self.eng2sci(val)
-                            device.update( {name : val} )
+                            device.update( {name.upper() : val} )
                 elif (line[0] == 'M') or (line.startswith('XM')):
                     # MOSFET, create new device and add it
                     if device is not None:
@@ -120,7 +122,7 @@ class Netlist:
                     for i in range(6, len(tmp)):
                         name, val = tmp[i].split('=')
                         val = self.eng2sci(val)
-                        device.update( {name : val} )
+                        device.update( {name.upper() : val} )
                 elif (line[0] == 'R'):
                     # Parasitic resistor, create new device and add it
                     if device is not None:
@@ -135,7 +137,7 @@ class Netlist:
                 elif (line[0] == 'C'):
                     # Parasitic capacitor, skip
                     continue
-                elif (".SUBCKT" in line):
+                elif (".SUBCKT" in line) or (".subckt" in line):
                     # Subcircuit
                     tmp = line.split()
                     if subcircuit != {}:
@@ -150,7 +152,7 @@ class Netlist:
                             # This is a node name
                             nodes.append(tmp[i])
                     subcircuit.update( {'nodes' : nodes} )
-                elif (".ENDS" in line):
+                elif (".ENDS" in line) or (".ends" in line):
                     if device is not None:
                         # Save previous device
                         devices.update( {device['name'] : device} )
