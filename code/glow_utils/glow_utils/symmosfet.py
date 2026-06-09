@@ -81,9 +81,14 @@ class SymMOSFET(Symdevice):
         except ValueError:
             return False  
 
-    def to_SPICE(self):
+    def to_SPICE(self, mosSubckt=True):
         # Return string for SPICE netlist
-        res = "M" + self.getName() + " "
+        if mosSubckt:
+            # Use X for VerilogA MOS models
+            res = "XM" + self.getName() + " "
+        else:
+            # Use M for ngspice native models
+            res = "M" + self.getName() + " "
         res += " ".join(self.getNodes()) + " "
         res += self.getModelName() + " "
         for param in ['m', 'w', 'l', 'ad', 'as', 'pd', 'ps', 'nrd', 'nrs', 'ng']:

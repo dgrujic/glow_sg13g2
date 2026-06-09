@@ -475,7 +475,7 @@ class Symsubcircuit(object):
         return ret
     
     @classmethod
-    def netlist_SPICE(cls):
+    def netlist_SPICE(cls, mosSubckt=True):
         res = ".subckt " + cls.subCktClassName + " "
         res += " ".join(cls.subCktTerminals)
         params = cls.getDefaultParameters()
@@ -493,7 +493,7 @@ class Symsubcircuit(object):
             if isinstance(elem, Symsubcircuit):
                 res += elem.to_SPICE(True, parameterEvaluator)
             else:
-                res += elem.to_SPICE()
+                res += elem.to_SPICE(mosSubckt)
         res += ".ends\n"
         return res
     
