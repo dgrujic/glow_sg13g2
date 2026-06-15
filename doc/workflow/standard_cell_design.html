@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-fafc40f0.js";
+            window.path_to_searchindex_js = "searchindex-ba3f083e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9e19758c.js"></script>
@@ -267,6 +267,216 @@ This area is not wasted for several reasons (numbers for DRC rules are for IHP S
 <h1 id="design-of-a-standard-cell"><a class="header" href="#design-of-a-standard-cell">Design of a standard cell</a></h1>
 <p>The following sections contain the design flow for a single standard cell.</p>
 <h2 id="netlist-design"><a class="header" href="#netlist-design">Netlist design</a></h2>
+<p>Standard digital logic cell design starts with functional design, followed by initial netlist design, transistor sizing and equivalent circuit transformations. Some iterations might be required when physical constrainst, such as routing and cell height, are taken into account.</p>
+<p>Static CMOS logic gates can be partitioned into pull-up network (PUN) consisting of PMOS transistors, and pull-down network (PUD) consisting of NMOS transistors, as shown in the figure below. PUN is active when the output should be driven to logic ‘1’, and the PUD is active when the output should be driven to logic ‘0’.
+By ‘network is active’ we mean that there is a (relatively) low resistance path of turned-on transistors from power (ground) to the output that pulls the output, by charging the capacitance connected to output, to logic ‘1’ (‘0’).
+PUN and PUD should never, except in short transients when inputs change, be active at the same time because it would result in a short circuit between power supply and ground.</p>
+<div align="center">
+<img src="figs/cmos_gate_pu_pd_networks.svg" height="300" />
+</div>
+
+The condition that PUN and PUD should not be active at the same time requires that they are complementary.
+From a functional perspective, only PUN or PUD should be designed, as the other network is it's complementary.
+Making a complementary network is simple as series trasistor connections becomes a parallel connection in a complementary network, and vice-versa.
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">A</th><th style="text-align: center">B</th><th style="text-align: center">NAND(A,B)</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center">0</td><td style="text-align: center">0</td><td style="text-align: center">1</td></tr>
+<tr><td style="text-align: center">0</td><td style="text-align: center">1</td><td style="text-align: center">1</td></tr>
+<tr><td style="text-align: center">1</td><td style="text-align: center">0</td><td style="text-align: center">1</td></tr>
+<tr><td style="text-align: center">1</td><td style="text-align: center">1</td><td style="text-align: center">0</td></tr>
+</tbody>
+</table>
+</div>
+<p>PUN is active for three input value when ouput is logic ‘1’, while the PDN is active only for <code>A=1, B=1</code> when ouptut is logic ‘0’.
+In this case it is easier to design the PDN, as it is active for only one input value, and it is a series connection of two NMOS transistors as shown in the figure below.
+Only when both NMOS transistors are turned on with input value <code>A=1, B=1</code> the output is pulled low, in accordance with the NAND truth table.</p>
+<div align="center">
+<img src="figs/nand2_pdn.svg" />
+</div>
+
+Complementary network for PUN network is obtained by transforming a series connection of NMOS transistors to parallel connection of PMOS transistors. Complete schematic of NAND gate is given in the figure below.
+<div align="center">
+<img src="figs/nand2.svg" />
+</div>
+
+Any static CMOS combinatorial network with one output can be made by designing PUN or PDN directly from the truth table, and then making a complimentary network by parallel &lt;-&gt; series conversion.
+It is easier to design a PUN/PDN network that has a smaller number of elements, so it is common to inspect the truth table and then design PUN if there are fewer 1's in the output values, or PDN if there are fewer 0's.
+Design of combinatorial circuits with multiple outputs might be more involved as there is a possibility to reuse common terms and reduce the total number of transistors and layout area.
+<p>Memory elements, such a latches and flip-flops, in static CMOS are based on two inverters connected back-to-back, as shown in the figure below.</p>
+<div align="center">
+<img src="figs/inv_bb.svg" />
+</div>
+
+<p>Back-to-back inverters, also known as two inverter latch or a bistable element, form a positive feedback loop that indefinitely retains one of two possible stable states - logic ‘1’ or ‘0’. The state of a latch can be changed by forcing the output of inverter <code>A</code> or <code>B</code> by an external tristate driver. In normal operation the tristate driver’s output would be in high impedance state, and the output would only be activated when a state needs to be changed.
+Inverter with tristate output, shown in the figure below, can be used as an external driver.
+Output of a tristate inverter is high impedance <code>Y=Z</code> when <code>OE=0</code> and <code>OEN=1</code>, and <code>Y=NOT(A)</code> when <code>OE=1</code> and <code>OEN=0</code>.</p>
+<div align="center">
+<img src="figs/inv_tristate.svg" />
+</div>
+
+<p>One of the inverters can be made to be ‘weak’ by using close to minimum width transistors. ‘Weak’ inverter output can easily be forced to change the value by an external tristate driver. Alternatively, one of the inverters can have a tristate output.
+Using a tristate driver and tristate inverter in a feedback loop results in a transprarent latch, shown in the figure below.
+Signals <code>G</code> and <code>GN</code> determine whether the latch passes the input data value to the output - latch is ‘transparent’, or keeps the output at latched value. In the figure below the latch is transparent for <code>G=1</code> and <code>GN=0</code>, when the tristate inverter connected to the input <code>D</code> is active and feedback tristate inverter is in high impedace state, effectively cutting the feedback loop.
+The data value is latched when control signals transition to <code>G=1 -&gt; G=0</code> and <code>GN=0 -&gt; GN=1</code>. This transition puts the tristate inverter in high impedance state, so it is no longer driving the bistable element, and enables the tristate inverter in the feedback loop that indefinitely retains the last input value.</p>
+<div align="center">
+<img src="figs/dlatch.svg" />
+</div>
+
+<p>Flip-flops are usually made from two latches in so-called ‘master-slave’ configuration. The principle of operation is the same, with a difference that a flip-flop captures the input data on rising or falling edge of the clock signal and retains it, regardless of data and clock signal levels, until the next rising or falling edge.</p>
+<p>From these simple examples we can see that complex gates are made from simpler ones, and that some basic circuits could be reused. That is the reason why parametrized circuits, located in <code>glow_parcells</code>, are made.</p>
+<p>Up until now we were considering only the functional requirements - which circuit topology implements the desired combinatorial function, or how to make a memory element. For a circuit to be implemented we need to determine the transistor dimensions - channel length and width - for all transistors.
+This is called ‘transistor sizing’ and is an important step in the design of a standard digital cell.</p>
+<p>Transistor channel length should be the minimum channel length available in a given technology - if a longer channel length produces satisfactory results, a different and cheaper technology should be considered.
+Using the minimum channel length ensures that input capacitance, propagation delays and area are minimal for a given technology.
+If static leakage is a concern, it is better to use transistors with higher threshold voltage or to lower the power supply voltage, than to use transistors with longer channel.
+The only exception to this ‘rule’ are special delay cells that are used to fix hold time violations, which intentionally have long propagation times.</p>
+<p>Choice of transistor widths in a standard cell comes down to the choice of ratio of PMOS to NMOS transistor width, and the width of NMOS transistors in various stages. The width of NMOS transistors determines the drive strength of a cell, and it can be considered as an independent variable available to design cells of different drive strengths. Besides electrical performance, there are physical constraints, such as available area and foundry design rules.</p>
+<p>The choice of PMOS to NMOS ratio is mainly technology dependent, but some fine tuning may result from design requirements. In older CMOS processes, where minimum channel length was measured in micrometers, the mobility of holes was about two times lower than the mobility of electrons, so the default ratio of PMOS to NMOS transistor width for an inverter was about two.
+Having the PMOS to NMOS width equal to electron to hole mobility results in, in a first approximation, that ‘on’ resistance at the output is equal for charging the parasitic capacitance to power supply and discharging it to ground.
+In deep submicron processes the ratio of electron to hole mobility has reduced below the value of two, and is about 1.5 in 130 nm process.</p>
+<p>Overall goals of the standard cell design is to:</p>
+<ul>
+<li>minimize the cell area,</li>
+<li>minimize the internal cell power,</li>
+<li>minimize the propagation delay and rise/fall times,</li>
+<li>balance propagation delays and rise/fall times,</li>
+<li>make the switching threshold close to half of power supply.</li>
+</ul>
+<p>There is no point of designing a cell that has very short low to high and long high to low propagation delay, as the longer propagation delay will limit the maximum operating frequency. Similar reasoning applies to rise/fall time as longer time will determine the maximum operating frequency.
+Also, switching threshold at half the power supply maximizes the noise immunity.</p>
+<p>Lets consider an inverter as a simple example to illustrate the process of choosing the PMOS to NMOS ratio. We will fix the NMOS width to 1 micrometer and observe the effects of different PMOS/NMOS ratios.
+Three inverters were designed with PMOS to NMOS channel width WP/WN of 0.5, 1.5 and 4.5 to illustrate the effects of transistor sizing.</p>
+<p>All three inverters were simulated with <code>ngspice</code> in a DC simulation using SG13G2 transistor models <code>sg13_lv_nmos</code> and <code>sg13_lv_pmos</code>.
+Input voltage was swept from 0 to a power supply of 1.2 V, and output voltages and supply currents were recorded, and the results are presented in the figure below.
+Solid lines represent output voltage, while the dashed lines are current through the power supply.</p>
+<div align="center">
+<img src="figs/inv_dc.svg" width="500/">
+</div>
+
+<p>From simulation results it can be seen that WP/WN of 1.5 has an input threshold close to half the power supply, which maximizes the noise immunity.
+However, DC simulation does not reveal all parameters of interest.
+Results of transient simulation with output load of 20 fF and input rise/fall time of 100 ps are shown in the figure below.
+Having in mind that the width of NMOS transistors is fixed, falling transition is almost the same, while the rising transition is different due to different PMOS widths.
+Numerical values of transient simulations are summarized in the table following the figure.</p>
+<div align="center">
+<img src="figs/inv_tran.svg" width="500/">
+</div>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">WP/WN</th><th style="text-align: center">tr</th><th style="text-align: center">tf</th><th style="text-align: center">tphl</th><th style="text-align: center">tplh</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center">0.5</td><td style="text-align: center">187.7</td><td style="text-align: center">47.6</td><td style="text-align: center">64.0</td><td style="text-align: center">166.3</td></tr>
+<tr><td style="text-align: center">1.5</td><td style="text-align: center">67.4</td><td style="text-align: center">48.7</td><td style="text-align: center">66.7</td><td style="text-align: center">76.7</td></tr>
+<tr><td style="text-align: center">4.5</td><td style="text-align: center">32.5</td><td style="text-align: center">52.5</td><td style="text-align: center">73.5</td><td style="text-align: center">46.2</td></tr>
+</tbody>
+</table>
+</div>
+<p>As expected, fall times and propagation delays high to low, that are mostly determined by the NMOS transistor, are almost the same.
+However, rise time and low to high propagation delays are quite different, that is also expected.
+Ratio of PMOS to NMOS transistors of 1.5 has balanced rise/fall times and propagation delays, although a ratio of 4.5 might seem a viable choice as well, that offers a margin in rise time and propagation delay.
+However, inspecting the power supply current, shown in the figure below, provides an additional insight.</p>
+<div align="center">
+<img src="figs/inv_tran_idd.svg" width="500/">
+</div>
+
+<p>At about 1 ns, when the PMOS transistor charges the output capacitance, the maximum value of power supply current is much higher for larger PMOS transistor, but that is expected as the output capacitance is charged faster. At falling transition, the output capacitance is discharged through the NMOS transistor, and the current flowing through the power supply is the VDD-GND short circuit current that represents the cell internal power, and should be minimized.
+Short circuit current for PMOS/NMOS ratio of 4.5 is much higher than for ratio of 1.5, and it indicates that the penalty in internal power is not worth the (unnecessary) margin in rise time/propagation delay.</p>
+<p>Transistor sizing for complex gates is a bit more involved as propagation delays and rise/fall times are input-data dependant. Technically speaking, complex gates have several timing arcs that need to be considered and balanced.
+Initial sizing can be obtained by reusing the inverter transistor widths and sizing the transistors to keep the ‘on’ resistance approximately constant. If needed, fine tuning can be performed after initial sizing.</p>
+<p>Assuming that an inverter has PMOS channel width <code>WP</code> and NMOS channel width <code>WN</code>, we will show how to size transistors of two input NAND gate, that is repeated in the figure below for easy reference.</p>
+<div align="center">
+<img src="figs/nand2.svg" />
+</div>
+
+<p>Both PMOS transistors are connected directly to power supply and output, and using the same transistor width as in inverter will result in the same ‘on’ resistance when only one of the PMOS transistors is turned on.
+When both of the transistors are turned on the ‘on’ resistance will be reduced to half the value.
+Transistors should be sized so that ‘on’ resistance is the same as inverter’s in the worst case, so PMOS transistors should have channel width equal to inverter’s <code>WP</code>.</p>
+<p>Output is pulled low only when both NMOS transistors are turned on, and the equivalent ‘on’ resistance of two transistors in series is double the resistance of a single transistor. Therefore, NMOS transistors should have channel width of <code>2WN</code> to maintain the same ‘on’ resistance as inverter.</p>
+<p>The result of this short analysis is that initial values of PMOS and NMOS channel width for two input NAND gate are <code>WP</code> and <code>2*WN</code>, respectively. If needed, these values could be fine tuned or slightly changed to take into account physical constraints.</p>
+<h2 id="code-organization"><a class="header" href="#code-organization">Code organization</a></h2>
+<p>Standard cells are located in <code>$GLOW_ROOT/cells</code> directory, each within its own directory, as shown in the directory tree below.</p>
+<pre><code>├── cells_logic.txt
+├── cells_physical.txt
+├── DFQQN_D1
+│   └── DFQQN_D1.py
+├── DLN_D1
+│   └── DLN_D1.py
+├── INV_D1
+│   └── INV_D1.py
+└── NAND2_D1
+    └── NAND2_D1.py
+</code></pre>
+<p>Files <code>cells_logic.txt</code> and <code>cells_physical.txt</code> contain a list of cells for batch processing, to separate the cells implementing logic from cells that are only needed for physical implementation - fillers, decoupling, etc.</p>
+<p>Each cell is within its own directory, where all the generated files, such as SPICE and CDL netlists, will be placed.
+Directory, Python file and cell name should all be the same, except for .py extension, to enable batch processing.</p>
+<p>Classes from <code>glow_utils</code> should be used to construct the cell from NMOS and PMOS transistors, as shown in the <code>INV_D1</code> example below.</p>
+<pre><code class="language-python">from glow_parcells import *
+from glow_utils.symsim import Symsim
+from glow_utils.symtech import SymTech
+from sympy import Not
+from sympy.abc import x
+
+def info():
+    """
+    Returns a dictionary with cell information
+    Key         Value
+    name        Cell name
+    pinList     List of cell pins
+    description Cell description
+    """
+    cellInfo = { 'name' : 'INV_D1',
+                 'pinList' : ['A', 'Y', 'VDD', 'VSS'],
+                 'description' : 'Inverter with drive strength x1'
+    }
+    return cellInfo
+
+def generate(genFlat = True, anonimize = True):
+    """
+    Generate the circuit structure.
+    If genFlat = True generate a flat circuit with suffix _flat
+    If anonimize = True anonimize devices and nodes in the generated flat circuit
+    """
+    cellInfo = info()
+    wn = SymTech.technology['invx1WN']
+    wp = SymTech.technology['invx1WP']
+
+    INV_D1 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
+    inv1 = inv_par('inv1', ['A', 'Y', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
+    INV_D1.addElement(inv1)
+
+    # Flatten the circuit
+    if genFlat:
+        INV_D1_flat = INV_D1.flat()
+    if anonimize:
+        INV_D1_flat.anonimize()
+
+def check(verbose = False):
+    """
+    Check if the circuit works as expected
+    """
+    expectedFns = [ Not(x) ]
+    cellInfo = info()
+    name = cellInfo["name"]
+    allCircuits = Symsubcircuit.getSubckts()
+    circuit = allCircuits[ name + "_flat" ]
+    sim = Symsim(circuit, verbose = verbose)
+    return sim.combCheck(expectedFns)
+</code></pre>
+<p>Cell Python code is dynamically loaded by the <code>gencell</code> script that generates SPICE and CDL netlists, and performs checks to ensure that the cell performs as expected.</p>
+<p>Function <code>info</code> returns a dictionary <code>cellInfo</code> that at least contains keys <code>name</code>, <code>pinList</code> and <code>description</code>.
+Value of <code>name</code> is the cell name, <code>pinList</code> has list of cell top level pins (terminals) and <code>description</code> is string that describes the cell.
+Other information might be included in a dictionary if it would be used in the flow.</p>
+<p>Function <code>generate</code> assembles the circuit by creating an instance of <code>Symsubcircuit</code> class and adds transistors or other subcircuits to it. In this particular example, the inverter is made by instantiating a parametrized inverter circuit <code>inv_par</code> and passing the transistor dimensions obtained from <code>Symtech</code> class.
+If <code>genFlat</code> is <code>True</code> the circuit is flattened, and if <code>anonimize</code> is True instance and node names are anonimized.</p>
+<p>Function <code>check</code> uses <code>Symsim</code> class to simulate the circuit and check if its function matches the expected function. Any additional checks should be performed in this function, and return a value of <code>True</code> if cell works as intended.</p>
+<p>Presented code organization allow for the use of tools from <code>glow_utils</code> to develop and check individual cells, but also to run batch processing scripts.</p>
 <h2 id="layout-design-and-verification"><a class="header" href="#layout-design-and-verification">Layout design and verification</a></h2>
 <h2 id="cell-characterization"><a class="header" href="#cell-characterization">Cell characterization</a></h2>
 <h2 id="abstract-view-generation"><a class="header" href="#abstract-view-generation">Abstract view generation</a></h2>
