@@ -22,7 +22,7 @@ from glow_utils.netlist import Netlist
 from glow_utils.symcheck import Symcheck
 
 class Ngspice:
-    def __init__(self, libraries, includes, conditions, verbose=True):
+    def __init__(self, libraries, includes, conditions, netlistFile, circuitName, verbose=True):
         defaultConditions = {   "supplyVoltage" : 1.2, 
                                 "temperature" : 27.0,
                                 "useGear" : True,
@@ -35,17 +35,29 @@ class Ngspice:
         self.includes = includes
         self.conditions = defaultConditions
         self.conditions.update( conditions )
+        self.verbose = verbose
+        self.echoprefix = "!#!#"
+        self.clear()
+        self.circuitName = circuitName
+        self.netlistFile = netlistFile
+        self.dutFromNetlist(netlistFile, circuitName)
+
+    def clear(self):
+        # Clear current state for new simulation
+        self.parameters = []
         self.subcircuits = {}
         self.instances = {}
         self.dotcommands = []
         self.control = []
-        self.verbose = verbose
-        self.echoprefix = "!#!#"
         self.measGroups = {}
-
+        
     def msg(self, message):
         if self.verbose:
             print("Ngspice::", message, "\n")
+
+    def addParameter(self, name, value):
+        # Add parameter to circuit
+        self.parameters.append( (name, value) )
 
     def addInstance(self, name, nodes, model, parameters=None):
         # Add instance to circuit
@@ -63,11 +75,21 @@ class Ngspice:
     def addControl(self, command : str) -> str:
         self.control.append(command)
 
+    def clearControl(self):
+        self.control = []
+
     def echo(self, toEcho : str) -> str:
         return 'echo "' + self.echoprefix + toEcho + '"'
     
     def measAtTime(self, name : str, expr : str, time ) -> str:
         return 'meas tran ' + name + ' FIND '+ expr + ' AT='+str(time)
+
+    def makeMeasGroupV(self, names):
+        # Make measurement group where name is the same as node name
+        measGroup = []
+        for name in names:
+            measGroup.append( (name, 'v('+name+')') )
+        return measGroup
 
     def addMeasGroup(self, groupName : str, measurements):
         # Add a measurement group that can be used with measGroupAtTime
@@ -98,6 +120,14 @@ class Ngspice:
                 echo += " " + name + "=$&" + name_t
         res += self.echo(echo)
         return res
+    
+    def measGroupOP(self, groupName : str):
+        group = self.measGroups[groupName]
+        res = ""
+        for meas in group:
+            name, expr = meas
+            res += " " + name + "=$&" + expr
+        return self.echo(res)
 
     def makeNetlist(self) -> str:
         # Make an ngspice netlist for a given circuit
@@ -109,6 +139,11 @@ class Ngspice:
         for include in self.includes:
             res += ".include " + include + "\n"
         res += ".temp " + str(temp) + "\n"
+        # Add subcircuit parameters to netlist
+        for param in self.parameters:
+            name, val = param
+            res += ".param " + name + " " + str(val) + "\n"
+
         # Add subcircuit definitions
         for name in self.subcircuits.keys():
             res += self.subcircuits[name]
@@ -142,10 +177,7 @@ class Ngspice:
         return res
 
     def arbSource(self, name, waveform, vhigh, td, tr, tf, tclk):
-        """
-        Make an arbitrary signal source from several PULSE sources.
-
-        """
+        # Make an arbitrary signal source from several PULSE sources.
         res  = ".subckt " + name + " out\n"
         ind = 0
         i = 0
@@ -156,7 +188,7 @@ class Ngspice:
                 # Merge consecutive '1's
                 istart = i
                 while (i < len(waveform)):
-                    if (waveform[i] == 0):
+                    if (waveform[i] == 0) or (waveform[i] == '0') or (waveform[i] == False):
                         break
                     i += 1
                 iend = i
@@ -204,6 +236,25 @@ class Ngspice:
                 filtered.append(line[len(self.echoprefix):])
         return filtered
 
+    def extractValues(self, names, results, missingVal = 1e9):
+        # Extract values from measurement results
+        # If results do not contain all names, missing values will be assigned the value missingVal
+        outvals = []
+        for step in results:
+            expr = step.split()
+            row = [missingVal for _ in range(len(names))]
+            for vals in expr:
+                if ('=' in vals):
+                    name, val  = vals.split('=')
+                    if name in names:
+                        ind = names.index(name)
+                        try:
+                            row[ind] = float(val)
+                        except:
+                            row[ind] = val
+            outvals.append(row)
+        return outvals
+
     def genCombSources(self, inputs):
         # Add arbitrary sources for combinatorial circuit that simulate all combinations of inputs
         # td, tclk, tr, tf and vdd are taken from conditions
@@ -234,11 +285,8 @@ class Ngspice:
             self.addInstance("X"+name, [inputs[i]], name, None)
         return (twave, allVectors)
     
-    def combSim(self, netlistFile, circuitName, toLogic=True):
-        # Read netlist, deduce inputs and outputs and run ngspice simulations over all input vectors.
-        # Returns a tuple (inputs, outputs)
-        # If toLogic = False returns simulated voltages
-        # If toLogic = True returns logic values
+    def dutFromNetlist(self, netlistFile, circuitName):
+        # Read a DUT from a given netlistFile and circuitName and identify pins
         netlist = Netlist(netlistFile, self.verbose)
         circuit = netlist.makeCircuit(circuitName)
         check = Symcheck(circuit)
@@ -259,61 +307,288 @@ class Ngspice:
         # Add netlist file to include list
         self.includes.append(netlistFile)
 
-        # Add circuit instance
-        nodes = []
-        nodes += inputs
-        nodes += outputs
-        nodes.append( power )
-        nodes.append( '0' ) # ground
-        self.addInstance("XDUT", nodes, circuitName, None)
+        self.inputs = inputs
+        self.outputs = outputs
+        self.power = power
+        self.ground = ground
+        self.circuitTerminals = circuit.getTerminals()
+    
+    def combSim(self, toLogic=True):
+        # Read netlist, deduce inputs and outputs, and run ngspice simulations over all input vectors.
+        # Returns a tuple (inputs, outputs)
+        # If toLogic = False returns simulated voltages
+        # If toLogic = True returns logic values
+
+        self.clear()
+
+        # Add DUT circuit instance
+        self.addInstance("XDUT", self.circuitTerminals, self.circuitName, None)
+        # Add ground -> 0 source for ground current measurement
+        self.addInstance("VDUTGND", [self.ground, '0'], None, ['0'])
 
         # Add supply voltage
         vddVal = self.conditions['supplyVoltage']
-        self.addInstance('VSUP', [power, '0'], None, [str(vddVal)])
+        self.addInstance('VSUP', [self.power, '0'], None, [str(vddVal)])
 
-        tsim, allVectors = self.genCombSources(inputs)
+        tsim, allVectors = self.genCombSources(self.inputs)
 
         tstep = self.conditions["tstepCombSim"]
         self.addControl("tran " + str(tstep) + " " + str(tsim))
 
-        measGroup = []
-        for name in inputs:
-            measGroup.append( (name, 'v('+name+')') )
-        for name in outputs:
-            measGroup.append( (name, 'v('+name+')') )
-        
-        self.addMeasGroup("signals", measGroup)
+        self.addMeasGroup("signals", self.makeMeasGroupV(self.inputs + self.outputs))
+
         td = self.conditions["td"]
         tclk = self.conditions["tclk"]
         t0 = td + 0.9 * tclk
+        # Add measurements for each input combination
         for i in range(len(allVectors)):
             self.addControl(self.measGroupAtTime("signals", t0 + i * tclk, True))
         
-        inputVals = []
-        outputVals = []
         res = self.run()
-        for step in res:
-            expr = step.split()
-            inputRow = [1e9 for _ in range(len(inputs))]
-            outputRow = [1e9 for _ in range(len(outputs))]
-            for vals in expr[1:]:
-                if ('=' in vals):
-                    name, val  = vals.split('=')
-                    if name in inputs:
-                        ind = inputs.index(name)
-                        inputRow[ind] = float(val)
-                    if name in outputs:
-                        ind = outputs.index(name)
-                        outputRow[ind] = float(val)
-            inputVals.append(inputRow)
-            outputVals.append(outputRow)
+        inputVals = self.extractValues(self.inputs, res)
+        outputVals = self.extractValues(self.outputs, res)
 
         if not toLogic:
-            return (inputs, inputVals, outputs, outputVals)
+            return (self.inputs, inputVals, self.outputs, outputVals)
         else:
             vt = self.conditions['supplyVoltage']/2
             inputVals01 = [['1' if val > vt else '0' for val in row] for row in inputVals]
             outputVals01 = [['1' if val > vt else '0' for val in row] for row in outputVals]
-            return (inputs, inputVals01, outputs, outputVals01)
+            return (self.inputs, inputVals01, self.outputs, outputVals01)
 
+    def combSimLeakagePower(self):
+        # Simulate power leakage of combinatorial circuits for all input states
+        
+        self.clear()
+        
+        # Add DUT circuit instance
+        self.addInstance("XDUT", self.circuitTerminals, self.circuitName, None)
+        # Add ground -> 0 source for ground current measurement
+        self.addInstance("VDUTGND", [self.ground, '0'], None, ['0'])
+
+        inputSources = ['V'+x for x in self.inputs]
+
+        # Add supply voltage
+        vddVal = self.conditions['supplyVoltage']
+        self.addInstance('VSUP', [self.power, '0'], None, [str(vddVal)])
+
+        # Add input stimuli
+        for name in self.inputs:
+            self.addInstance('V'+name, [name, '0'], None, [0.0])
+
+        mg = self.makeMeasGroupV(self.inputs + self.outputs)
+        mg.append(('pleak', 'pleak'))
+        self.addMeasGroup("signals", mg)
+        
+        nbits = len(self.inputs)
+        allVectors = list(product([0.0, vddVal], repeat=nbits))
+
+        self.addControl('set vdd='+str(vddVal))
+
+        for vector in allVectors:
+            ag = zip(inputSources, vector)
+            self.addControl(self.alterGroup(ag))
+            self.addControl("op")
+            self.addControl("let pleak=-$vdd*i(VSUP)")
+            self.addControl(self.measGroupOP("signals"))
+        
+        res = self.run()
+
+        inputVals = self.extractValues(self.inputs, res)
+        outputVals = self.extractValues(self.outputs, res)
+        pleak = self.extractValues(['pleak'], res)
+        # Flatten pleak results to one dimension
+        pleak = [val for row in pleak for val in row]
+        return (self.inputs, inputVals, self.outputs, outputVals, pleak)
+
+    def combSimDelaySlewPowerCin(self, simSetup):
+        # Simulate combinatorial circuit propagation delay and slew (rise/fall) time.
+        # All but one input are at given constant values, and one input changes 0 -> 1 and 1 -> 0.
+        # Measurements are performed for all combinations of given rise time and loading capacitance.
+        # Only one output is considered at a time.
+        # Simsetup is a dictionary that contains simulation setup
+        # Key               Description
+        # constantInputs    List of tuples (inputName, value) that are held at constant given values during simulations.
+        #                   value is True for input held at VDD, or False for input held at 0.
+        # input             Tuple (inputName, ["positive" | "negative"]). 
+        #                   Values "positive" and "negative" define if input->output is positive or negative unate.
+        # output            Name of output
+        # capList           List of loading capacitance values in pF.
+        # slewList          List of slew rates in ns.
+        # 
+        # Optional arguments.
+        #
+        # input_threshold_pct_fall      Threshold for input signal falling edge, default 50.
+        # input_threshold_pct_rise      Threshold for input signal rising edge, default 50.
+        # output_threshold_pct_fall     Threshold for output signal falling edge, default 50.
+        # output_threshold_pct_rise     Threshold for output signal rising edge, default 50
+        # slew_lower_threshold_pct_fall Lower threshold for falling edge, default 20
+        # slew_lower_threshold_pct_rise Lower threshold for rising edge, default 20
+        # slew_upper_threshold_pct_fall High threshold for falling edge, default 80
+        # slew_upper_threshold_pct_rise High threshold for rising edge, default 80
+        #
+        #
+        # Returns a list of results in a form of a tuple
+        # (['rise', 'fall'], cout, slew, tp, ts, pint, cg )
+        #
+
+        self.clear()
+
+        settings = {    "input_threshold_pct_fall"  :   50.0,
+                        "input_threshold_pct_rise"  :   50.0,
+                        "output_threshold_pct_fall" :   50.0,
+                        "output_threshold_pct_rise" :   50.0,
+                        "slew_lower_threshold_pct_fall" :   20.0,
+                        "slew_lower_threshold_pct_rise" :   20.0,
+                        "slew_upper_threshold_pct_fall" :   80.0,
+                        "slew_upper_threshold_pct_rise" :   80.0,
+                        "tran_sim_step"                 :   1e-12,
+                        "tran_sim_time"                 :   10e-9,
+                        "tran_delay"                    :   1e-9
+                    }
+
+        settings.update( simSetup )
+
+        # Add DUT circuit instance
+        self.addInstance("XDUT", self.circuitTerminals, self.circuitName, None)
+        # Add ground -> 0 source for ground current measurement
+        self.addInstance("VDUTGND", [self.ground, '0'], None, ['0'])
+
+        # Add voltage sources for constant inputs
+        for cin in settings['constantInputs']:
+            name, val = cin
+            # Add constant input stimuli
+            if val:
+                vin = self.conditions['supplyVoltage']
+            else:
+                vin = 0.0
+            self.addInstance('V'+name, [name, '0'], None, [str(vin)])
+        
+        # Add supply voltage
+        vddVal = self.conditions['supplyVoltage']
+        self.addInstance('VSUP', [self.power, '0'], None, [str(vddVal)])
+
+        # Output load capacitor
+        outNode = settings['output']
+        self.addInstance("Cload", [outNode, '0'], None, ['1f'])
+
+        inNode, unate = settings['input']
+
+        # Add input stimulus
+        spec = "pulse(0 1.2 1n 100p 100p 100n 1 1 )"
+        self.addInstance("VIN", [inNode, '0'], None, [spec])
+
+        tDelay = str(settings['tran_delay'])
+
+        # Calculate threshold values
+        itFall = float(vddVal) * settings["input_threshold_pct_fall"] / 100.0
+        itRise = float(vddVal) * settings["input_threshold_pct_rise"] / 100.0
+        otFall = float(vddVal) * settings["output_threshold_pct_fall"] / 100.0
+        otRise = float(vddVal) * settings["output_threshold_pct_rise"] / 100.0
+        slFall = float(vddVal) * settings["slew_lower_threshold_pct_fall"] / 100.0
+        slRise = float(vddVal) * settings["slew_lower_threshold_pct_rise"] / 100.0
+        suFall = float(vddVal) * settings["slew_upper_threshold_pct_fall"] / 100.0
+        suRise = float(vddVal) * settings["slew_upper_threshold_pct_rise"] / 100.0
+
+        # Prepare commonly used commands
+        if unate == 'positive':
+            # Input rising -> output rising, input falling -> output falling
+            # Delay on rising output
+            mDelayRise = "meas tran tp_rise TRIG v(" + inNode + ") VAL="+str(itRise)+" RISE=1 TARG v(" + outNode + ") VAL=" + str(otRise) + " RISE=1"
+            # Delay on falling output
+            mDelayFall = "meas tran tp_fall TRIG v(" + inNode + ") VAL="+str(itFall)+" FALL=1 TARG v(" + outNode + ") VAL=" + str(otFall) + " FALL=1"
+        elif unate == 'negative':
+            # Input rising -> output falling, input falling -> output rising
+            # Delay on rising output
+            mDelayRise = "meas tran tp_rise TRIG v(" + inNode + ") VAL="+str(itFall)+" FALL=1 TARG v(" + outNode + ") VAL=" + str(otRise) + " RISE=1"
+            # Delay on falling output
+            mDelayFall = "meas tran tp_fall TRIG v(" + inNode + ") VAL="+str(itRise)+" RISE=1 TARG v(" + outNode + ") VAL=" + str(otFall) + " FALL=1"
+        else:
+            print("ERROR : Unate value must be either 'positive' or 'negative'")
+            exit(1)
+
+        # Output rise time
+        mOutRise = "meas tran ts_rise TRIG v(" + outNode +") VAL=" + str(slRise) + " RISE=1 TARG v(" + outNode + ") VAL=" + str(suRise) + " RISE=1"
+        # Output fall time
+        mOutFall = "meas tran ts_fall TRIG v(" + outNode +") VAL=" + str(suFall) + " FALL=1 TARG v(" + outNode + ") VAL=" + str(slFall) + " FALL=1"
+
+        # Internal power from VDD current
+        expr_pVDD = "let pvdd = v(" + self.power + ") * i(vsup)"
+        mVDD_pint = "meas tran pint INTEG pvdd FROM={} TO={}"
+        # Internal power from VSS current
+        expr_pVSS = "let pvss = -v(" + self.power + ") * i(vdutgnd)"
+        mVSS_pint = "meas tran pint INTEG pvss FROM={} TO={}"
+
+        # Gate charge falling input
+        mQg = "meas tran qg INTEG i(vin) FROM={} TO={}"
+        # Gage capacitance falling input
+        expr_CgFall = "let cg = qg/{}"
+        # Gate charge rising input
+        expr_CgRise = "let cg = -qg/{}"
+
+        tranCmd = "tran " + str(settings['tran_sim_step']) + ' ' + str(settings['tran_sim_time'])
+
+        res_names = ['type', 'cout', 'slew', 'tp', 'ts', 'pint', 'cg']
+        res_vals = []
+
+        # Setup simulation
+        coutList = settings['capList']
+        slewList = settings['slewList']
+
+        for cout in coutList:
+            for slew in slewList:
+                self.clearControl()
+                self.addControl("alter Cload " + str(cout))
+
+                # Input rising
+                vstart = str(0.0)
+                vend = str(vddVal)
+                self.addControl("alter @VIN[pulse]=[ " + vstart + " " + vend + " " + tDelay + " " + str(slew) + " " + str(slew) +" 1 1 ]")
+                self.addControl(tranCmd)
+                self.addControl(mQg.format(float(tDelay), float(tDelay)+float(slew)))
+                self.addControl(expr_CgRise.format(vddVal))
+                if unate == 'positive':
+                    # Output rising
+                    self.addControl(mDelayRise)
+                    self.addControl(mOutRise)
+                    self.addControl(expr_pVSS)
+                    self.addControl(mVSS_pint.format(float(tDelay), float(tDelay)+float(slew)))
+                    msg = "type=rise cout=" + str(cout) + " slew=" + str(slew) + " tp=$&tp_rise ts=$&ts_rise pint=$&pint cg=$&cg"
+                else:
+                    # Output falling
+                    self.addControl(mDelayFall)
+                    self.addControl(mOutFall)
+                    self.addControl(expr_pVDD)
+                    self.addControl(mVDD_pint.format(float(tDelay), float(tDelay)+float(slew)))
+                    msg = "type=fall cout=" + str(cout) + " slew=" + str(slew) + " tp=$&tp_fall ts=$&ts_fall pint=$&pint cg=$&cg"
+                self.addControl(self.echo(msg))
+
+                # Input falling
+                vstart = str(vddVal)
+                vend = str(0.0)
+                self.addControl("alter @VIN[pulse]=[ " + vstart + " " + vend + " " + tDelay + " " + str(slew) + " " + str(slew) +" 1 1 ]")
+                self.addControl(tranCmd)
+                self.addControl(mQg.format(float(tDelay), float(tDelay)+float(slew)))
+                self.addControl(expr_CgFall.format(vddVal))
+                if unate == 'negative':
+                    # Output rising
+                    self.addControl(mDelayRise)
+                    self.addControl(mOutRise)
+                    self.addControl(expr_pVSS)
+                    self.addControl(mVSS_pint.format(float(tDelay), float(tDelay)+float(slew)))
+                    msg = "type=rise cout=" + str(cout) + " slew=" + str(slew) + " tp=$&tp_rise ts=$&ts_rise pint=$&pint cg=$&cg"
+                else:
+                    #Output falling
+                    self.addControl(mDelayFall)
+                    self.addControl(mOutFall)
+                    self.addControl(expr_pVDD)
+                    self.addControl(mVDD_pint.format(float(tDelay), float(tDelay)+float(slew)))
+                    msg = "type=fall cout=" + str(cout) + " slew=" + str(slew) + " tp=$&tp_fall ts=$&ts_fall pint=$&pint cg=$&cg"
+                self.addControl(self.echo(msg))
+
+                res = self.run()
+            
+                res_vals += self.extractValues(res_names, res)
+
+        return (res_names, res_vals)
 
