@@ -426,7 +426,8 @@ class Ngspice:
         # slew_lower_threshold_pct_rise Lower threshold for rising edge, default 20
         # slew_upper_threshold_pct_fall High threshold for falling edge, default 80
         # slew_upper_threshold_pct_rise High threshold for rising edge, default 80
-        #
+        # adjust_slew                   Adjust generator slew time so that given slew time is
+        #                               between thresholds slew_*threshold_pct_*. Default True.
         #
         # Returns a list of results in a form of a tuple
         # (['rise', 'fall'], cout, slew, tp, ts, pint, cg )
@@ -442,6 +443,7 @@ class Ngspice:
                         "slew_lower_threshold_pct_rise" :   20.0,
                         "slew_upper_threshold_pct_fall" :   80.0,
                         "slew_upper_threshold_pct_rise" :   80.0,
+                        "adjust_slew"                   :   True,
                         "tran_sim_step"                 :   1e-12,
                         "tran_sim_time"                 :   10e-9,
                         "tran_delay"                    :   1e-9
@@ -489,6 +491,17 @@ class Ngspice:
         slRise = float(vddVal) * settings["slew_lower_threshold_pct_rise"] / 100.0
         suFall = float(vddVal) * settings["slew_upper_threshold_pct_fall"] / 100.0
         suRise = float(vddVal) * settings["slew_upper_threshold_pct_rise"] / 100.0
+
+        if settings["adjust_slew"]:
+            # Input rise time adjustment
+            irAdj = 100.0 / (settings["slew_upper_threshold_pct_rise"] - settings["slew_lower_threshold_pct_rise"])
+            # Input fall time adjustment
+            ifAdj = 100.0 / (settings["slew_upper_threshold_pct_fall"] - settings["slew_lower_threshold_pct_fall"])
+        else:
+            # No input rise time adjustment
+            irAdj = 1.0
+            # No input fall time adjustment
+            ifAdj = 1.0
 
         # Prepare commonly used commands
         if unate == 'positive':
@@ -539,50 +552,52 @@ class Ngspice:
             for slew in slewList:
                 self.clearControl()
                 self.addControl("alter Cload " + str(cout))
+                rslew = irAdj * float(slew)
+                fslew = ifAdj * float(slew)
 
                 # Input rising
                 vstart = str(0.0)
                 vend = str(vddVal)
-                self.addControl("alter @VIN[pulse]=[ " + vstart + " " + vend + " " + tDelay + " " + str(slew) + " " + str(slew) +" 1 1 ]")
+                self.addControl("alter @VIN[pulse]=[ " + vstart + " " + vend + " " + tDelay + " " + str(rslew) + " " + str(fslew) +" 1 1 ]")
                 self.addControl(tranCmd)
-                self.addControl(mQg.format(float(tDelay), float(tDelay)+float(slew)))
+                self.addControl(mQg.format(float(tDelay), float(tDelay)+float(rslew)))
                 self.addControl(expr_CgRise.format(vddVal))
                 if unate == 'positive':
                     # Output rising
                     self.addControl(mDelayRise)
                     self.addControl(mOutRise)
                     self.addControl(expr_pVSS)
-                    self.addControl(mVSS_pint.format(float(tDelay), float(tDelay)+float(slew)))
+                    self.addControl(mVSS_pint.format(float(tDelay), float(tDelay)+float(rslew)))
                     msg = "type=rise cout=" + str(cout) + " slew=" + str(slew) + " tp=$&tp_rise ts=$&ts_rise pint=$&pint cg=$&cg"
                 else:
                     # Output falling
                     self.addControl(mDelayFall)
                     self.addControl(mOutFall)
                     self.addControl(expr_pVDD)
-                    self.addControl(mVDD_pint.format(float(tDelay), float(tDelay)+float(slew)))
+                    self.addControl(mVDD_pint.format(float(tDelay), float(tDelay)+float(rslew)))
                     msg = "type=fall cout=" + str(cout) + " slew=" + str(slew) + " tp=$&tp_fall ts=$&ts_fall pint=$&pint cg=$&cg"
                 self.addControl(self.echo(msg))
 
                 # Input falling
                 vstart = str(vddVal)
                 vend = str(0.0)
-                self.addControl("alter @VIN[pulse]=[ " + vstart + " " + vend + " " + tDelay + " " + str(slew) + " " + str(slew) +" 1 1 ]")
+                self.addControl("alter @VIN[pulse]=[ " + vstart + " " + vend + " " + tDelay + " " + str(rslew) + " " + str(fslew) +" 1 1 ]")
                 self.addControl(tranCmd)
-                self.addControl(mQg.format(float(tDelay), float(tDelay)+float(slew)))
+                self.addControl(mQg.format(float(tDelay), float(tDelay)+float(fslew)))
                 self.addControl(expr_CgFall.format(vddVal))
                 if unate == 'negative':
                     # Output rising
                     self.addControl(mDelayRise)
                     self.addControl(mOutRise)
                     self.addControl(expr_pVSS)
-                    self.addControl(mVSS_pint.format(float(tDelay), float(tDelay)+float(slew)))
+                    self.addControl(mVSS_pint.format(float(tDelay), float(tDelay)+float(fslew)))
                     msg = "type=rise cout=" + str(cout) + " slew=" + str(slew) + " tp=$&tp_rise ts=$&ts_rise pint=$&pint cg=$&cg"
                 else:
                     #Output falling
                     self.addControl(mDelayFall)
                     self.addControl(mOutFall)
                     self.addControl(expr_pVDD)
-                    self.addControl(mVDD_pint.format(float(tDelay), float(tDelay)+float(slew)))
+                    self.addControl(mVDD_pint.format(float(tDelay), float(tDelay)+float(fslew)))
                     msg = "type=fall cout=" + str(cout) + " slew=" + str(slew) + " tp=$&tp_fall ts=$&ts_fall pint=$&pint cg=$&cg"
                 self.addControl(self.echo(msg))
 
