@@ -105,6 +105,15 @@ class Ngspice:
             res += "\talter " + name + " = " + str(val) + "\n"
         return res
 
+    def addSets(self, setList):
+        # Generate set commands from a list of set commands
+        # setList is a list of tuples (name, value)
+        res = ""
+        for x in setList:
+            name, val = x
+            res += "\tset " + name + " = " + str(val) + "\n"
+        return res
+
     def measGroupAtTime(self, groupName : str, t, addEcho=True):
         # Add measurements from groupName at time t
         # If addEcho = True add echo to netlist
@@ -314,7 +323,7 @@ class Ngspice:
         self.circuitTerminals = circuit.getTerminals()
     
     def combSim(self, toLogic=True):
-        # Read netlist, deduce inputs and outputs, and run ngspice simulations over all input vectors.
+        # Run ngspice simulations over all input vectors.
         # Returns a tuple (inputs, outputs)
         # If toLogic = False returns simulated voltages
         # If toLogic = True returns logic values
@@ -413,8 +422,8 @@ class Ngspice:
         # input             Tuple (inputName, ["positive" | "negative"]). 
         #                   Values "positive" and "negative" define if input->output is positive or negative unate.
         # output            Name of output
-        # capList           List of loading capacitance values in pF.
-        # slewList          List of slew rates in ns.
+        # capList           List of loading capacitance values.
+        # slewList          List of slew times.
         # 
         # Optional arguments.
         #
@@ -443,8 +452,8 @@ class Ngspice:
                         "slew_lower_threshold_pct_rise" :   20.0,
                         "slew_upper_threshold_pct_fall" :   80.0,
                         "slew_upper_threshold_pct_rise" :   80.0,
-                        "adjust_slew"                   :   True,
-                        "tran_sim_step"                 :   1e-12,
+                        "adjust_slew"                   :   False,
+                        "tran_sim_step"                 :   10e-12,
                         "tran_sim_time"                 :   10e-9,
                         "tran_delay"                    :   1e-9
                     }
@@ -607,3 +616,603 @@ class Ngspice:
 
         return (res_names, res_vals)
 
+    def dffSetup(self, simSetup):
+        # Simulate the D flip-flop setup time.
+        # 
+        # Simsetup is a dictionary that contains simulation setup
+        # Key               Description
+        # constantInputs    List of tuples (inputName, value) that are held at constant given values during simulations.
+        #                   value is True for input held at VDD, or False for input held at 0.
+        #                   Constant inputs should be set so that flip-flip operates normally, i.e. is not held in reset.
+        # input             Tuple (inputName, ["positive" | "negative"]). 
+        #                   Values "positive" and "negative" define if input->output is of  positive or negative polarity.
+        # clk               Tuple (clkName, ["positive" | "negative"])
+        # output            Name of the flip-flop output
+        # dSlewList         List of input data slew times.
+        # clkSlewList       List of clock slew times.
+
+        # 
+        # Optional arguments.
+        #
+        # max_tclkout_change            Setup violation occurs when t_clk_out > max_tclkout_change * t_clk_out_nom . Default 1.05.
+        # cout                          Output loading capacitor. Default 1 fF.
+        # input_threshold_pct_fall      Threshold for input signal falling edge, default 50.
+        # input_threshold_pct_rise      Threshold for input signal rising edge, default 50.
+        # output_threshold_pct_fall     Threshold for output signal falling edge, default 50.
+        # output_threshold_pct_rise     Threshold for output signal rising edge, default 50
+        # slew_lower_threshold_pct_fall Lower threshold for falling edge, default 20
+        # slew_lower_threshold_pct_rise Lower threshold for rising edge, default 20
+        # slew_upper_threshold_pct_fall High threshold for falling edge, default 80
+        # slew_upper_threshold_pct_rise High threshold for rising edge, default 80
+        # adjust_slew                   Adjust generator slew time so that given slew time is
+        #                               between thresholds slew_*threshold_pct_*. Default True.
+        # td_search                     Setup time search interval is td_search + dataSlew + clkSlew
+        # Returns a list of results in a form of a tuple
+        # [("dslew=data slew", "clkslew=clock slew", "t_setup=setup time", ... )
+        #
+
+        self.clear()
+
+        settings = {    "max_tclkout_change"        :   1.05,
+                        "cout"                      :   1e-15,
+                        "input_threshold_pct_fall"  :   50.0,
+                        "input_threshold_pct_rise"  :   50.0,
+                        "output_threshold_pct_fall" :   50.0,
+                        "output_threshold_pct_rise" :   50.0,
+                        "slew_lower_threshold_pct_fall" :   20.0,
+                        "slew_lower_threshold_pct_rise" :   20.0,
+                        "slew_upper_threshold_pct_fall" :   80.0,
+                        "slew_upper_threshold_pct_rise" :   80.0,
+                        "adjust_slew"                   :   False,
+                        "tran_sim_step"                 :   10e-12,
+                        "tran_clk_pw"                   :   5e-9,
+                        "tran_delay"                    :   1e-9,
+                        "td_search"                     :   1e-9,
+                        "td_tolerance"                  :   1e-12,
+                        "max_iter"                      :   20,
+                        "edge"                          :   "rising"
+                    }
+
+        settings.update( simSetup )
+
+        # Add DUT circuit instance
+        self.addInstance("XDUT", self.circuitTerminals, self.circuitName, None)
+        # Add ground -> 0 source for ground current measurement
+        self.addInstance("VDUTGND", [self.ground, '0'], None, ['0'])
+
+        # Add voltage sources for constant inputs
+        for cin in settings['constantInputs']:
+            name, val = cin
+            # Add constant input stimuli
+            if val:
+                vin = self.conditions['supplyVoltage']
+            else:
+                vin = 0.0
+            self.addInstance('V'+name, [name, '0'], None, [str(vin)])
+        
+        # Add supply voltage
+        vddVal = self.conditions['supplyVoltage']
+        self.addInstance('VSUP', [self.power, '0'], None, [str(vddVal)])
+
+        # Output load capacitor
+        outNode = settings['output']
+        self.addInstance("Cload", [outNode, '0'], None, [settings['cout']])
+
+        if settings["adjust_slew"]:
+            # Input rise time adjustment
+            irAdj = 100.0 / (settings["slew_upper_threshold_pct_rise"] - settings["slew_lower_threshold_pct_rise"])
+            # Input fall time adjustment
+            ifAdj = 100.0 / (settings["slew_upper_threshold_pct_fall"] - settings["slew_lower_threshold_pct_fall"])
+        else:
+            # No input rise time adjustment
+            irAdj = 1.0
+            # No input fall time adjustment
+            ifAdj = 1.0
+
+        tran_delay = settings['tran_delay']
+        tran_clk_pw = settings['tran_clk_pw']
+        td_search = settings['td_search']
+
+        edge = settings['edge']
+
+        # Add default data pulse generator, parameters will be changed in the search loop
+        inNode, inPolarity = settings['input']
+        self.addInstance('VD', [ inNode, '0' ], None, ['pulse(0 1.2 9n 100p 100p 100n 1 )'])
+        # Data polarity
+        if edge not in ('rising', 'falling'):
+            print("ERROR : setup edge must be 'rising' or 'falling'")
+            exit(1)
+        elif inPolarity not in ('positive', 'negative'):
+            print("ERROR : data polarity property must be 'positive' or 'negative'")
+            exit(1)
+        else:
+            # True if data and edge are of the same polarity
+            edgeEquData = (edge == 'rising') == (inPolarity == 'positive')
+            vd_start = 0.0 if edgeEquData else vddVal
+            vd_end = vddVal if edgeEquData else 0.0
+
+        # Add default clock pulse generator, parameters will be changed in the search loop
+        clkNode, clkPolarity = settings['clk']
+        self.addInstance('VCLK', [ clkNode, '0'], None, ['pulse(0 1.2 1n 200p 200p 5n 10n)'] )
+
+        res_list = []
+        # Loop goes here
+        for dSlew in settings["dSlewList"]:
+            for clkSlew in settings["clkSlewList"]:
+                self.clearControl()
+
+                # Data slew rate
+                if vd_start < vddVal/2:
+                    # Rising edge
+                    dSlew_eff = dSlew * irAdj
+                else:
+                    # Falling edge
+                    dSlew_eff = dSlew * ifAdj
+                
+                # Clock polarity
+                if clkPolarity == 'positive':
+                    clkSlew_eff = clkSlew * irAdj
+                    vclk_zero = 0.0
+                    vclk_one = vddVal
+                else:
+                    clkSlew_eff = clkSlew * ifAdj
+                    vclk_zero = vddVal
+                    vclk_one = 0.0
+
+                td_window = td_search + dSlew_eff + clkSlew_eff
+                td0 = 2*tran_clk_pw+2*clkSlew_eff+tran_delay+(clkSlew_eff-dSlew_eff)/2
+                td_min = td0 - td_window
+                td_max = td0 + td_window
+                tran_out_start = 2*tran_clk_pw+2*clkSlew_eff+(clkSlew_eff-dSlew_eff)/2
+                tran_sim_time = tran_delay + 2.5*tran_clk_pw + 2*clkSlew_eff
+
+                tranCmd = "tran " + str(settings['tran_sim_step']) + ' ' + str(tran_sim_time) + ' ' + str(tran_out_start)
+
+                setCmds = [ ("td0", td0), 
+                            ("td_max", td_max), ("td_min", td_min), ("iter", 0), ("max_iter", settings["max_iter"]),
+                            ("max_change", settings["max_tclkout_change"]), ("vd_start", vd_start), ("vd_end", vd_end),
+                            ("vd_tr", dSlew_eff), ("vd_tf", dSlew_eff), ("vclk_tr", clkSlew_eff), ("vclk_tf", clkSlew_eff),
+                            ("vclk_zero", vclk_zero), ("vclk_one", vclk_one), ("vclk_per", 2*tran_clk_pw+2*clkSlew_eff), ("vclk_pw", tran_clk_pw),
+                            ("td_tolerance", settings["td_tolerance"]), ("tran_delay", tran_delay) ]
+                self.addControl( self.addSets(setCmds) )
+                
+                self.addControl("let ltd_curr = $td0 - " + str(td_search))
+                self.addControl("set td_curr = $&ltd_curr")
+                
+                self.addControl("alter @VD[pulse]=[ $vd_start $vd_end $td_curr $vd_tr $vd_tf 1 1 ]")
+
+                self.addControl("alter @VCLK[pulse]=[ $vclk_zero $vclk_one $tran_delay $vclk_tr $vclk_tf $vclk_pw $vclk_per]")
+                
+                # Run baseline transient to measure nominal Clk->Q delay
+                self.addControl(tranCmd)
+
+                if inPolarity == "positive":
+                    self.addControl("let vq_end = " + str(vd_end))
+                else:
+                    self.addControl("let vq_end = " + str(vddVal - vd_end))
+
+
+                self.addControl('* Check if FF has captured the value')
+                self.addControl('let vq_final = v(' + outNode + ')[length(v(' + outNode + '))-1]')
+                self.addControl('print vq_final')
+                self.addControl('if abs(vq_final - vq_end) ge ' + str(0.1 * vddVal))
+                self.addControl('    echo "ERROR : Q was not captured during baseline run"')
+                self.addControl('    quit 1')
+                self.addControl('else')
+                self.addControl('    echo "Q was captured during baseline run"')
+                self.addControl('end')
+
+                # Measure baseline clk->q delay
+                meas = "meas tran nom_tclkq TRIG v(" + clkNode+ ") VAL=" + str(vddVal/2)
+                if clkPolarity == "positive":
+                    meas += " RISE=1 "
+                else:
+                    meas += " FALL=1 "
+                meas += "TARG v(" + outNode + ") VAL="+ str(vddVal/2)
+                if inPolarity == "positive":
+                    if edge == "rising":
+                        meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
+                else:
+                    if edge == "rising":
+                        meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
+                self.addControl(meas)
+                # Store the raw text number safely across simulations
+                self.addControl("set v_nom_tclkq = $&nom_tclkq")
+                self.addControl('echo "Baseline Clock-to-Q delay is: $v_nom_tclkq"')
+
+                self.addControl('set converged = 0')
+                self.addControl('while $iter < $max_iter')
+                self.addControl('    let tmp_delta = $td_max - $td_min')
+                self.addControl('    if tmp_delta < $td_tolerance')
+                self.addControl('        echo "Setup simulation has converged"')
+                self.addControl('        set converged = 1')
+                self.addControl('        break')
+                self.addControl('    end')
+
+                self.addControl('    let tmp_td = ($td_min + $td_max) / 2')
+                self.addControl('    set td_current = $&tmp_td')
+                    
+                self.addControl('    let tmp_iter = $iter + 1')
+                self.addControl('    set iter = $&tmp_iter')
+                self.addControl('    echo "Iteration $iter, testing data delay td = $td_current"')
+
+                self.addControl("alter @VD[pulse]=[ $vd_start $vd_end $td_current $vd_tr $vd_tf 1 1 ]")
+                
+                self.addControl(tranCmd)
+                if inPolarity == "positive":
+                    self.addControl("let vq_end = " + str(vd_end))
+                else:
+                    self.addControl("let vq_end = " + str(vddVal - vd_end))
+                self.addControl("let vq_final = v(" + outNode + ")[length(v(" + outNode + "))-1]")
+
+                self.addControl('    if abs(vq_final - vq_end) ge ' + str(0.1 * vddVal))
+                self.addControl('        echo "Q was not captured"')
+                self.addControl('        set td_max = $td_current')
+                self.addControl('    else')
+                self.addControl('        echo "Q was captured"')
+
+                meas = "meas tran m_tclkq TRIG v(" + clkNode+ ") VAL=" + str(vddVal/2)
+                if clkPolarity == "positive":
+                    meas += " RISE=1 "
+                else:
+                    meas += " FALL=1 "
+                meas += "TARG v(" + outNode + ") VAL="+ str(vddVal/2)
+                if inPolarity == "positive":
+                    if edge == "rising":
+                        meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
+                else:
+                    if edge == "rising":
+                        meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
+                self.addControl(meas)
+                # Convert current measurement to a local text variable
+                self.addControl("set v_m_tclkq = $&m_tclkq")
+                        
+                # Calculate the maximum allowed degraded delay boundary
+                self.addControl("let tmp_limit = $v_nom_tclkq * $max_change")
+                self.addControl("set v_limit = $&tmp_limit")
+
+                self.addControl('        if $v_limit > $v_m_tclkq')
+                self.addControl('            echo "Setup is OK"')
+                self.addControl('            set td_min = $td_current')
+                self.addControl('        else')
+                self.addControl('            echo "Setup is not OK (Clock-to-Q delay grew too large)"')
+                self.addControl('            set td_max = $td_current')
+                self.addControl('        end')
+                self.addControl('    end')
+                self.addControl('end')
+                self.addControl('if $converged < 1')
+                self.addControl('    echo "ERROR : Simulation has not converged!"')
+                self.addControl('    quit 1')
+                self.addControl('end')
+
+                self.addControl("let tmp_td = ($td_min + $td_max) / 2")
+                self.addControl("set td_current = $&tmp_td")
+                self.addControl("alter @VD[pulse]=[ $vd_start $vd_end $td_current $vd_tr $vd_tf 1 1 ]")
+                self.addControl(tranCmd)
+                meas = "meas tran t_setup TRIG v(" + inNode+ ") VAL=" + str(vddVal/2)
+                if inPolarity == "positive":
+                    if edge == "rising":
+                        meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
+                else:
+                    if edge == "rising":
+                        meas += " FALL=1 "
+                    else:
+                        meas += " RISE=1 "
+                meas += "TARG v(" + clkNode + ") VAL="+ str(vddVal/2)
+                if clkPolarity == "positive":
+                    meas += " RISE=1 "
+                else:
+                    meas += " FALL=1 "
+                self.addControl(meas)
+                self.addControl(self.echo("t_setup=$&t_setup"))
+                res = self.run()
+                res_list.append( ("dslew="+str(dSlew), "clkslew="+str(clkSlew), res[0] ) )
+        return res_list
+
+    def dffHold(self, simSetup):
+        # Simulate the D flip-flop hold time.
+        # 
+        # Simsetup is a dictionary that contains simulation setup
+        # Key               Description
+        # constantInputs    List of tuples (inputName, value) that are held at constant given values during simulations.
+        #                   value is True for input held at VDD, or False for input held at 0.
+        #                   Constant inputs should be set so that flip-flip operates normally, i.e. is not held in reset.
+        # input             Tuple (inputName, ["positive" | "negative"]). 
+        #                   Values "positive" and "negative" define if input->output is of positive or negative polarity.
+        # clk               Tuple (clkName, ["positive" | "negative"])
+        # output            Name of the flip-flop output
+        # dSlewList         List of input data slew times.
+        # clkSlewList       List of clock slew times.
+
+        # 
+        # Optional arguments.
+        #
+        # max_tclkout_change            Setup violation occurs when t_clk_out > max_tclkout_change * t_clk_out_nom . Default 1.05.
+        # cout                          Output loading capacitor. Default 1 fF.
+        # input_threshold_pct_fall      Threshold for input signal falling edge, default 50.
+        # input_threshold_pct_rise      Threshold for input signal rising edge, default 50.
+        # output_threshold_pct_fall     Threshold for output signal falling edge, default 50.
+        # output_threshold_pct_rise     Threshold for output signal rising edge, default 50
+        # slew_lower_threshold_pct_fall Lower threshold for falling edge, default 20
+        # slew_lower_threshold_pct_rise Lower threshold for rising edge, default 20
+        # slew_upper_threshold_pct_fall High threshold for falling edge, default 80
+        # slew_upper_threshold_pct_rise High threshold for rising edge, default 80
+        # adjust_slew                   Adjust generator slew time so that given slew time is
+        #                               between thresholds slew_*threshold_pct_*. Default True.
+        # td_search                     Setup time search interval is td_search + dataSlew + clkSlew
+        # Returns a list of results in a form of a tuple
+        # [("dslew=data slew", "clkslew=clock slew", "t_hold=hold time", ... )
+        #
+
+        self.clear()
+
+        settings = {    "max_tclkout_change"        :   1.05,
+                        "cout"                      :   1e-15,
+                        "input_threshold_pct_fall"  :   50.0,
+                        "input_threshold_pct_rise"  :   50.0,
+                        "output_threshold_pct_fall" :   50.0,
+                        "output_threshold_pct_rise" :   50.0,
+                        "slew_lower_threshold_pct_fall" :   20.0,
+                        "slew_lower_threshold_pct_rise" :   20.0,
+                        "slew_upper_threshold_pct_fall" :   80.0,
+                        "slew_upper_threshold_pct_rise" :   80.0,
+                        "adjust_slew"                   :   False,
+                        "tran_sim_step"                 :   10e-12,
+                        "tran_clk_pw"                   :   5e-9,
+                        "tran_delay"                    :   1e-9,
+                        "td_search"                     :   1e-9,
+                        "td_tolerance"                  :   1e-12,
+                        "max_iter"                      :   20,
+                        "edge"                          :   "rising"
+                    }
+
+        settings.update( simSetup )
+
+        # Add DUT circuit instance
+        self.addInstance("XDUT", self.circuitTerminals, self.circuitName, None)
+        # Add ground -> 0 source for ground current measurement
+        self.addInstance("VDUTGND", [self.ground, '0'], None, ['0'])
+
+        # Add voltage sources for constant inputs
+        for cin in settings['constantInputs']:
+            name, val = cin
+            # Add constant input stimuli
+            if val:
+                vin = self.conditions['supplyVoltage']
+            else:
+                vin = 0.0
+            self.addInstance('V'+name, [name, '0'], None, [str(vin)])
+        
+        # Add supply voltage
+        vddVal = self.conditions['supplyVoltage']
+        self.addInstance('VSUP', [self.power, '0'], None, [str(vddVal)])
+
+        # Output load capacitor
+        outNode = settings['output']
+        self.addInstance("Cload", [outNode, '0'], None, [settings['cout']])
+
+        if settings["adjust_slew"]:
+            # Input rise time adjustment
+            irAdj = 100.0 / (settings["slew_upper_threshold_pct_rise"] - settings["slew_lower_threshold_pct_rise"])
+            # Input fall time adjustment
+            ifAdj = 100.0 / (settings["slew_upper_threshold_pct_fall"] - settings["slew_lower_threshold_pct_fall"])
+        else:
+            # No input rise time adjustment
+            irAdj = 1.0
+            # No input fall time adjustment
+            ifAdj = 1.0
+
+        tran_delay = settings['tran_delay']
+        tran_clk_pw = settings['tran_clk_pw']
+
+        td_search = settings['td_search']
+        edge = settings['edge']
+
+        # Add default data pulse generator, parameters will be changed in the search loop
+        inNode, inPolarity = settings['input']
+        self.addInstance('VD', [ inNode, '0' ], None, ['pulse(0 1.2 9n 100p 100p 100n 1 )'])
+        # Data polarity
+        if edge not in ('rising', 'falling'):
+            print("ERROR : hold edge must be 'rising' or 'falling'")
+            exit(1)
+        elif inPolarity not in ('positive', 'negative'):
+            print("ERROR : data polarity property must be 'positive' or 'negative'")
+            exit(1)
+        else:
+            # For hold time measurement the reference edge is close to clock edge,
+            # so the starting voltage is inverted compared to the setup case
+            vd_start = 0.0 if edge == 'falling' else vddVal
+            vd_end = vddVal if edge == 'falling' else 0.0
+
+        # Add default clock pulse generator, parameters will be changed in the search loop
+        clkNode, clkPolarity = settings['clk']
+        self.addInstance('VCLK', [ clkNode, '0'], None, ['pulse(0 1.2 1n 200p 200p 5n 10n)'] )
+
+        res_list = []
+
+        for dSlew in settings["dSlewList"]:
+            for clkSlew in settings["clkSlewList"]:
+                self.clearControl()
+
+                # Data slew rate
+                if vd_start > vddVal/2:
+                    # Rising edge
+                    dSlew_eff = dSlew * irAdj
+                else:
+                    # Falling edge
+                    dSlew_eff = dSlew * ifAdj
+                
+                # Clock polarity
+                if clkPolarity == 'positive':
+                    clkSlew_eff = clkSlew * irAdj
+                    vclk_zero = 0.0
+                    vclk_one = vddVal
+                else:
+                    clkSlew_eff = clkSlew * ifAdj
+                    vclk_zero = vddVal
+                    vclk_one = 0.0
+
+                tc_pw = tran_clk_pw + dSlew_eff
+                tc_per = 2*tc_pw + 2*clkSlew_eff
+                td_del = tran_delay + tc_pw + clkSlew_eff - dSlew_eff/2 + clkSlew_eff/2
+                td_pw = tc_pw - dSlew_eff + clkSlew_eff
+
+                td_window = td_search + dSlew_eff + clkSlew_eff
+                td_min = -td_window
+                td_max = td_window
+                tran_out_start = td_del
+                tran_sim_time = tran_delay + 2.5*tc_pw + 2*clkSlew_eff
+
+                tranCmd = "tran " + str(settings['tran_sim_step']) + ' ' + str(tran_sim_time) + ' ' + str(tran_out_start)
+
+                setCmds = [ ("td_min", td_min), ("td_max", td_max), ("iter", 0), ("max_iter", settings["max_iter"]),
+                            ("max_change", settings["max_tclkout_change"]), ("vd_start", vd_start), ("vd_end", vd_end),
+                            ("vd_tr", dSlew_eff), ("vd_tf", dSlew_eff), ("vclk_tr", clkSlew_eff), ("vclk_tf", clkSlew_eff),
+                            ("vclk_zero", vclk_zero), ("vclk_one", vclk_one), ("vclk_per", tc_per), ("vclk_pw", tc_pw),
+                            ("td_tolerance", settings["td_tolerance"]), ("tran_delay", settings['tran_delay']), ("td_del", td_del), ("td_pw", td_pw) ]
+                self.addControl( self.addSets(setCmds) )
+                
+                self.addControl("alter @VD[pulse]=[ $vd_start $vd_end $td_del $vd_tr $vd_tf 1 1 ]")
+                self.addControl("alter @VCLK[pulse]=[ $vclk_zero $vclk_one $tran_delay $vclk_tr $vclk_tf $vclk_pw $vclk_per]")
+                # Run baseline transient to measure nominal Clk->Q delay
+                self.addControl(tranCmd)
+
+                if inPolarity == "positive":
+                    self.addControl("let vq_end = " + str(vd_end))
+                else:
+                    self.addControl("let vq_end = " + str(vddVal - vd_end))
+
+                
+                self.addControl("* Check if FF has captured the value")
+                self.addControl('let vq_final = v(""" + outNode + """)[length(v(""" + outNode + """))-1]')
+                self.addControl('print vq_final')
+                self.addControl('if abs(vq_final - vq_end) ge ' + str(0.1 * vddVal))
+                self.addControl('    echo "ERROR : Q was not captured during baseline run"')
+                self.addControl('    quit 1')
+                self.addControl('else')
+                self.addControl('    echo "Q was captured during baseline run"')
+                self.addControl('end')
+
+                # Measure baseline clk->q delay
+                meas = "meas tran nom_tclkq TRIG v(" + clkNode+ ") VAL=" + str(vddVal/2)
+                if clkPolarity == "positive":
+                    meas += " RISE=1 "
+                else:
+                    meas += " FALL=1 "
+                meas += "TARG v(" + outNode + ") VAL="+ str(vddVal/2)
+                if inPolarity == "positive":
+                    if edge == "falling":
+                        meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
+                else:
+                    if edge == "rising":
+                        meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
+                self.addControl(meas)
+                # Store the raw text number safely across simulations
+                self.addControl("set v_nom_tclkq = $&nom_tclkq")
+                self.addControl('echo "Baseline Clock-to-Q delay is: $v_nom_tclkq"')
+
+                self.addControl('set converged = 0')
+                self.addControl('while $iter < $max_iter')
+                self.addControl('    let tmp_delta = $td_max - $td_min')
+                self.addControl('    if tmp_delta < $td_tolerance')
+                self.addControl('        echo "Hold simulation has converged"')
+                self.addControl('        set converged = 1')
+                self.addControl('        break')
+                self.addControl('    end')
+                self.addControl('    let tmp_iter = $iter + 1')
+                self.addControl('    set iter = $&tmp_iter')
+                self.addControl('    let tpw_vector = $td_pw + ($td_min + $td_max) / 2')
+                self.addControl('    set tpw = $&tpw_vector')
+                self.addControl('    echo "Iteration $iter, testing data pulse width td_pw = $tpw"')
+
+                self.addControl("alter @VD[pulse]=[ $vd_start $vd_end $td_del $vd_tr $vd_tf $tpw 1 ]")
+                self.addControl(tranCmd)
+                if inPolarity == "positive":
+                    self.addControl("let vq_end = " + str(vd_end))
+                else:
+                    self.addControl("let vq_end = " + str(vddVal - vd_end))                
+                self.addControl("let vq_final = v(" + outNode + ")[length(v(" + outNode + "))-1]")
+
+                self.addControl('    if abs(vq_final - vq_end) ge ' + str(0.1 * vddVal))
+                self.addControl('        echo "Q was not captured"')
+                self.addControl('        let td_min_vec = $tpw - $td_pw')
+                self.addControl('        set td_min = $&td_min_vec')
+                self.addControl('    else')
+                self.addControl('        echo "Q was captured"')
+
+                meas = "meas tran m_tclkq TRIG v(" + clkNode+ ") VAL=" + str(vddVal/2)
+                if clkPolarity == "positive":
+                    meas += " RISE=1 "
+                else:
+                    meas += " FALL=1 "
+                meas += "TARG v(" + outNode + ") VAL="+ str(vddVal/2)
+                if inPolarity == "positive":
+                    if edge == "falling":
+                        meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
+                else:
+                    if edge == "rising":
+                        meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
+                self.addControl(meas)
+                # Convert current measurement to a local text variable
+                self.addControl("set v_m_tclkq = $&m_tclkq")
+                        
+                # Calculate the maximum allowed degraded delay boundary
+                self.addControl("let tmp_limit = $v_nom_tclkq * $max_change")
+                self.addControl("set v_limit = $&tmp_limit")
+
+                self.addControl('        if $v_limit > $v_m_tclkq')
+                self.addControl('            echo "Hold is OK"')
+                self.addControl('            let td_vec = $tpw - $td_pw')
+                self.addControl('            set td_max = $&td_vec')
+                self.addControl('        else')
+                self.addControl('            echo "Hold is not OK (Clock-to-Q delay grew too large)"')
+                self.addControl('            let td_vec = $tpw - $td_pw')
+                self.addControl('            set td_min = $&td_vec')
+                self.addControl('        end')
+                self.addControl('    end')
+                self.addControl('end')
+                self.addControl('if $converged < 1')
+                self.addControl('    echo "ERROR : Simulation has not converged!"')
+                self.addControl('    quit 1')
+                self.addControl('end')
+
+                self.addControl('let tpw_vector = $td_pw + ($td_min + $td_max) / 2')
+                self.addControl('set tpw = $&tpw_vector')
+                
+                self.addControl("alter @VD[pulse]=[ $vd_start $vd_end $td_del $vd_tr $vd_tf $tpw 1 ]")
+                self.addControl(tranCmd)
+
+                meas = "meas tran t_hold TRIG v(" + clkNode + ") VAL="+ str(vddVal/2)
+                if clkPolarity == "positive":
+                    meas += " RISE=1 "
+                else:
+                    meas += " FALL=1 "                                
+                meas += "TARG v(" + inNode+ ") VAL=" + str(vddVal/2)
+                if edge == "rising":
+                    meas += " RISE=1 "
+                else:
+                    meas += " FALL=1 "
+
+                self.addControl(meas)
+                self.addControl(self.echo("t_hold=$&t_hold"))
+                res = self.run()
+                res_list.append( ("dslew="+str(dSlew), "clkslew="+str(clkSlew), res[0] ) )
+        return res_list
