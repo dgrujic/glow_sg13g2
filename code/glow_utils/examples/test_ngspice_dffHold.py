@@ -1,4 +1,6 @@
 from glow_utils.ngspice import Ngspice
+from tabulate import tabulate
+
 
 libs = [ ('$PDK_ROOT/$PDK/libs.tech/ngspice/models/cornerMOSlv.lib', 'mos_tt') ]
 inc = []
@@ -23,7 +25,9 @@ simSetup = {    'constantInputs' : [],
                 'dSlewList' : [100e-12, 1000e-12],
                 'clkSlewList' : [100e-12, 1000e-12]
             }
-print(ng.dffHold(simSetup))
+print("Rising edge hold")
+names, values =  ng.dffHold(simSetup)
+print(tabulate(values, headers=names, tablefmt='grid'))
 
 simSetup = {    'constantInputs' : [],
                 'input' : ('D', 'positive'),
@@ -34,7 +38,9 @@ simSetup = {    'constantInputs' : [],
                 'dSlewList' : [100e-12, 1000e-12],
                 'clkSlewList' : [100e-12, 1000e-12]
             }
-print(ng.dffHold(simSetup))
+print("Falling edge hold")
+names, values =  ng.dffHold(simSetup)
+print(tabulate(values, headers=names, tablefmt='grid'))
 
 simSetup = {    'constantInputs' : [],
                 'input' : ('D', 'negative'),
@@ -44,7 +50,9 @@ simSetup = {    'constantInputs' : [],
                 'dSlewList' : [100e-12, 1000e-12],
                 'clkSlewList' : [100e-12, 1000e-12]
             }
-print(ng.dffHold(simSetup))
+print("Rising edge hold - QN")
+names, values =  ng.dffHold(simSetup)
+print(tabulate(values, headers=names, tablefmt='grid'))
 
 simSetup = {    'constantInputs' : [],
                 'input' : ('D', 'negative'),
@@ -54,4 +62,6 @@ simSetup = {    'constantInputs' : [],
                 'dSlewList' : [100e-12, 1000e-12],
                 'clkSlewList' : [100e-12, 1000e-12]
             }
-print(ng.dffHold(simSetup))
+print("Falling edge hold - QN")
+names, values =  ng.dffHold(simSetup)
+print(tabulate(values, headers=names, tablefmt='grid'))

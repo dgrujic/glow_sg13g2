@@ -726,16 +726,16 @@ class Ngspice:
             print("ERROR : data polarity property must be 'positive' or 'negative'")
             exit(1)
         else:
-            # True if data and edge are of the same polarity
-            edgeEquData = (edge == 'rising') == (inPolarity == 'positive')
-            vd_start = 0.0 if edgeEquData else vddVal
-            vd_end = vddVal if edgeEquData else 0.0
+            vd_start = 0.0 if (edge == 'rising') else vddVal
+            vd_end = vddVal if (edge == 'rising') else 0.0
+
 
         # Add default clock pulse generator, parameters will be changed in the search loop
         clkNode, clkPolarity = settings['clk']
         self.addInstance('VCLK', [ clkNode, '0'], None, ['pulse(0 1.2 1n 200p 200p 5n 10n)'] )
 
         res_list = []
+        res_names = ['dslew', 'clkslew', 't_setup']
         # Loop goes here
         for dSlew in settings["dSlewList"]:
             for clkSlew in settings["clkSlewList"]:
@@ -816,9 +816,9 @@ class Ngspice:
                         meas += " FALL=1 "
                 else:
                     if edge == "rising":
-                        meas += " RISE=1 "
-                    else:
                         meas += " FALL=1 "
+                    else:
+                        meas += " RISE=1 "
                 self.addControl(meas)
                 # Store the raw text number safely across simulations
                 self.addControl("set v_nom_tclkq = $&nom_tclkq")
@@ -868,9 +868,9 @@ class Ngspice:
                         meas += " FALL=1 "
                 else:
                     if edge == "rising":
-                        meas += " RISE=1 "
-                    else:
                         meas += " FALL=1 "
+                    else:
+                        meas += " RISE=1 "
                 self.addControl(meas)
                 # Convert current measurement to a local text variable
                 self.addControl("set v_m_tclkq = $&m_tclkq")
@@ -905,19 +905,19 @@ class Ngspice:
                         meas += " FALL=1 "
                 else:
                     if edge == "rising":
-                        meas += " FALL=1 "
-                    else:
                         meas += " RISE=1 "
+                    else:
+                        meas += " FALL=1 "
                 meas += "TARG v(" + clkNode + ") VAL="+ str(vddVal/2)
                 if clkPolarity == "positive":
                     meas += " RISE=1 "
                 else:
                     meas += " FALL=1 "
                 self.addControl(meas)
-                self.addControl(self.echo("t_setup=$&t_setup"))
+                self.addControl(self.echo("dslew=$vd_tr clkslew=$vclk_tr t_setup=$&t_setup"))
                 res = self.run()
-                res_list.append( ("dslew="+str(dSlew), "clkslew="+str(clkSlew), res[0] ) )
-        return res_list
+                res_list += self.extractValues(res_names, res)
+        return (res_names, res_list)
 
     def dffHold(self, simSetup):
         # Simulate the D flip-flop hold time.
@@ -1039,7 +1039,7 @@ class Ngspice:
         self.addInstance('VCLK', [ clkNode, '0'], None, ['pulse(0 1.2 1n 200p 200p 5n 10n)'] )
 
         res_list = []
-
+        res_names = ['dslew', 'clkslew', 't_hold']
         for dSlew in settings["dSlewList"]:
             for clkSlew in settings["clkSlewList"]:
                 self.clearControl()
@@ -1212,13 +1212,10 @@ class Ngspice:
                     meas += " FALL=1 "
 
                 self.addControl(meas)
-                self.addControl(self.echo("t_hold=$&t_hold"))
+                self.addControl(self.echo("dslew=$vd_tr clkslew=$vclk_tr t_hold=$&t_hold"))
                 res = self.run()
-                res_list.append( ("dslew="+str(dSlew), "clkslew="+str(clkSlew), res[0] ) )
-        return res_list
-
-
-
+                res_list += self.extractValues(res_names, res)
+        return (res_names, res_list)
 
     def dffClkToOut(self, simSetup):
         # Simulate the D flip-flop clock to output time.
