@@ -1216,3 +1216,225 @@ class Ngspice:
                 res = self.run()
                 res_list.append( ("dslew="+str(dSlew), "clkslew="+str(clkSlew), res[0] ) )
         return res_list
+
+
+
+
+    def dffClkToOut(self, simSetup):
+        # Simulate the D flip-flop clock to output time.
+        # 
+        # Simsetup is a dictionary that contains simulation setup
+        # Key               Description
+        # constantInputs    List of tuples (inputName, value) that are held at constant given values during simulations.
+        #                   value is True for input held at VDD, or False for input held at 0.
+        #                   Constant inputs should be set so that flip-flip operates normally, i.e. is not held in reset.
+        # input             Tuple (inputName, ["positive" | "negative"]). 
+        #                   Values "positive" and "negative" define if input->output is of  positive or negative polarity.
+        # clk               Tuple (clkName, ["positive" | "negative"])
+        # output            Name of the flip-flop output
+        # coutList          List of output loading capacitances.
+        # clkSlewList       List of clock slew times.
+        # edge              Output edge ['rising' | 'falling']
+
+        # 
+        # Optional arguments.
+        #
+        # input_threshold_pct_fall      Threshold for input signal falling edge, default 50.
+        # input_threshold_pct_rise      Threshold for input signal rising edge, default 50.
+        # output_threshold_pct_fall     Threshold for output signal falling edge, default 50.
+        # output_threshold_pct_rise     Threshold for output signal rising edge, default 50
+        # slew_lower_threshold_pct_fall Lower threshold for falling edge, default 20
+        # slew_lower_threshold_pct_rise Lower threshold for rising edge, default 20
+        # slew_upper_threshold_pct_fall High threshold for falling edge, default 80
+        # slew_upper_threshold_pct_rise High threshold for rising edge, default 80
+        # adjust_slew                   Adjust generator slew time so that given slew time is
+        #                               between thresholds slew_*threshold_pct_*. Default True.
+        # Returns a list of results in a form of a tuple
+        # [("clkslew=clock slew", "cout=output capacitance", "t_clkout=clock->out time"), ... ]
+        #
+
+        self.clear()
+
+        settings = {    "input_threshold_pct_fall"  :   50.0,
+                        "input_threshold_pct_rise"  :   50.0,
+                        "output_threshold_pct_fall" :   50.0,
+                        "output_threshold_pct_rise" :   50.0,
+                        "slew_lower_threshold_pct_fall" :   20.0,
+                        "slew_lower_threshold_pct_rise" :   20.0,
+                        "slew_upper_threshold_pct_fall" :   80.0,
+                        "slew_upper_threshold_pct_rise" :   80.0,
+                        "adjust_slew"                   :   False,
+                        "dataSlew"                      :   100e-12,
+                        "tran_sim_step"                 :   10e-12,
+                        "tran_clk_pw"                   :   5e-9,
+                        "tran_delay"                    :   1e-9,
+                    }
+
+        settings.update( simSetup )
+
+        # Add DUT circuit instance
+        self.addInstance("XDUT", self.circuitTerminals, self.circuitName, None)
+        # Add ground -> 0 source for ground current measurement
+        self.addInstance("VDUTGND", [self.ground, '0'], None, ['0'])
+
+        # Add voltage sources for constant inputs
+        for cin in settings['constantInputs']:
+            name, val = cin
+            # Add constant input stimuli
+            if val:
+                vin = self.conditions['supplyVoltage']
+            else:
+                vin = 0.0
+            self.addInstance('V'+name, [name, '0'], None, [str(vin)])
+        
+        # Add supply voltage
+        vddVal = self.conditions['supplyVoltage']
+        self.addInstance('VSUP', [self.power, '0'], None, [str(vddVal)])
+
+        # Output load capacitor of 1 fF, will be changed to specified values later
+        outNode = settings['output']
+        self.addInstance("Cload", [outNode, '0'], None, [1e-15])
+
+        tran_delay = settings['tran_delay']
+        tran_clk_pw = settings['tran_clk_pw']
+
+        edge = settings['edge']
+
+        # Add default data pulse generator, parameters will be changed in the search loop
+        inNode, inPolarity = settings['input']
+        self.addInstance('VD', [ inNode, '0' ], None, ['pulse(0 1.2 9n 100p 100p 100n 1 )'])
+        # Data polarity
+        if edge not in ('rising', 'falling'):
+            print("ERROR : output edge must be 'rising' or 'falling'")
+            exit(1)
+        elif inPolarity not in ('positive', 'negative'):
+            print("ERROR : data polarity property must be 'positive' or 'negative'")
+            exit(1)
+        else:
+            # True if data and edge are of the same polarity
+            edgeEquData = (edge == 'rising') == (inPolarity == 'positive')
+            vd_start = 0.0 if edgeEquData else vddVal
+            vd_end = vddVal if edgeEquData else 0.0
+
+        # Add default clock pulse generator, parameters will be changed in the search loop
+        clkNode, clkPolarity = settings['clk']
+        self.addInstance('VCLK', [ clkNode, '0'], None, ['pulse(0 1.2 1n 200p 200p 5n 10n)'] )
+
+        # Calculate threshold values
+        itFall = float(vddVal) * settings["input_threshold_pct_fall"] / 100.0
+        itRise = float(vddVal) * settings["input_threshold_pct_rise"] / 100.0
+        otFall = float(vddVal) * settings["output_threshold_pct_fall"] / 100.0
+        otRise = float(vddVal) * settings["output_threshold_pct_rise"] / 100.0
+        slFall = float(vddVal) * settings["slew_lower_threshold_pct_fall"] / 100.0
+        slRise = float(vddVal) * settings["slew_lower_threshold_pct_rise"] / 100.0
+        suFall = float(vddVal) * settings["slew_upper_threshold_pct_fall"] / 100.0
+        suRise = float(vddVal) * settings["slew_upper_threshold_pct_rise"] / 100.0
+
+        if settings["adjust_slew"]:
+            # Input rise time adjustment
+            irAdj = 100.0 / (settings["slew_upper_threshold_pct_rise"] - settings["slew_lower_threshold_pct_rise"])
+            # Input fall time adjustment
+            ifAdj = 100.0 / (settings["slew_upper_threshold_pct_fall"] - settings["slew_lower_threshold_pct_fall"])
+        else:
+            # No input rise time adjustment
+            irAdj = 1.0
+            # No input fall time adjustment
+            ifAdj = 1.0
+
+        # Prepare commonly used commands
+        if clkPolarity == 'positive':
+            # Input rising -> output rising, input falling -> output falling
+            # Delay on rising output
+            mDelayRise = "meas tran tprop TRIG v(" + clkNode + ") VAL="+str(itRise)+" RISE=1 TARG v(" + outNode + ") VAL=" + str(otRise) + " RISE=1"
+            # Delay on falling output
+            mDelayFall = "meas tran tprop TRIG v(" + clkNode + ") VAL="+str(itRise)+" RISE=1 TARG v(" + outNode + ") VAL=" + str(otFall) + " FALL=1"
+        elif clkPolarity == 'negative':
+            # Input rising -> output falling, input falling -> output rising
+            # Delay on rising output
+            mDelayRise = "meas tran tprop TRIG v(" + clkNode + ") VAL="+str(itFall)+" FALL=1 TARG v(" + outNode + ") VAL=" + str(otRise) + " RISE=1"
+            # Delay on falling output
+            mDelayFall = "meas tran tprop TRIG v(" + clkNode + ") VAL="+str(itFall)+" FALL=1 TARG v(" + outNode + ") VAL=" + str(otFall) + " FALL=1"
+        else:
+            print("ERROR : clkPolarity value must be either 'positive' or 'negative'")
+            exit(1)
+
+        # Output rise time
+        mOutRise = "meas tran tslew TRIG v(" + outNode +") VAL=" + str(slRise) + " RISE=1 TARG v(" + outNode + ") VAL=" + str(suRise) + " RISE=1"
+        # Output fall time
+        mOutFall = "meas tran tslew TRIG v(" + outNode +") VAL=" + str(suFall) + " FALL=1 TARG v(" + outNode + ") VAL=" + str(slFall) + " FALL=1"
+
+        if edge == 'rising':
+            mDelay = mDelayRise
+            mSlew = mOutRise
+        elif edge == 'falling':
+            mDelay = mDelayFall
+            mSlew = mOutFall
+        else:
+            print("ERROR : edge value must be either 'positive' or 'negative'")
+            exit(1)
+
+        res_names = ['cout', 'slew', 'tp', 'ts']
+        res_vals = []
+        for clkSlew in settings["clkSlewList"]:
+            self.clearControl()
+
+            # Data slew rate
+            dSlew_eff = settings["dataSlew"]
+
+            # Clock polarity
+            if clkPolarity == 'positive':
+                clkSlew_eff = clkSlew * irAdj
+                vclk_zero = 0.0
+                vclk_one = vddVal
+            else:
+                clkSlew_eff = clkSlew * ifAdj
+                vclk_zero = vddVal
+                vclk_one = 0.0
+
+            tran_out_start = 2*tran_clk_pw+2*clkSlew_eff+(clkSlew_eff-dSlew_eff)/2
+            tran_sim_time = tran_delay + 2.5*tran_clk_pw + 2*clkSlew_eff
+            td_safe = tran_delay + clkSlew_eff + tran_clk_pw
+
+            tranCmd = "tran " + str(settings['tran_sim_step']) + ' ' + str(tran_sim_time) + ' ' + str(tran_out_start)
+
+            setCmds = [ ("tran_delay", tran_delay) ,
+                        ("vd_start", vd_start), ("vd_end", vd_end),
+                        ("vd_tr", dSlew_eff), ("vd_tf", dSlew_eff), ("vclk_tr", clkSlew_eff), ("vclk_tf", clkSlew_eff),
+                        ("vclk_zero", vclk_zero), ("vclk_one", vclk_one), ("vclk_per", 2*tran_clk_pw+2*clkSlew_eff), ("vclk_pw", tran_clk_pw) ]
+            self.addControl( self.addSets(setCmds) )
+            
+            self.addControl("set td_safe = " + str(td_safe))
+            
+            self.addControl("alter @VD[pulse]=[ $vd_start $vd_end $td_safe $vd_tr $vd_tf 1 1 ]")
+            self.addControl("alter @VCLK[pulse]=[ $vclk_zero $vclk_one $tran_delay $vclk_tr $vclk_tf $vclk_pw $vclk_per]")
+
+            for cout in settings['coutList']:
+                # Change output capacitance
+                self.addControl('alter Cload ' + str(cout))                            
+                # Run transient to measure Clk->Q delay
+                self.addControl(tranCmd)
+
+                if inPolarity == "positive":
+                    self.addControl("let vq_end = " + str(vd_end))
+                else:
+                    self.addControl("let vq_end = " + str(vddVal - vd_end))
+
+                self.addControl('* Check if FF has captured the value')
+                self.addControl('let vq_final = v(' + outNode + ')[length(v(' + outNode + '))-1]')
+                self.addControl('print vq_final')
+                self.addControl('if abs(vq_final - vq_end) ge ' + str(0.1 * vddVal))
+                self.addControl('    echo "ERROR : Q was not captured"')
+                self.addControl('    quit 1')
+                self.addControl('else')
+                self.addControl('    echo "Q was captured"')
+                self.addControl('end')
+
+                # Measure clk->q delay and slew
+                self.addControl(mDelay)
+                self.addControl(mSlew)
+                msg = "cout=" + str(cout) + " slew=" + str(clkSlew) + " tp=$&tprop ts=$&tslew"
+                self.addControl(self.echo(msg))
+
+            res = self.run()
+            res_vals += self.extractValues(res_names, res)
+        return (res_names, res_vals)
