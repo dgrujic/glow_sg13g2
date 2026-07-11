@@ -7,9 +7,12 @@ As a by-product it also provides a work flow that can be used to design new stan
 
 An effort has been made to make the work flow process-agnostic as much as possible, so that it could be used with other PDKs that support open source tools.
 
-# Acknowledgement
+# Funding
 
-This project is funded by donation from NGI Zero Commons Fund.
+This project is funded through [NGI0 Commons Fund](https://nlnet.nl/commonsfund), a fund established by [NLnet](https://nlnet.nl) with financial support from the European Commission's [Next Generation Internet](https://ngi.eu) program. Learn more at the [NLnet project page](https://nlnet.nl/project/GLOW-SG13G2).
+
+[<img src="https://nlnet.nl/logo/banner.png" alt="NLnet foundation logo" width="20%" />](https://nlnet.nl)
+[<img src="https://nlnet.nl/image/logos/NGI0_tag.svg" alt="NGI Zero Logo" width="20%" />](https://nlnet.nl/commonsfund)
 
 # Quick start guide
 
