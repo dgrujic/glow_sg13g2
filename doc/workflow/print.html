@@ -16,8 +16,8 @@
         <link rel="icon" href="favicon-de23e50b.svg">
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-0392ca55.css">
-        <link rel="stylesheet" href="css/chrome-fc474251.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ba3f083e.js";
+            window.path_to_searchindex_js = "searchindex-08ca1d60.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9e19758c.js"></script>
@@ -394,7 +394,7 @@ Cells in advanced nodes might use more than one metal layer to reduce the cell a
 <p>Digital implementation floor planner tool places standard cells in a regular array, as shown in the figure below.
 Array rows are separated by alternating horizontal power (VDD) and ground (GND) rails.
 Standard cells are Y mirrored in alternating rows to properly connect the power and ground, as is indicated by the orientation mark.</p>
-<p><img src="figs/stdcells_core.svg" alt="Standard cell array"></p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/stdcells_core.svg" alt="Standard cell array"><span class="img-wrapper"><img src="figs/stdcells_core.svg" alt="Standard cell array"></span></label></p>
 <p>Router uses pre-defined set of metal track widths and vias (also called “cuts” in a digital flow) for routing. Information about cell geometry and routing is contained in a technology LEF file, that is an integral part of a standard digital library.</p>
 <h2 id="anatomy-of-a-standard-cell"><a class="header" href="#anatomy-of-a-standard-cell">Anatomy of a standard cell</a></h2>
 <p>For a cell library to be usable in an automated digital implementation flow, it must conform to some rules:</p>
@@ -406,7 +406,7 @@ Standard cells are Y mirrored in alternating rows to properly connect the power 
 <li>Cell pins must be on a routing grid and accessible by via without DRC violations.</li>
 </ul>
 <p>A standard cell site template shown in the figure below can solve most of the standard cell requirements.</p>
-<p><img src="figs/stdcell_site_basic.svg" alt="Standard cell site"></p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/stdcell_site_basic.svg" alt="Standard cell site"><span class="img-wrapper"><img src="figs/stdcell_site_basic.svg" alt="Standard cell site"></span></label></p>
 <p>Standard cell site template provides:</p>
 <ul>
 <li>Place and Route (PnR) boundary for cell alignment and abutment. Cell layout extends beyond PnR boundary, and when cells are abutted from left, right, top and bottom some parts of layouts overlap. For example, abutting a cell from top or bottom results in overlap of power rails, diffusions and contacts, but the composite layout is still DRC clean.</li>
@@ -1909,7 +1909,7 @@ END INV_D1
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.js"></script>
-        <script src="book-c22b7243.js"></script>
+        <script src="book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
         <script src="mermaid-eefea253.min.js"></script>
