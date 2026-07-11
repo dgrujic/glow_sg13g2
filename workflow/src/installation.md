@@ -81,6 +81,7 @@ This commands installs, amongst other things, KLayout Python bindings that are u
 Testing of DRC and LVS can be performed with the following commands:
 ```sh
 cd $GLOW_ROOT/cells/INV_D1
+gencell INV_D1
 $GLOW_ROOT/code/scripts/check_cell.sh INV_D1.gds INV_D1
 ```
 that runs `gdsinfo` based checks, DRC and LVS, and should produce an output
