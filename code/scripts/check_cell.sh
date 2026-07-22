@@ -58,7 +58,7 @@ if grep -q "No DRC violations detected" drc/drc_run*.log; then
     DRC_STATUS=0
     echo -e -n "OK"
 else
-    DRC_STATUR=1
+    DRC_STATUS=1
     echo -e -n "ERROR"
 fi
 
@@ -72,7 +72,7 @@ if grep -q "PASS (netlists match)" lvs/lvs_run*.log; then
     LVS_STATUS=0
     echo -e -n "OK"
 else
-    LVS_STATUR=1
+    LVS_STATUS=1
     echo -e -n "ERROR"
 fi
 
