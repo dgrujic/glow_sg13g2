@@ -34,6 +34,8 @@ class SymTech:
         # Cell sizing
         "invx1WN": 640e-9,
         "invx1WP": 980e-9,
+        "invx2WN": 1070e-9,
+        "invx2WP": 1600e-9,        
         # LEF related
         "LEF_siteName" : "GLOW_SITE",
         "LEF_siteSize" : "0.48 4.32",

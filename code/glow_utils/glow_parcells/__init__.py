@@ -2,3 +2,7 @@ from .inv_par import *
 from .invz_par import *
 from .invz2_par import *
 from .nand2_par import *
+from .nand2_pun_par import *
+from .nand2_pdn_par import *
+from .nand2_pdn2_par import *
+from .nand3_par import *
