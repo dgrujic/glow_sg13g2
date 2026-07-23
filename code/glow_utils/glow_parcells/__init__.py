@@ -6,3 +6,4 @@ from .nand2_pun_par import *
 from .nand2_pdn_par import *
 from .nand2_pdn2_par import *
 from .nand3_par import *
+from .nand4_par import *
