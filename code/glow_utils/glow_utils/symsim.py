@@ -348,7 +348,7 @@ class Symsim:
 
         for i in range(len(expectedFns)):
             mapping = bool_map(expectedFns[i], logicExpr[i])
-            if mapping is None:
+            if (mapping is None) or (mapping is False):
                 self.msg("ERROR : Circuit function #" + str(i) +" "+str(expectedFns[i])+" does not operate as expected.")
                 return False
             else:
