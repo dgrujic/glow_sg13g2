@@ -1,0 +1,10 @@
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[book]
+title = "GLOW SG13G2 Library"
+authors = ["Dr. Dušan Grujić"]
+language = "en"
+
+[output.html]
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
