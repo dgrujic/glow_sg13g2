@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         book_dir: [doc/workflow]
+        book_dir: [doc/glow_sg13g2]        
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
