@@ -226,6 +226,8 @@ XMP2 Y C VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2
 .ends
 ```
 
+NAND3 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NAND2.
+
 ## `nand4_par`
 
 Cell `nand4_par` is a parametrized four-input NAND cell.
@@ -273,3 +275,4 @@ XMP2 Y C VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2
 XMP3 Y D VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
 .ends
 ```
+NAND4 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NAND2.
