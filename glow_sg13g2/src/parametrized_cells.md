@@ -106,3 +106,170 @@ XMP0 Y A net1 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={
 XMP1 net1 ENB VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
 .ends
 ```
+
+## `nand2_par`
+
+Cell `nand2_par` is a parametrized two-input NAND cell.
+
+Schematic of the `nand2_par` cell is given in the following figure.
+
+![nand2_par schematic](figs/nand2_par_sch.svg)
+
+Symbol of the `nand2_par` cell is given in the following figure.
+
+![nand2_par symbol](figs/nand2_par_sym.svg)
+
+Pins of the `nand2_par` cell are listed in the following table.
+| Pin | Description |
+| :-------: | :--------- |
+| `A`       | Input A of NAND2. |
+| `B`       | Input B of NAND2. |
+| `Y`       | NAND2 output. |
+| `VDD`     | Power supply. Not shown in the symbol. |
+| `VSS`     | Ground. Not shown in the symbol. |
+
+Parameters of the `nand2_par` cell are given in the following table.
+
+| Parameter | Description |
+| :-------: | :--------- |
+| `WN`      | Total width of NMOS transistor. Default 300 nm. |
+| `NGN`     | Number of gates of NMOS transistor. Default 1. |
+| `WP`      | Total width of PMOS transistor. Default 450 nm. |
+| `NGP`     | Number of gates of PMOS transistor. Default 1. |
+| `L`       | Channel length. Default 130 nm. |
+
+SPICE netlist of the `nand2_par` cell is:
+```
+.subckt nand2_par A B Y VDD VSS WN=3e-07 WP=4.5e-07 L=1.3e-07 NGN=1 NGP=1
+XMN0 n0 A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y B n0 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 Y A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+
+In theory, parametrized two input NAND cell `nand2_par` can be used to construct a cell of any drive strength by increasing the total transistor width (`WP` and `WN`), and number of gates (`NGN` and `NGP`).
+Layout of such cell would be suboptimal, as all sources/drains of series transistors would have to be connected together, and local routing would become increasingly complex for larger drive strengths.
+Routing complexity is usually solved by relaxing the requirement that all drains connected together, as illustrated in the figure below.
+
+![nand_pdn transform](figs/nand_pdn_transform.svg)
+
+On the left side two series NMOS transistors have two gates and a total channel width of `2WN`, and all terminals are connected together. On the right side two gates are split and there are two series transistors connected in parallel.
+Although not isomorphic, the two structures are logically equivalent.
+
+Parallel-series transformation can be made for any transistor size and number of gates, and significantly reduces the layout complexity for transistors with large number of gates, i.e. large drive strengths.
+It is convenient to have a parametrized series transistor pull-down network that can be used for the described parallel-series transformation, and its SPICE netlist `nand2_pdn_par` is given below.
+
+```
+.subckt nand2_pdn_par A B Y VDD VSS WN=3e-07 L=1.3e-07 NGN=1
+XMN0 n0 B VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y A n0 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+.ends
+```
+SPICE netlist with alternate assignment of inputs `A` and `B` is given below.
+```
+.subckt nand2_pdn2_par A B Y VDD VSS WN=3e-07 L=1.3e-07 NGN=1
+XMN0 n0 A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y B n0 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+.ends
+```
+To complete the NAND gate, a complementary parametrized pull-up network is needed, and its SPICE netlist is given below. NAND pull-up network has transistors in parallel, so there is no need for alternate assignment netlist.
+```
+.subckt nand2_pun_par A B Y VDD VSS WP=4.5e-07 L=1.3e-07 NGP=1
+XMP0 Y A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+
+## `nand3_par`
+
+Cell `nand3_par` is a parametrized three-input NAND cell.
+
+Schematic of the `nand3_par` cell is given in the following figure.
+
+![nand3_par schematic](figs/nand3_par_sch.svg)
+
+Symbol of the `nand3_par` cell is given in the following figure.
+
+![nand3_par symbol](figs/nand3_par_sym.svg)
+
+Pins of the `nand3_par` cell are listed in the following table.
+| Pin | Description |
+| :-------: | :--------- |
+| `A`       | Input A of NAND3. |
+| `B`       | Input B of NAND3. |
+| `C`       | Input C of NAND3. |
+| `Y`       | NAND3 output. |
+| `VDD`     | Power supply. Not shown in the symbol. |
+| `VSS`     | Ground. Not shown in the symbol. |
+
+Parameters of the `nand3_par` cell are given in the following table.
+
+| Parameter | Description |
+| :-------: | :--------- |
+| `WN`      | Total width of NMOS transistor. Default 1030 nm. |
+| `NGN`     | Number of gates of NMOS transistor. Default 1. |
+| `WP`      | Total width of PMOS transistor. Default 980 nm. |
+| `NGP`     | Number of gates of PMOS transistor. Default 1. |
+| `L`       | Channel length. Default 130 nm. |
+
+SPICE netlist of the `nand3_par` cell is:
+
+```
+.subckt nand3_par A B C Y VDD VSS WN=1.03e-06 WP=9.8e-07 L=1.3e-07 NGN=1 NGP=1
+XMN0 n0 C VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 n1 B n0 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN2 Y A n1 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 Y A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP2 Y C VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+
+## `nand4_par`
+
+Cell `nand4_par` is a parametrized four-input NAND cell.
+
+Schematic of the `nand4_par` cell is given in the following figure.
+
+![nand4_par schematic](figs/nand4_par_sch.svg)
+
+Symbol of the `nand4_par` cell is given in the following figure.
+
+![nand4_par symbol](figs/nand4_par_sym.svg)
+
+Pins of the `nand4_par` cell are listed in the following table.
+| Pin | Description |
+| :-------: | :--------- |
+| `A`       | Input A of NAND4. |
+| `B`       | Input B of NAND4. |
+| `C`       | Input C of NAND4. |
+| `D`       | Input D of NAND4. |
+| `Y`       | NAND4 output. |
+| `VDD`     | Power supply. Not shown in the symbol. |
+| `VSS`     | Ground. Not shown in the symbol. |
+
+Parameters of the `nand4_par` cell are given in the following table.
+
+| Parameter | Description |
+| :-------: | :--------- |
+| `WN`      | Total width of NMOS transistor. Default 800 nm. |
+| `NGN`     | Number of gates of NMOS transistor. Default 1. |
+| `WP`      | Total width of PMOS transistor. Default 700 nm. |
+| `NGP`     | Number of gates of PMOS transistor. Default 1. |
+| `L`       | Channel length. Default 130 nm. |
+
+SPICE netlist of the `nand4_par` cell is:
+
+```
+.subckt nand4_par A B C D Y VDD VSS WN=8e-07 WP=7e-07 L=1.3e-07 NGN=1 NGP=1
+XMN0 n0 D VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 n1 C n0 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN2 n2 B n1 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN3 Y A n2 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 Y A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP2 Y C VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP3 Y D VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
