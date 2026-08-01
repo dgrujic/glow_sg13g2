@@ -173,6 +173,13 @@ XMN0 n0 A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={
 XMN1 Y B n0 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
 .ends
 ```
+In some cases, a floating pull-down network is useful for layout optimization, and its SPICE netlist is given below.
+```
+.subckt nand2_pdn_float_par A B Y X VSS WN=3e-07 L=1.3e-07 NGN=1
+XMN0 n0 B X VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y A n0 VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+.ends
+```
 To complete the NAND gate, a complementary parametrized pull-up network is needed, and its SPICE netlist is given below. NAND pull-up network has transistors in parallel, so there is no need for alternate assignment netlist.
 ```
 .subckt nand2_pun_par A B Y VDD VSS WP=4.5e-07 L=1.3e-07 NGP=1
