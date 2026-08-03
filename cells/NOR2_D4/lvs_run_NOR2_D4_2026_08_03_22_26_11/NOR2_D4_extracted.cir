@@ -1,0 +1,20 @@
+* Extracted by KLayout with SG13G2 LVS runset on : 03/08/2026 22:26
+
+.SUBCKT NOR2_D4
+M$1 \$1 \$4 \$3 \$1 sg13_lv_nmos L=0.13u W=2.14u AS=0.81755p AD=0.4066p
++ PS=5.42u PD=2.9u rfmode=0
+M$2 \$1 \$5 \$3 \$1 sg13_lv_nmos L=0.13u W=2.14u AS=0.81755p AD=0.4066p
++ PS=5.42u PD=2.9u rfmode=0
+M$5 \$2 \$4 \$6 \$2 sg13_lv_pmos L=0.13u W=1.43u AS=0.6334p AD=0.1287p PS=4.22u
++ PD=1.61u rfmode=0
+M$6 \$6 \$5 \$3 \$2 sg13_lv_pmos L=0.13u W=1.43u AS=0.1287p AD=0.2717p PS=1.61u
++ PD=1.81u rfmode=0
+M$7 \$3 \$5 \$7 \$2 sg13_lv_pmos L=0.13u W=1.43u AS=0.2717p AD=0.1287p PS=1.81u
++ PD=1.61u rfmode=0
+M$8 \$7 \$4 \$2 \$2 sg13_lv_pmos L=0.13u W=1.43u AS=0.1287p AD=0.3739p PS=1.61u
++ PD=2.19u rfmode=0
+M$9 \$2 \$4 \$8 \$2 sg13_lv_pmos L=0.13u W=1.43u AS=0.3739p AD=0.1287p PS=2.19u
++ PD=1.61u rfmode=0
+M$10 \$8 \$5 \$3 \$2 sg13_lv_pmos L=0.13u W=1.43u AS=0.1287p AD=0.4862p
++ PS=1.61u PD=3.54u rfmode=0
+.ENDS NOR2_D4

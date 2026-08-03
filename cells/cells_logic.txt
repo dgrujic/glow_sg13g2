@@ -45,6 +45,16 @@ NAND4N2_D1
 NAND4N2_D2
 
 #
+# NOR
+#
+
+NOR2_DL
+NOR2_D1
+NOR2_D2
+NOR2_D4
+NOR2_D8
+
+#
 # Latches
 #
 
