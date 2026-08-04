@@ -521,7 +521,7 @@ class Symsubcircuit(object):
         for param in params.keys():
             if printParams:
                 paramVal = parameterEvaluator.substitute(params[param])
-            res += " " + param + "=" + str(paramVal)
+                res += " " + param + "=" + str(paramVal)
         res += "\n"
         # Add pin info as comment
         check = Symcheck(cls)
