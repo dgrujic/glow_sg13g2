@@ -38,8 +38,15 @@ class SymTech:
         "invx2WP": 1600e-9,
         "nor3x1WN": 500e-9,
         "nor3x1WP": 1250e-9,
+        # NOR4
+        "nor4xLWN": 300e-9,
+        "nor4xLWP": 840e-9,
         "nor4x1WN": 500e-9,
         "nor4x1WP": 1400e-9,
+        "nor4x2WN": 800e-9,
+        "nor4x2WP": 2200e-9,
+        "nor4x4WN": 1500e-9,
+        "nor4x4WP": 4410e-9,        
         # LEF related
         "LEF_siteName" : "GLOW_SITE",
         "LEF_siteSize" : "0.48 4.32",

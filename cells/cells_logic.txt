@@ -59,6 +59,11 @@ NOR3_D1
 NOR3_D2
 NOR3_D4
 
+NOR4_DL
+NOR4_D1
+NOR4_D2
+NOR4_D4
+
 #
 # Latches
 #
