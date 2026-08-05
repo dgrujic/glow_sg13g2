@@ -283,3 +283,170 @@ XMP3 Y D VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2
 .ends
 ```
 NAND4 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NAND2.
+
+## `nor2_par`
+
+Cell `nor2_par` is a parametrized two-input NAND cell.
+
+Schematic of the `nor2_par` cell is given in the following figure.
+
+![nor2_par schematic](figs/nor2_par_sch.svg)
+
+Symbol of the `nor2_par` cell is given in the following figure.
+
+![nor2_par symbol](figs/nor2_par_sym.svg)
+
+Pins of the `nor2_par` cell are listed in the following table.
+| Pin | Description |
+| :-------: | :--------- |
+| `A`       | Input A of NOR2. |
+| `B`       | Input B of NOR2. |
+| `Y`       | NOR2 output. |
+| `VDD`     | Power supply. Not shown in the symbol. |
+| `VSS`     | Ground. Not shown in the symbol. |
+
+Parameters of the `nor2_par` cell are given in the following table.
+
+| Parameter | Description |
+| :-------: | :--------- |
+| `WN`      | Total width of NMOS transistor. Default 640 nm. |
+| `NGN`     | Number of gates of NMOS transistor. Default 1. |
+| `WP`      | Total width of PMOS transistor. Default 980 nm. |
+| `NGP`     | Number of gates of PMOS transistor. Default 1. |
+| `L`       | Channel length. Default 130 nm. |
+
+SPICE netlist of the `nor2_par` cell is:
+```
+.subckt nor2_par A B Y VDD VSS WN=6.4e-07 WP=9.8e-07 L=1.3e-07 NGN=1 NGP=1
+XMN0 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y B VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 n0 A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+
+As with `nand2_par`, layout optimization for cells with larger drive strengths can be performed by manipulating pull-up and pull-down networks.
+SPICE netlist of parametrized `NOR2` pull-down network is given below.
+```
+.subckt nor2_pdn_par A B Y VDD VSS WN=3e-07 L=1.3e-07 NGN=1
+XMN0 Y B VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+.ends
+```
+Complementary pull-up networks are available in three variants - two variants of pin assignment and a floating version - and they are given in SPICE netlists below.
+```
+.subckt nor2_pun_par A B Y VDD VSS WP=3e-07 L=1.3e-07 NGP=1
+XMP0 n0 A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+```
+.subckt nor2_pun2_par A B Y VDD VSS WP=3e-07 L=1.3e-07 NGP=1
+XMP0 n0 B VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y A n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+```
+.subckt nor2_pun_float_par A B Y X VDD WP=3e-07 L=1.3e-07 NGP=1
+XMP0 n0 A X VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+These parametrized circuits are sufficient to construct `NOR2` of any drive strength.
+
+## `nor3_par`
+
+Cell `nor3_par` is a parametrized three-input NOR cell.
+
+Schematic of the `nor3_par` cell is given in the following figure.
+
+![nor3_par schematic](figs/nor3_par_sch.svg)
+
+Symbol of the `nor3_par` cell is given in the following figure.
+
+![nor3_par symbol](figs/nor3_par_sym.svg)
+
+Pins of the `nor3_par` cell are listed in the following table.
+| Pin | Description |
+| :-------: | :--------- |
+| `A`       | Input A of NOR3. |
+| `B`       | Input B of NOR3. |
+| `C`       | Input C of NOR3. |
+| `Y`       | NOR3 output. |
+| `VDD`     | Power supply. Not shown in the symbol. |
+| `VSS`     | Ground. Not shown in the symbol. |
+
+Parameters of the `nor3_par` cell are given in the following table.
+
+| Parameter | Description |
+| :-------: | :--------- |
+| `WN`      | Total width of NMOS transistor. Default 500 nm. |
+| `NGN`     | Number of gates of NMOS transistor. Default 1. |
+| `WP`      | Total width of PMOS transistor. Default 1250 nm. |
+| `NGP`     | Number of gates of PMOS transistor. Default 1. |
+| `L`       | Channel length. Default 130 nm. |
+
+SPICE netlist of the `nor3_par` cell is:
+
+```
+.subckt nor3_par A B C Y VDD VSS WN=5e-07 WP=1.25e-06 L=1.3e-07 NGN=1 NGP=1
+XMN0 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y B VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN2 Y C VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 n0 A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 n1 B n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP2 Y C n1 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+
+NOR3 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NOR2.
+
+## `nor4_par`
+
+Cell `nor4_par` is a parametrized four-input NOR cell.
+
+Schematic of the `nor4_par` cell is given in the following figure.
+
+![nor4_par schematic](figs/nor4_par_sch.svg)
+
+Symbol of the `nor4_par` cell is given in the following figure.
+
+![nor4_par symbol](figs/nor4_par_sym.svg)
+
+Pins of the `nor4_par` cell are listed in the following table.
+| Pin | Description |
+| :-------: | :--------- |
+| `A`       | Input A of NOR4. |
+| `B`       | Input B of NOR4. |
+| `C`       | Input C of NOR4. |
+| `D`       | Input D of NOR4. |
+| `Y`       | NOR4 output. |
+| `VDD`     | Power supply. Not shown in the symbol. |
+| `VSS`     | Ground. Not shown in the symbol. |
+
+Parameters of the `nor4_par` cell are given in the following table.
+
+| Parameter | Description |
+| :-------: | :--------- |
+| `WN`      | Total width of NMOS transistor. Default 500 nm. |
+| `NGN`     | Number of gates of NMOS transistor. Default 1. |
+| `WP`      | Total width of PMOS transistor. Default 1400 nm. |
+| `NGP`     | Number of gates of PMOS transistor. Default 1. |
+| `L`       | Channel length. Default 130 nm. |
+
+SPICE netlist of the `nor4_par` cell is:
+
+```
+.subckt nor4_par A B C D Y VDD VSS WN=5e-07 WP=1.4e-06 L=1.3e-07 NGN=1 NGP=1
+XMN0 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y B VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN2 Y C VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN3 Y D VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 n0 D VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 n1 C n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP2 n2 B n1 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP3 Y A n2 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+
+NOR4 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NOR2.
