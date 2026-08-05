@@ -399,7 +399,7 @@ XMP2 Y C n1 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*
 .ends
 ```
 
-NOR3 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NOR2.
+NOR3 cell with large drive strength layout can be optimized by transforming the pull-up network in the similar manner as NOR2.
 
 ## `nor4_par`
 
@@ -449,4 +449,4 @@ XMP3 Y A n2 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*
 .ends
 ```
 
-NOR4 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NOR2.
+NOR4 cell with large drive strength layout can be optimized by transforming the pull-up network in the similar manner as NOR2.
