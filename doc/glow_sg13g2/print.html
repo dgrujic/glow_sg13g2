@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-08883c53.js";
+            window.path_to_searchindex_js = "searchindex-a8316a98.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-b876787f.js"></script>
@@ -459,6 +459,173 @@ XMP3 Y D VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2
 .ends
 </code></pre>
 <p>NAND4 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NAND2.</p>
+<h2 id="nor2_par"><a class="header" href="#nor2_par"><code>nor2_par</code></a></h2>
+<p>Cell <code>nor2_par</code> is a parametrized two-input NAND cell.</p>
+<p>Schematic of the <code>nor2_par</code> cell is given in the following figure.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/nor2_par_sch.svg" alt="nor2_par schematic"><span class="img-wrapper"><img src="figs/nor2_par_sch.svg" alt="nor2_par schematic"></span></label></p>
+<p>Symbol of the <code>nor2_par</code> cell is given in the following figure.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/nor2_par_sym.svg" alt="nor2_par symbol"><span class="img-wrapper"><img src="figs/nor2_par_sym.svg" alt="nor2_par symbol"></span></label></p>
+<p>Pins of the <code>nor2_par</code> cell are listed in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Pin</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>A</code></td><td style="text-align: left">Input A of NOR2.</td></tr>
+<tr><td style="text-align: center"><code>B</code></td><td style="text-align: left">Input B of NOR2.</td></tr>
+<tr><td style="text-align: center"><code>Y</code></td><td style="text-align: left">NOR2 output.</td></tr>
+<tr><td style="text-align: center"><code>VDD</code></td><td style="text-align: left">Power supply. Not shown in the symbol.</td></tr>
+<tr><td style="text-align: center"><code>VSS</code></td><td style="text-align: left">Ground. Not shown in the symbol.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Parameters of the <code>nor2_par</code> cell are given in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Parameter</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>WN</code></td><td style="text-align: left">Total width of NMOS transistor. Default 640 nm.</td></tr>
+<tr><td style="text-align: center"><code>NGN</code></td><td style="text-align: left">Number of gates of NMOS transistor. Default 1.</td></tr>
+<tr><td style="text-align: center"><code>WP</code></td><td style="text-align: left">Total width of PMOS transistor. Default 980 nm.</td></tr>
+<tr><td style="text-align: center"><code>NGP</code></td><td style="text-align: left">Number of gates of PMOS transistor. Default 1.</td></tr>
+<tr><td style="text-align: center"><code>L</code></td><td style="text-align: left">Channel length. Default 130 nm.</td></tr>
+</tbody>
+</table>
+</div>
+<p>SPICE netlist of the <code>nor2_par</code> cell is:</p>
+<pre><code>.subckt nor2_par A B Y VDD VSS WN=6.4e-07 WP=9.8e-07 L=1.3e-07 NGN=1 NGP=1
+XMN0 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y B VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 n0 A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+</code></pre>
+<p>As with <code>nand2_par</code>, layout optimization for cells with larger drive strengths can be performed by manipulating pull-up and pull-down networks.
+SPICE netlist of parametrized <code>NOR2</code> pull-down network is given below.</p>
+<pre><code>.subckt nor2_pdn_par A B Y VDD VSS WN=3e-07 L=1.3e-07 NGN=1
+XMN0 Y B VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+.ends
+</code></pre>
+<p>Complementary pull-up networks are available in three variants - two variants of pin assignment and a floating version - and they are given in SPICE netlists below.</p>
+<pre><code>.subckt nor2_pun_par A B Y VDD VSS WP=3e-07 L=1.3e-07 NGP=1
+XMP0 n0 A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+</code></pre>
+<pre><code>.subckt nor2_pun2_par A B Y VDD VSS WP=3e-07 L=1.3e-07 NGP=1
+XMP0 n0 B VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y A n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+</code></pre>
+<pre><code>.subckt nor2_pun_float_par A B Y X VDD WP=3e-07 L=1.3e-07 NGP=1
+XMP0 n0 A X VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 Y B n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+</code></pre>
+<p>These parametrized circuits are sufficient to construct <code>NOR2</code> of any drive strength.</p>
+<h2 id="nor3_par"><a class="header" href="#nor3_par"><code>nor3_par</code></a></h2>
+<p>Cell <code>nor3_par</code> is a parametrized three-input NOR cell.</p>
+<p>Schematic of the <code>nor3_par</code> cell is given in the following figure.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/nor3_par_sch.svg" alt="nor3_par schematic"><span class="img-wrapper"><img src="figs/nor3_par_sch.svg" alt="nor3_par schematic"></span></label></p>
+<p>Symbol of the <code>nor3_par</code> cell is given in the following figure.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/nor3_par_sym.svg" alt="nor3_par symbol"><span class="img-wrapper"><img src="figs/nor3_par_sym.svg" alt="nor3_par symbol"></span></label></p>
+<p>Pins of the <code>nor3_par</code> cell are listed in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Pin</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>A</code></td><td style="text-align: left">Input A of NOR3.</td></tr>
+<tr><td style="text-align: center"><code>B</code></td><td style="text-align: left">Input B of NOR3.</td></tr>
+<tr><td style="text-align: center"><code>C</code></td><td style="text-align: left">Input C of NOR3.</td></tr>
+<tr><td style="text-align: center"><code>Y</code></td><td style="text-align: left">NOR3 output.</td></tr>
+<tr><td style="text-align: center"><code>VDD</code></td><td style="text-align: left">Power supply. Not shown in the symbol.</td></tr>
+<tr><td style="text-align: center"><code>VSS</code></td><td style="text-align: left">Ground. Not shown in the symbol.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Parameters of the <code>nor3_par</code> cell are given in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Parameter</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>WN</code></td><td style="text-align: left">Total width of NMOS transistor. Default 500 nm.</td></tr>
+<tr><td style="text-align: center"><code>NGN</code></td><td style="text-align: left">Number of gates of NMOS transistor. Default 1.</td></tr>
+<tr><td style="text-align: center"><code>WP</code></td><td style="text-align: left">Total width of PMOS transistor. Default 1250 nm.</td></tr>
+<tr><td style="text-align: center"><code>NGP</code></td><td style="text-align: left">Number of gates of PMOS transistor. Default 1.</td></tr>
+<tr><td style="text-align: center"><code>L</code></td><td style="text-align: left">Channel length. Default 130 nm.</td></tr>
+</tbody>
+</table>
+</div>
+<p>SPICE netlist of the <code>nor3_par</code> cell is:</p>
+<pre><code>.subckt nor3_par A B C Y VDD VSS WN=5e-07 WP=1.25e-06 L=1.3e-07 NGN=1 NGP=1
+XMN0 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y B VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN2 Y C VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 n0 A VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 n1 B n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP2 Y C n1 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+</code></pre>
+<p>NOR3 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NOR2.</p>
+<h2 id="nor4_par"><a class="header" href="#nor4_par"><code>nor4_par</code></a></h2>
+<p>Cell <code>nor4_par</code> is a parametrized four-input NOR cell.</p>
+<p>Schematic of the <code>nor4_par</code> cell is given in the following figure.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/nor4_par_sch.svg" alt="nor4_par schematic"><span class="img-wrapper"><img src="figs/nor4_par_sch.svg" alt="nor4_par schematic"></span></label></p>
+<p>Symbol of the <code>nor4_par</code> cell is given in the following figure.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/nor4_par_sym.svg" alt="nor4_par symbol"><span class="img-wrapper"><img src="figs/nor4_par_sym.svg" alt="nor4_par symbol"></span></label></p>
+<p>Pins of the <code>nor4_par</code> cell are listed in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Pin</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>A</code></td><td style="text-align: left">Input A of NOR4.</td></tr>
+<tr><td style="text-align: center"><code>B</code></td><td style="text-align: left">Input B of NOR4.</td></tr>
+<tr><td style="text-align: center"><code>C</code></td><td style="text-align: left">Input C of NOR4.</td></tr>
+<tr><td style="text-align: center"><code>D</code></td><td style="text-align: left">Input D of NOR4.</td></tr>
+<tr><td style="text-align: center"><code>Y</code></td><td style="text-align: left">NOR4 output.</td></tr>
+<tr><td style="text-align: center"><code>VDD</code></td><td style="text-align: left">Power supply. Not shown in the symbol.</td></tr>
+<tr><td style="text-align: center"><code>VSS</code></td><td style="text-align: left">Ground. Not shown in the symbol.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Parameters of the <code>nor4_par</code> cell are given in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Parameter</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>WN</code></td><td style="text-align: left">Total width of NMOS transistor. Default 500 nm.</td></tr>
+<tr><td style="text-align: center"><code>NGN</code></td><td style="text-align: left">Number of gates of NMOS transistor. Default 1.</td></tr>
+<tr><td style="text-align: center"><code>WP</code></td><td style="text-align: left">Total width of PMOS transistor. Default 1400 nm.</td></tr>
+<tr><td style="text-align: center"><code>NGP</code></td><td style="text-align: left">Number of gates of PMOS transistor. Default 1.</td></tr>
+<tr><td style="text-align: center"><code>L</code></td><td style="text-align: left">Channel length. Default 130 nm.</td></tr>
+</tbody>
+</table>
+</div>
+<p>SPICE netlist of the <code>nor4_par</code> cell is:</p>
+<pre><code>.subckt nor4_par A B C D Y VDD VSS WN=5e-07 WP=1.4e-06 L=1.3e-07 NGN=1 NGP=1
+XMN0 Y A VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN1 Y B VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN2 Y C VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMN3 Y D VSS VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 n0 D VDD VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP1 n1 C n0 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP2 n2 B n1 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+XMP3 Y A n2 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+</code></pre>
+<p>NOR4 cell with large drive strength layout can be optimized by transforming the pull-down network in the similar manner as NOR2.</p>
 
                     </main>
 
