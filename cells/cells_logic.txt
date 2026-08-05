@@ -22,6 +22,13 @@ AND4_D1
 AND4_D2
 AND4_D4
 
+#
+# AND - OR 
+#
+
+AO21_DL
+AO21_D1
+AO21_D2
 
 
 #

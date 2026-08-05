@@ -21,6 +21,7 @@ import json
 class SymTech:
     technology = {
         "processName" : "sg13g2",
+        "Lmin" : 130e-9,
         "nmosModelName" : "sg13_lv_nmos",
         "pmosModelName" : "sg13_lv_pmos",
         "nmosAS" : "ipar('w')*310e-9",
