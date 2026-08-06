@@ -50,6 +50,10 @@ AOI221_D1
 
 AOI222_D1
 
+AOI2N1_DL
+AOI2N1_D1
+AOI2N1_D2
+
 #
 # Inverters
 #
