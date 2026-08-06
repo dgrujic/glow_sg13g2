@@ -34,6 +34,10 @@ AO22_DL
 AO22_D1
 AO22_D2
 
+AOI21_DL
+AOI21_D1
+AOI21_D2
+
 #
 # Inverters
 #
