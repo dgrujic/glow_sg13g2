@@ -54,6 +54,9 @@ AOI2N1_DL
 AOI2N1_D1
 AOI2N1_D2
 
+AOI2N2_DL
+AOI2N2_D1
+
 #
 # Inverters
 #
