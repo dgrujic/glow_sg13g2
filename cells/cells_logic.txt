@@ -71,6 +71,10 @@ OR3_D1
 OR3_D2
 OR3_D4
 
+OR4_DL
+OR4_D1
+OR4_D2
+OR4_D4
 
 #
 # Inverters
@@ -153,3 +157,13 @@ DLN_D1
 #
 
 DFQQN_D1
+
+#
+# XOR
+#
+
+XOR2_DL
+XOR2_D1
+
+XNOR2_DL
+XNOR2_D1
