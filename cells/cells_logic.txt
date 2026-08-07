@@ -58,6 +58,19 @@ AOI2N2_DL
 AOI2N2_D1
 
 #
+# Buffers
+#
+
+BUF_DL
+BUF_D1
+BUF_D2
+BUF_D3
+BUF_D4
+BUF_D6
+BUF_D8
+BUF_D12
+
+#
 # OR
 #
 
