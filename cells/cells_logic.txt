@@ -58,6 +58,21 @@ AOI2N2_DL
 AOI2N2_D1
 
 #
+# OR
+#
+
+OR2_DL
+OR2_D1
+OR2_D2
+OR2_D4
+
+OR3_DL
+OR3_D1
+OR3_D2
+OR3_D4
+
+
+#
 # Inverters
 #
 
