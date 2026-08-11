@@ -84,6 +84,16 @@ CLKBUF_D12
 CLKBUF_D16
 
 #
+# Clock inverters
+#
+
+CLKINV_D1
+CLKINV_D2
+CLKINV_D4
+CLKINV_D8
+CLKINV_D16
+
+#
 # OR
 #
 
