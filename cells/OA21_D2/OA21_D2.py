@@ -55,13 +55,13 @@ def generate(genFlat = True, anonimize = True):
     OA21_D2 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
 
     n0 = SymNMOS("N0", ['nabp', 'A', 'VSS', 'VSS'], {'w' : wn, 'l' : lmin })
-    n1 = SymNMOS("N0", ['nabp', 'B', 'VSS', 'VSS'], {'w' : wn, 'l' : lmin })
-    n2 = SymNMOS("N0", ['nabp', 'C', 'NY', 'VSS'], {'w' : wn, 'l' : lmin })
+    n1 = SymNMOS("N1", ['nabp', 'B', 'VSS', 'VSS'], {'w' : wn, 'l' : lmin })
+    n2 = SymNMOS("N2", ['nabp', 'C', 'NY', 'VSS'], {'w' : wn, 'l' : lmin })
 
     # Pull-up network
     p0 = SymPMOS("P0", ['NY', 'C', 'VDD', 'VDD'], {'w' : wpp, 'l' : lmin })
     p1 = SymPMOS("P1", ['nabs', 'A', 'VDD', 'VDD'], {'w' : wp, 'l' : lmin })
-    p2 = SymPMOS("P1", ['nabs', 'B', 'NY', 'VDD'], {'w' : wp, 'l' : lmin })
+    p2 = SymPMOS("P2", ['nabs', 'B', 'NY', 'VDD'], {'w' : wp, 'l' : lmin })
 
     inv1 = inv_par('inv1', ['NY', 'Y', 'VDD', 'VSS'], {'WN' : wninv, 'WP' : wpinv})
     OA21_D2.addElement([n0, n1, n2, p0, p1, p2, inv1])
