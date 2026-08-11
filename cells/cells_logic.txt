@@ -113,6 +113,14 @@ OR4_D2
 OR4_D4
 
 #
+# OR - AND
+#
+
+OA21_D1
+OA21_D2
+OA21_D4
+
+#
 # Inverters
 #
 
