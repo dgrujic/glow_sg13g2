@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-936e22b0.js";
+            window.path_to_searchindex_js = "searchindex-dccb3d23.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-b876787f.js"></script>
@@ -621,6 +621,50 @@ XMP3 Y A n2 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*
 .ends
 </code></pre>
 <p>NOR4 cell with large drive strength layout can be optimized by transforming the pull-up network in the similar manner as NOR2.</p>
+<h2 id="tgate_par"><a class="header" href="#tgate_par">‘tgate_par’</a></h2>
+<p>Cell <code>tgate_par</code> is a parametrized CMOS transmission gate cell.</p>
+<p>Schematic of the <code>tgate_par</code> cell is given in the following figure.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/tgate_par_sch.svg" alt="tgate_par schematic"><span class="img-wrapper"><img src="figs/tgate_par_sch.svg" alt="tgate_par schematic"></span></label></p>
+<p>Symbol of the <code>tgate_par</code> cell is given in the following figure.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="figs/tgate_par_sym.svg" alt="tgate_par symbol"><span class="img-wrapper"><img src="figs/tgate_par_sym.svg" alt="tgate_par symbol"></span></label></p>
+<p>Pins of the <code>tgate_par</code> cell are listed in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Pin</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>A</code></td><td style="text-align: left">Signal input A.</td></tr>
+<tr><td style="text-align: center"><code>B</code></td><td style="text-align: left">Signal input B.</td></tr>
+<tr><td style="text-align: center"><code>OE</code></td><td style="text-align: left">Enable, active high.</td></tr>
+<tr><td style="text-align: center"><code>OEN</code></td><td style="text-align: left">Inverted enable, active low.</td></tr>
+<tr><td style="text-align: center"><code>VDD</code></td><td style="text-align: left">Power supply. Not shown in the symbol.</td></tr>
+<tr><td style="text-align: center"><code>VSS</code></td><td style="text-align: left">Ground. Not shown in the symbol.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Parameters of the <code>tgate_par</code> cell are given in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Parameter</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><code>WN</code></td><td style="text-align: left">Total width of NMOS transistor. Default 300 nm.</td></tr>
+<tr><td style="text-align: center"><code>NGN</code></td><td style="text-align: left">Number of gates of NMOS transistor. Default 1.</td></tr>
+<tr><td style="text-align: center"><code>WP</code></td><td style="text-align: left">Total width of PMOS transistor. Default 450 nm.</td></tr>
+<tr><td style="text-align: center"><code>NGP</code></td><td style="text-align: left">Number of gates of PMOS transistor. Default 1.</td></tr>
+<tr><td style="text-align: center"><code>L</code></td><td style="text-align: left">Channel length. Default 130 nm.</td></tr>
+</tbody>
+</table>
+</div>
+<p>SPICE netlist of the <code>tgate_par</code> cell is:</p>
+<pre><code>.subckt tgate_par A B EN ENB VDD VSS WN=3e-07 WP=4.5e-07 L=1.3e-07 NGN=1 NGP=1
+XMN0 A EN B VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 A ENB B VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+</code></pre>
+<p>Transmission gate cell is used for signal routing in cells, such as multiplexers.</p>
 
                     </main>
 
