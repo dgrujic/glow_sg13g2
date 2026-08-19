@@ -241,3 +241,10 @@ XOR2_D1
 
 XNOR2_DL
 XNOR2_D1
+
+#
+# TIE cells
+#
+
+TIEH
+TIEL
