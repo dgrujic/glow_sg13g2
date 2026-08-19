@@ -15,3 +15,4 @@ from .nor2_pun2_par import *
 from .nor2_pun_float_par import *
 from .nor3_par import *
 from .nor4_par import *
+from .tgate_par import *

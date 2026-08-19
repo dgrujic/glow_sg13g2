@@ -208,6 +208,19 @@ NOR4N2_D1
 NOR4N2_D2
 
 #
+# Multiplexers
+#
+
+MUX2_DL
+MUX2_D1
+MUX2N_DL
+MUX2N_D1
+MUX3_DL
+MUX3_D1
+MUX4_DL
+MUX4_D1
+
+#
 # Latches
 #
 

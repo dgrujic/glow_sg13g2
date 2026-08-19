@@ -33,10 +33,13 @@ class SymTech:
         "pmosPS" : "2*(ipar('w')+310e-9)",
         "pmosPD" : "2*(ipar('w')+310e-9)",
         # Cell sizing
+        "invmWN": 150e-9,
+        "invmWP": 230e-9,
         "invx1WN": 640e-9,
         "invx1WP": 980e-9,
         "invx2WN": 1070e-9,
         "invx2WP": 1600e-9,
+        # NOR3
         "nor3x1WN": 500e-9,
         "nor3x1WP": 1250e-9,
         # NOR4
@@ -47,7 +50,10 @@ class SymTech:
         "nor4x2WN": 800e-9,
         "nor4x2WP": 2200e-9,
         "nor4x4WN": 1500e-9,
-        "nor4x4WP": 4410e-9,        
+        "nor4x4WP": 4410e-9,
+        # MUX
+        "mux2x1WN": 400e-9,
+        "mux3x1WN": 600e-9,
         # LEF related
         "LEF_siteName" : "GLOW_SITE",
         "LEF_siteSize" : "0.48 4.32",
