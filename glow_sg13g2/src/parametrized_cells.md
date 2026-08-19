@@ -450,3 +450,49 @@ XMP3 Y A n2 VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*
 ```
 
 NOR4 cell with large drive strength layout can be optimized by transforming the pull-up network in the similar manner as NOR2.
+
+## 'tgate_par'
+
+
+Cell `tgate_par` is a parametrized CMOS transmission gate cell.
+
+Schematic of the `tgate_par` cell is given in the following figure.
+
+![tgate_par schematic](figs/tgate_par_sch.svg)
+
+Symbol of the `tgate_par` cell is given in the following figure.
+
+![tgate_par symbol](figs/tgate_par_sym.svg)
+
+Pins of the `tgate_par` cell are listed in the following table.
+| Pin | Description |
+| :-------: | :--------- |
+| `A`       | Signal input A. |
+| `B`       | Signal input B. |
+| `OE`      | Enable, active high. |
+| `OEN`     | Inverted enable, active low. |
+| `VDD`     | Power supply. Not shown in the symbol. |
+| `VSS`     | Ground. Not shown in the symbol. |
+
+Parameters of the `tgate_par` cell are given in the following table.
+
+| Parameter | Description |
+| :-------: | :--------- |
+| `WN`      | Total width of NMOS transistor. Default 300 nm. |
+| `NGN`     | Number of gates of NMOS transistor. Default 1. |
+| `WP`      | Total width of PMOS transistor. Default 450 nm. |
+| `NGP`     | Number of gates of PMOS transistor. Default 1. |
+| `L`       | Channel length. Default 130 nm. |
+
+SPICE netlist of the `tgate_par` cell is:
+
+```
+.subckt tgate_par A B EN ENB VDD VSS WN=3e-07 WP=4.5e-07 L=1.3e-07 NGN=1 NGP=1
+XMN0 A EN B VSS sg13_lv_nmos w={WN} l={L} ad={WN*3.1e-07} as={WN*3.1e-07} pd={2*(WN+3.1e-07)} ps={2*(WN+3.1e-07)} ng={NGN} 
+XMP0 A ENB B VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2*(WP+3.1e-07)} ps={2*(WP+3.1e-07)} ng={NGP} 
+.ends
+```
+
+Transmission gate cell is used for signal routing in cells, such as multiplexers.
+
+
