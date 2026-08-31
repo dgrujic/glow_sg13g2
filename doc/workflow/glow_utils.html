@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e73bd1fd.js";
+            window.path_to_searchindex_js = "searchindex-2ae0c1f3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9e19758c.js"></script>
@@ -1375,6 +1375,68 @@ Information from extracted netlist is used to calculate gate/diffusion area.</p>
 		END
 	END VSS
 END INV_D1
+</code></pre>
+<h2 id="ngcombsim"><a class="header" href="#ngcombsim">ngcombsim</a></h2>
+<p>Script <code>ngcombsim</code> is an utility to simulate a combinatorial circuit’s SPICE netlist in NGSPICE and determine its logic function.
+It can be used to determine a logic function and check against a given Boolean function.</p>
+<p>Script is invoked as:</p>
+<pre><code class="language-sh">ngcombsim input_file circuit [commands]
+</code></pre>
+<p>Commands are summarized in the following table</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Command</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>–expected</td><td>Specify expected output Boolean functions</td></tr>
+<tr><td>–strict</td><td>Enforce strict checks</td></tr>
+<tr><td>–lib</td><td>Specify library model and corner</td></tr>
+<tr><td>–cond</td><td>Specify operating condition value</td></tr>
+</tbody>
+</table>
+</div>
+<p>Examples:</p>
+<p>Specify expected output function and check if the circuit function matches it.
+Running the following command in the <code>$GLOW_ROOT/cells/NAND2_D1</code> directory</p>
+<pre><code class="language-sh">ngcombsim NAND2_D1.sp NAND2_D1 --expected "Y = ~(A &amp; B)"
+</code></pre>
+<p>produces the output</p>
+<pre><code>Input file : NAND2_D1.sp
+Circuit    : NAND2_D1
+
+Expected Boolean expressions
+Y =  ~(A &amp; B)
+
+Using default library and corner.
+
+Using default conditions.
+
+Inputs  :  A B
+Outputs :  Y
+
+Simulated truth table
+
+A   B   Y   
+------------
+0   0   1   
+0   1   1   
+1   0   1   
+1   1   0   
+------------
+
+Circuit Boolean functions : 
+Y = ~A | ~B
+
+Matching Boolean functions...
+Y 	MATCH
+ALL OK
+</code></pre>
+<p>PDK libraries and corners can be specified as:</p>
+<pre><code class="language-sh">ngcombsim NAND2_D1.sp NAND2_D1 --lib "$PDK_ROOT/$PDK/libs.tech/ngspice/models/cornerMOSlv.lib mos_tt"
+</code></pre>
+<p>Operating conditions, such as <code>supplyVoltage</code> or <code>temperature</code> can be changed as</p>
+<pre><code class="language-sh">ngcombsim NAND2_D1.sp NAND2_D1 --cond "supplyVoltage=1.3"
 </code></pre>
 
                     </main>
