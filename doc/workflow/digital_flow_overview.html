@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2ae0c1f3.js";
+            window.path_to_searchindex_js = "searchindex-9d941c3f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9e19758c.js"></script>
@@ -177,17 +177,17 @@
                         <h1 id="a-short-overview-of-asic-digital-design-flow"><a class="header" href="#a-short-overview-of-asic-digital-design-flow">A short overview of ASIC digital design flow</a></h1>
 <p>The objective of this section is to give a short overview of ASIC digital design flow and the role, uses and different libraries and formats that make a digital standard cell library.</p>
 <p>The design of a digital chip is traditionally partitioned into two major phases: <strong>front-end</strong> and <strong>back-end</strong> design.</p>
-<p>“<strong>Front-end</strong> design” refers to the design of a digital chip on a logical level in a Hardware Description Language (HDL), such as VHDL, SystemVerilog, Chisel, SpinalHDL, …, or in a High Level Synthesis (HLS) language, or any combination of them.
+<p>"<strong>Front-end</strong> design" refers to the design of a digital chip on a logical level in a Hardware Description Language (HDL), such as VHDL, SystemVerilog, Chisel, SpinalHDL, ..., or in a High Level Synthesis (HLS) language, or any combination of them.
 Design in HDLs is usually called Register-Transfer Level (RTL), because data is explicitly moved between registers, while the HLS design is algorithmic oriented, without explicit register assignments or register instantiation. Eventually the HLS design is compiled and translated (lowered) to (usually) SystemVerilog that is used in the backend phase.
 We will assume that the RTL design is done and focus only to back-end design.</p>
-<p>“<strong>Back-end</strong> design” refers to the physical implementation of the designed logic in a chosen integrated circuit process. Physical implementation takes many steps, and in the end results in geometric representation of transistors, vias, metal traces etc. that is used to produce mask layouts for chip fabrication.
+<p>"<strong>Back-end</strong> design" refers to the physical implementation of the designed logic in a chosen integrated circuit process. Physical implementation takes many steps, and in the end results in geometric representation of transistors, vias, metal traces etc. that is used to produce mask layouts for chip fabrication.
 Geometric representation of chip layout is usually stored in an industry standard library format such as GDSII, OASIS or OpenAcess.</p>
 <p><a href="https://en.wikipedia.org/wiki/GDSII">GDSII</a> is the oldest - created in 1970s - and the simplest format, that is still used. It stores per-layer geometry as paths, rectangles, polygons, labels and other shapes grouped in cells, that can be referenced in other cells to form complex layouts.</p>
 <p><a href="https://en.wikipedia.org/wiki/Open_Artwork_System_Interchange_Standard">OASIS</a> (Open Artwork System Interchange Standard) is a standard from 2002 that was designed to be a replacement for GDSII. It is an industry standard, but it is not open.</p>
 <p><a href="https://en.wikipedia.org/wiki/OpenAccess">OpenAccess</a> is (contrary to its name) a proprietary set of standards used in proprietary tools to allow interoperability. Although original motivation was to ensure interoperability, many vendors have added extensions that break it, and is usually not used in open source tools.</p>
 <p>Geometry stored in a layout library is used to produce a set of mask layouts, usually by performing Boolean operations on shapes in different layers.
 Each mask layout is used to produce a reticle used in one or more steps during the fabrication of chip features, and defines a certain feature - such as opening for source or drain diffusion implants, polysilicon gates, contacts, vias, metal traces etc., and ultimately define the functionality of the chip on the lowest level.</p>
-<p>Back-end design can be done by manually drawing transistors, either as parametrized cells or rectangles of polysilicon over rectangles of diffusion, contacts and interconnects in metal layers. This kind of design is called “full custom design” and is rarely done in practice because it is very time consuming and infeasible for complex designs.
+<p>Back-end design can be done by manually drawing transistors, either as parametrized cells or rectangles of polysilicon over rectangles of diffusion, contacts and interconnects in metal layers. This kind of design is called "full custom design" and is rarely done in practice because it is very time consuming and infeasible for complex designs.
 Full custom design is usually only used for timing/power critical parts, such as design of <a href="https://www.southampton.ac.uk/~bim/notes/vlsi/lecture/pdf/vlsi04.pdf">bit slice in Arithmetic-Logic Unit</a>.</p>
 <p>Back-end implementation can be simplified and automated by using a library of pre-defined logic cells. Pre-defined cells should contain transistors and local interconnect that implement a certain logic function.
 All information about semiconductors (transistors) is contained in a standard cell, so only the choice of cells, their placement and metal routing is done in the back-end phase.
@@ -237,16 +237,16 @@ Synthesis is a process that takes RTL description of a digital design, SDC (Syno
 SDC file is written by a designer to define design constraints such as input/output delays, clocks, timing exceptions etc.
 Liberty library contains information about gates available in a standard cell library: input and output pins, logic function, tables for delay and power calculation.</p>
 <p>Synthesis tool, in this case Yosys, reads in the RTL design, parses it and transforms it into a set of Boolean expressions and memory elements (flip-flops or latches) for implementation of combinatorial and sequential circuits.</p>
-<p>The main task of a synthesis tool is to map the design’s Boolean equations to available logic cells present in the Liberty library.
+<p>The main task of a synthesis tool is to map the design's Boolean equations to available logic cells present in the Liberty library.
 In theory, any Boolean expression can be mapped to a complete set of Boolean functions. A complete set of Boolean functions can be a single function, e.g. NAND forms a complete set, and so does NOR.
 However, synthesizing a digital circuit by using only NAND or NOR gates, although theoretically correct, is beyond suboptimal.
 For example, it takes 4 NAND gates to implement a NOR gate, and vice-versa.</p>
 <p>A specialized, carefully designed and optimized set of cells that implement various digital functions with several inputs, and possibly with variants of some inputs/outputs inverted, enables the synthesis tool to optimally map the design equations to available cells.
 Having in mind that logic mapping is a NP-hard problem, and that synthesis tools use heuristics, and possibly non-deterministic algorithms, to solve a problem in a reasonable time, optimality should be understood conditionally.</p>
-<p>The output of a synthesis tool is a structural, i.e. gate level, Verilog netlist that implements the user’s design. Structural Verilog netlist instantiates library cells and connects their inputs/outputs - it does not contain any behavioral code. Therefore, it can be implemented in silicon by placing the instantiated cells and connecting them with metal tracks.</p>
+<p>The output of a synthesis tool is a structural, i.e. gate level, Verilog netlist that implements the user's design. Structural Verilog netlist instantiates library cells and connects their inputs/outputs - it does not contain any behavioral code. Therefore, it can be implemented in silicon by placing the instantiated cells and connecting them with metal tracks.</p>
 <p>Floorplanning tool reads a structural Verilog netlist and a LEF (Library Exchange File) library that contains abstract views of standard cells and places them in a grid. Abstract view is a simplified layout of the cell, containing only the data pertinent to digital implementation - cell shape, pin positions and shape, routing obstructions and gate or diffusion area that is used in antenna violation checks. Floorplanning tool also places special cells if they are needed, such as substrate and n-well ties for biasing, or dedicated end cap cells on edges of the placement grid.</p>
 <p>Placement tool then places the cells so that connected cells are close to optimize routing. Besides placing the cells present in the structural Verilog netlist, placement tool may insert buffers to reduce the fan out of heavily loaded outputs, and it may resize the existing cells.
-Standard cells are made in several “sizes”, where the cell “size” refers to the drive strength of a cell.
+Standard cells are made in several "sizes", where the cell "size" refers to the drive strength of a cell.
 Drive strength of a cell is usually denoted as a suffix _Dx, where <code>x</code> is the drive strength <code>x=1,2,...</code>.
 Cells with higher drive strength have wider transistors and can drive higher capacitive loads for the same propagation time, but they occupy more area, and have a higher static and dynamic power.
 To minimize power consumption and occupied silicon area, a cell with minimum drive strength should be used, provided that it can drive a given output load according to timing constraints.

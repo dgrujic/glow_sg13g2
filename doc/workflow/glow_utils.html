@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2ae0c1f3.js";
+            window.path_to_searchindex_js = "searchindex-9d941c3f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9e19758c.js"></script>
@@ -325,7 +325,7 @@ Optional argument <code>allowSymbols</code> controls the behavior of symbolic su
 </code></pre>
 <p>Argument <code>paramExpr</code> is a string containing an expression to work on.
 Optional argument <code>instanceFns</code> allows for additional, e.g. per-instance defined, functions that are not defined in <code>fnDict</code>.
-Method <code>evaluate</code> tries to evaluate an expression to a number, and raises an exception if it can’t be done - e.g. a symbol does not evaluate to number for available parameter and function dictionaries.</p>
+Method <code>evaluate</code> tries to evaluate an expression to a number, and raises an exception if it can't be done - e.g. a symbol does not evaluate to number for available parameter and function dictionaries.</p>
 <p>For example, evaluation of expression <code>x + y</code> can be performed as:</p>
 <pre><code class="language-python">evaluator.evaluate('x + y') # Result is a number
 </code></pre>
@@ -567,8 +567,8 @@ Node identification can be carried out as operatons on sets, so it is not comput
 <p>If all ERC checks pass the result is <code>ercOK = True</code>. If any of checks fail, the result is <code>ercOK = False</code> and the error message(s) is (are) printed.</p>
 <p>ERC performs the following checks:</p>
 <ol>
-<li>Check if there are multiple nodes connected to NMOS or PMOS bulks. This is a so-called ‘soft bulk’ connect error, where NMOS or PMOS bulk conctacts are connected to different nets. This is a violation of electrical rules because all NMOS bulks are connected via conductive substrate, so there would be an electrical short between nets connected to bulks. The same happens in the case of PMOS transistors, where bulks are connected via conductive N well.</li>
-<li>Check if gate is directly connected to ground or power. This rule is an ERC error because power and ground nets form a large metal area in all metal layers, and connecting a transistor gate directly to ground or power net would result in antenna violation. If there is a need to connect a gate to constant ‘1’ or ‘0’ special cells should be used - <code>tie_hi</code> for logic ‘1’ or <code>tie_low</code> for logic ‘0’.</li>
+<li>Check if there are multiple nodes connected to NMOS or PMOS bulks. This is a so-called 'soft bulk' connect error, where NMOS or PMOS bulk conctacts are connected to different nets. This is a violation of electrical rules because all NMOS bulks are connected via conductive substrate, so there would be an electrical short between nets connected to bulks. The same happens in the case of PMOS transistors, where bulks are connected via conductive N well.</li>
+<li>Check if gate is directly connected to ground or power. This rule is an ERC error because power and ground nets form a large metal area in all metal layers, and connecting a transistor gate directly to ground or power net would result in antenna violation. If there is a need to connect a gate to constant '1' or '0' special cells should be used - <code>tie_hi</code> for logic '1' or <code>tie_low</code> for logic '0'.</li>
 <li>Check if there are floating gates. Floating gates are not permitted as they result in unpredictable behavior due to random gate voltage. Gates can only be connected to drains or sources of other transistors or to subcircuit terminals.</li>
 </ol>
 <h2 id="symsim-class"><a class="header" href="#symsim-class">Symsim class</a></h2>
@@ -624,11 +624,11 @@ mapping = bool_map(expectedFn, logicExpr[0])
 </code></pre>
 <p>The function <code>bool_map</code> tries to match two boolean expressions and returns variable correspondence information if two expressions are equivalent, or None if they are not equivalent.</p>
 <p>Simulation of a circuit logic function is performed in the <code>combSim</code> method. The simulation algorithm is straight forward: it goes through all circuit elements, gets the values of circuit nodes connected to device terminals, and calls the device <code>sim</code> method that calculates new node values.
-Since the change of node values can result in change of other node values, the evaluation is performed in a ‘delta-cycle’ manner until all node values settle to their final values.</p>
+Since the change of node values can result in change of other node values, the evaluation is performed in a 'delta-cycle' manner until all node values settle to their final values.</p>
 <p>Device code that evaluates new node values is also simple: if the gate of an NMOS (PMOS) device is at high (low) value the device is evaluated, otherwise the node values are not changed.
 When NMOS or PMOS device is turned on, and there is no current flowing - which is true for static CMOS logic - the drain and source terminals are at the same potential.
 Since drain and source should be at the same potential, the new value of source and drain terminal nodes is determined by IEEE1164 rules for signal resolution.
-If there is a conflicting condition, such as a direct path from power to ground, the node values would resolve to ‘X’ and indicate that there is a problem with a circuit.</p>
+If there is a conflicting condition, such as a direct path from power to ground, the node values would resolve to 'X' and indicate that there is a problem with a circuit.</p>
 <p>The folloing example shows a malformed circuit that can create a short between power and ground:</p>
 <pre><code class="language-python">from glow_utils import *
 # This circuit exhibits a short circuit between VDD and VSS for input values A=1, B=0
@@ -729,28 +729,28 @@ Circuit function OK
 <tr><th>Key</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>‘D’</td><td>Name of data input pin or None</td></tr>
-<tr><td>‘DN’</td><td>Name of inverted data input pin or None</td></tr>
-<tr><td>‘Q’</td><td>Name of output or None</td></tr>
-<tr><td>‘QN’</td><td>Name of inverted output or None</td></tr>
-<tr><td>‘CLK’</td><td>Name of clock input or None</td></tr>
-<tr><td>‘CLKN’</td><td>Name of inverted clock input or None</td></tr>
-<tr><td>‘ACLR’</td><td>Name of asynchronous active high clear pin or None</td></tr>
-<tr><td>‘ACLRN’</td><td>Name of asynchronous active low clear pin or None</td></tr>
-<tr><td>‘CLR’</td><td>Name of synchronous active high clear pin or None</td></tr>
-<tr><td>‘CLRN’</td><td>Name of synchronous active low clear pin or None</td></tr>
-<tr><td>‘ASET’</td><td>Name of asynchronous active high set pin or None</td></tr>
-<tr><td>‘ASETN’</td><td>Name of asynchronous active low set pin or None</td></tr>
-<tr><td>‘SET’</td><td>Name of synchronous active high set pin or None</td></tr>
-<tr><td>‘SETN’</td><td>Name of synchronous active low set pin or None</td></tr>
-<tr><td>‘EN’</td><td>Name of synchronous active high enable pin or None</td></tr>
-<tr><td>‘ENB’</td><td>Name of synchronous active low enable pin or None</td></tr>
-<tr><td>‘SCVAL’</td><td>Value of output when both set and clear are active or None</td></tr>
+<tr><td>'D'</td><td>Name of data input pin or None</td></tr>
+<tr><td>'DN'</td><td>Name of inverted data input pin or None</td></tr>
+<tr><td>'Q'</td><td>Name of output or None</td></tr>
+<tr><td>'QN'</td><td>Name of inverted output or None</td></tr>
+<tr><td>'CLK'</td><td>Name of clock input or None</td></tr>
+<tr><td>'CLKN'</td><td>Name of inverted clock input or None</td></tr>
+<tr><td>'ACLR'</td><td>Name of asynchronous active high clear pin or None</td></tr>
+<tr><td>'ACLRN'</td><td>Name of asynchronous active low clear pin or None</td></tr>
+<tr><td>'CLR'</td><td>Name of synchronous active high clear pin or None</td></tr>
+<tr><td>'CLRN'</td><td>Name of synchronous active low clear pin or None</td></tr>
+<tr><td>'ASET'</td><td>Name of asynchronous active high set pin or None</td></tr>
+<tr><td>'ASETN'</td><td>Name of asynchronous active low set pin or None</td></tr>
+<tr><td>'SET'</td><td>Name of synchronous active high set pin or None</td></tr>
+<tr><td>'SETN'</td><td>Name of synchronous active low set pin or None</td></tr>
+<tr><td>'EN'</td><td>Name of synchronous active high enable pin or None</td></tr>
+<tr><td>'ENB'</td><td>Name of synchronous active low enable pin or None</td></tr>
+<tr><td>'SCVAL'</td><td>Value of output when both set and clear are active or None</td></tr>
 </tbody>
 </table>
 </div>
 <p>An incomplete dictionary can be given, containing only the pins that D flip-flop has, and the <code>dffCheck</code> will perform simulations to check the functionality.
-For example, if a D flip-flop has an input ‘din’, clock ‘ck’ and only an inverted output ‘qoutn’, a specification is</p>
+For example, if a D flip-flop has an input 'din', clock 'ck' and only an inverted output 'qoutn', a specification is</p>
 <pre><code class="language-python">spec = { 'D' : 'din', 'CLK' : 'ck', 'QN' : 'qoutn' }
 </code></pre>
 <p>and the corresponding checks will be performed.</p>
@@ -832,19 +832,19 @@ INFO : Checks passed on cell DFQQN_D1
 <tr><th>Key</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>‘D’</td><td>Name of data input pin or None</td></tr>
-<tr><td>‘DN’</td><td>Name of inverted data input pin or None</td></tr>
-<tr><td>‘Q’</td><td>Name of output or None</td></tr>
-<tr><td>‘QN’</td><td>Name of inverted output or None</td></tr>
-<tr><td>‘G’</td><td>Name of latch input or None</td></tr>
-<tr><td>‘GN’</td><td>Name of inverted latch input or None</td></tr>
-<tr><td>‘ACLR’</td><td>Name of asynchronous active high clear pin or None</td></tr>
-<tr><td>‘ACLRN’</td><td>Name of asynchronous active low clear pin or None</td></tr>
-<tr><td>‘ASET’</td><td>Name of asynchronous active high set pin or None</td></tr>
-<tr><td>‘ASETN’</td><td>Name of asynchronous active low set pin or None</td></tr>
-<tr><td>‘EN’</td><td>Name of active high enable pin or None</td></tr>
-<tr><td>‘ENB’</td><td>Name of active low enable pin or None</td></tr>
-<tr><td>‘SCVAL’</td><td>Value of output when both set and clear are active or None</td></tr>
+<tr><td>'D'</td><td>Name of data input pin or None</td></tr>
+<tr><td>'DN'</td><td>Name of inverted data input pin or None</td></tr>
+<tr><td>'Q'</td><td>Name of output or None</td></tr>
+<tr><td>'QN'</td><td>Name of inverted output or None</td></tr>
+<tr><td>'G'</td><td>Name of latch input or None</td></tr>
+<tr><td>'GN'</td><td>Name of inverted latch input or None</td></tr>
+<tr><td>'ACLR'</td><td>Name of asynchronous active high clear pin or None</td></tr>
+<tr><td>'ACLRN'</td><td>Name of asynchronous active low clear pin or None</td></tr>
+<tr><td>'ASET'</td><td>Name of asynchronous active high set pin or None</td></tr>
+<tr><td>'ASETN'</td><td>Name of asynchronous active low set pin or None</td></tr>
+<tr><td>'EN'</td><td>Name of active high enable pin or None</td></tr>
+<tr><td>'ENB'</td><td>Name of active low enable pin or None</td></tr>
+<tr><td>'SCVAL'</td><td>Value of output when both set and clear are active or None</td></tr>
 </tbody>
 </table>
 </div>
@@ -1010,13 +1010,13 @@ Command <code>--nolabel</code> forbids a label name and raises an error if it is
 <tr><th>Command</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>–printcells</td><td>Print names of all cells in a library</td></tr>
-<tr><td>–cells</td><td>Specify cells to work on, default is all cells</td></tr>
-<tr><td>–noref</td><td>Raise error if a cell contans a reference (cell has hierarchy)</td></tr>
-<tr><td>–errlay</td><td>Raise error if a cell contains a layer/datatype</td></tr>
-<tr><td>–uselay</td><td>Allow layer/datatype in a cell</td></tr>
-<tr><td>–label</td><td>Require that label is present in a cell</td></tr>
-<tr><td>–nolabel</td><td>Forbid label in a cell</td></tr>
+<tr><td>--printcells</td><td>Print names of all cells in a library</td></tr>
+<tr><td>--cells</td><td>Specify cells to work on, default is all cells</td></tr>
+<tr><td>--noref</td><td>Raise error if a cell contans a reference (cell has hierarchy)</td></tr>
+<tr><td>--errlay</td><td>Raise error if a cell contains a layer/datatype</td></tr>
+<tr><td>--uselay</td><td>Allow layer/datatype in a cell</td></tr>
+<tr><td>--label</td><td>Require that label is present in a cell</td></tr>
+<tr><td>--nolabel</td><td>Forbid label in a cell</td></tr>
 </tbody>
 </table>
 </div>
@@ -1067,17 +1067,17 @@ Besides simple copy, additional operations can be performed on the cells:</p>
 <tr><th>Command</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>-i, –infile</td><td>Input files. At least one input file is required.</td></tr>
-<tr><td>-o, –outfile</td><td>Output file. If exists, output file will be overwritten.</td></tr>
-<tr><td>-a, –append</td><td>Output file for append write.</td></tr>
-<tr><td>-c, –cells</td><td>Cells to work on. Single cells or a list of cell can be given.</td></tr>
-<tr><td>–warn_duplicate</td><td>Only issue a warning if duplicate cells are found in different libraries.</td></tr>
-<tr><td>–flatten</td><td>Flatten the cells.</td></tr>
-<tr><td>–to_polygons</td><td>Convert paths to polygons.</td></tr>
-<tr><td>-r, –remap</td><td>Remap layers per given rules.</td></tr>
-<tr><td>-m, –merge</td><td>Merge shapes on specified layers. Shapes on the same layer and datatype are merged.</td></tr>
-<tr><td>-d, –delete</td><td>Delete shapes on specified layers.</td></tr>
-<tr><td>-l, –label</td><td>Rename labels per given rules</td></tr>
+<tr><td>-i, --infile</td><td>Input files. At least one input file is required.</td></tr>
+<tr><td>-o, --outfile</td><td>Output file. If exists, output file will be overwritten.</td></tr>
+<tr><td>-a, --append</td><td>Output file for append write.</td></tr>
+<tr><td>-c, --cells</td><td>Cells to work on. Single cells or a list of cell can be given.</td></tr>
+<tr><td>--warn_duplicate</td><td>Only issue a warning if duplicate cells are found in different libraries.</td></tr>
+<tr><td>--flatten</td><td>Flatten the cells.</td></tr>
+<tr><td>--to_polygons</td><td>Convert paths to polygons.</td></tr>
+<tr><td>-r, --remap</td><td>Remap layers per given rules.</td></tr>
+<tr><td>-m, --merge</td><td>Merge shapes on specified layers. Shapes on the same layer and datatype are merged.</td></tr>
+<tr><td>-d, --delete</td><td>Delete shapes on specified layers.</td></tr>
+<tr><td>-l, --label</td><td>Rename labels per given rules</td></tr>
 </tbody>
 </table>
 </div>
@@ -1172,9 +1172,9 @@ It should be run in the directory where the cell Python code resides.</p>
 <tr><th>Option</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>–quiet</td><td>Print only essential info.</td></tr>
-<tr><td>–nospice</td><td>Don’t write SPICE netlist.</td></tr>
-<tr><td>–nocdl</td><td>Don’t write CDL netlist.</td></tr>
+<tr><td>--quiet</td><td>Print only essential info.</td></tr>
+<tr><td>--nospice</td><td>Don't write SPICE netlist.</td></tr>
+<tr><td>--nocdl</td><td>Don't write CDL netlist.</td></tr>
 </tbody>
 </table>
 </div>
@@ -1229,9 +1229,9 @@ All OK
 <tr><th>Option</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>-c, –cells</td><td>Cells to work on. Single cells or a list of cell can be given.</td></tr>
-<tr><td>-n, –no_stipple</td><td>Don’t use stipple, draw all layers as solid filled.</td></tr>
-<tr><td>-x, –no_cross</td><td>Don’t draw x over contacts.</td></tr>
+<tr><td>-c, --cells</td><td>Cells to work on. Single cells or a list of cell can be given.</td></tr>
+<tr><td>-n, --no_stipple</td><td>Don't use stipple, draw all layers as solid filled.</td></tr>
+<tr><td>-x, --no_cross</td><td>Don't draw x over contacts.</td></tr>
 </tbody>
 </table>
 </div>
@@ -1277,10 +1277,10 @@ The GDSII layout should be flat for the script to work properly.</p>
 <tr><th>Option</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>–quiet</td><td>Print only essential info.</td></tr>
-<tr><td>–keep_polygons</td><td>Don’t convert polygons to rectangles</td></tr>
-<tr><td>–antenna</td><td>Set macro class to CORE ANTENNACELL</td></tr>
-<tr><td>–spacer</td><td>Set macro class to CORE SPACER</td></tr>
+<tr><td>--quiet</td><td>Print only essential info.</td></tr>
+<tr><td>--keep_polygons</td><td>Don't convert polygons to rectangles</td></tr>
+<tr><td>--antenna</td><td>Set macro class to CORE ANTENNACELL</td></tr>
+<tr><td>--spacer</td><td>Set macro class to CORE SPACER</td></tr>
 </tbody>
 </table>
 </div>
@@ -1377,7 +1377,7 @@ Information from extracted netlist is used to calculate gate/diffusion area.</p>
 END INV_D1
 </code></pre>
 <h2 id="ngcombsim"><a class="header" href="#ngcombsim">ngcombsim</a></h2>
-<p>Script <code>ngcombsim</code> is an utility to simulate a combinatorial circuit’s SPICE netlist in NGSPICE and determine its logic function.
+<p>Script <code>ngcombsim</code> is an utility to simulate a combinatorial circuit's SPICE netlist in NGSPICE and determine its logic function.
 It can be used to determine a logic function and check against a given Boolean function.</p>
 <p>Script is invoked as:</p>
 <pre><code class="language-sh">ngcombsim input_file circuit [commands]
@@ -1389,10 +1389,10 @@ It can be used to determine a logic function and check against a given Boolean f
 <tr><th>Command</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td>–expected</td><td>Specify expected output Boolean functions</td></tr>
-<tr><td>–strict</td><td>Enforce strict checks</td></tr>
-<tr><td>–lib</td><td>Specify library model and corner</td></tr>
-<tr><td>–cond</td><td>Specify operating condition value</td></tr>
+<tr><td>--expected</td><td>Specify expected output Boolean functions</td></tr>
+<tr><td>--strict</td><td>Enforce strict checks</td></tr>
+<tr><td>--lib</td><td>Specify library model and corner</td></tr>
+<tr><td>--cond</td><td>Specify operating condition value</td></tr>
 </tbody>
 </table>
 </div>
