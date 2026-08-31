@@ -1296,5 +1296,71 @@ MACRO INV_D1
 END INV_D1
 ```
 
+## ngcombsim
 
+Script `ngcombsim` is an utility to simulate a combinatorial circuit's SPICE netlist in NGSPICE and determine its logic function.
+It can be used to determine a logic function and check against a given Boolean function.
+
+Script is invoked as:
+```sh
+ngcombsim input_file circuit [commands]
+```
+
+Commands are summarized in the following table
+| Command     | Description |
+|-------------|-------------|
+|--expected | Specify expected output Boolean functions |
+|--strict   | Enforce strict checks |
+|--lib      | Specify library model and corner |
+|--cond     | Specify operating condition value |
+
+Examples:
+
+Specify expected output function and check if the circuit function matches it.
+Running the following command in the `$GLOW_ROOT/cells/NAND2_D1` directory
+```sh
+ngcombsim NAND2_D1.sp NAND2_D1 --expected "Y = ~(A & B)"
+```
+produces the output
+```
+Input file : NAND2_D1.sp
+Circuit    : NAND2_D1
+
+Expected Boolean expressions
+Y =  ~(A & B)
+
+Using default library and corner.
+
+Using default conditions.
+
+Inputs  :  A B
+Outputs :  Y
+
+Simulated truth table
+
+A   B   Y   
+------------
+0   0   1   
+0   1   1   
+1   0   1   
+1   1   0   
+------------
+
+Circuit Boolean functions : 
+Y = ~A | ~B
+
+Matching Boolean functions...
+Y 	MATCH
+ALL OK
+```
+
+PDK libraries and corners can be specified as:
+```sh
+ngcombsim NAND2_D1.sp NAND2_D1 --lib "$PDK_ROOT/$PDK/libs.tech/ngspice/models/cornerMOSlv.lib mos_tt"
+```
+
+Operating conditions, such as `supplyVoltage` or `temperature` can be changed as
+```sh
+ngcombsim NAND2_D1.sp NAND2_D1 --cond "supplyVoltage=1.3"
+```
 
