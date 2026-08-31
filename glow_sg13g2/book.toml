@@ -8,3 +8,4 @@ language = "en"
 
 [output.html]
 additional-js = ["mermaid.min.js", "mermaid-init.js"]
+smart-punctuation = false
