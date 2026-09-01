@@ -236,7 +236,15 @@ DLN_D2
 # Flip-flops
 #
 
+DFQ_DL
+DFQ_D1
+DFQ_D2
+DFQ_D4
+
+DFQQN_DL
 DFQQN_D1
+DFQQN_D2
+DFQQN_D4
 
 #
 # XOR
