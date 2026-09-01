@@ -40,7 +40,7 @@ class Symsim:
         self.elaborate()
         self.initSim()
 
-        self.rinit = 1e4
+        self.rinit = 1e5
 
         self.highThreshold = 0.9
         self.lowThreshold = 0.1
