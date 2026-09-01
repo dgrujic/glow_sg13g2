@@ -28,18 +28,18 @@ def info():
     pinList     List of cell pins
     description Cell description
     """
-    cellInfo = { 'name' : 'DLN_D1',
+    cellInfo = { 'name' : 'DLN_DL',
                  'pinList' : ['D', 'GN', 'Q', 'QN', 'VDD', 'VSS'],
-                 'description' : 'Latch with inverted control, Q and QN outputs and drive strength x1'
+                 'description' : 'Latch with inverted control, Q and QN outputs and weak drive strength'
     }
     return cellInfo
 
 def generate(genFlat = True, anonimize = True):
-    wn = SymTech.technology["invx1WN"]
-    wp = SymTech.technology["invx1WP"]
+    wn = SymTech.technology["invx1WN"] / 2
+    wp = SymTech.technology["invx1WP"] / 2
 
-    DLN_D1 = Symsubcircuit("DLN_D1", ['D', 'GN', 'Q', 'QN', 'VDD', 'VSS'])
-    inv_g = inv_par("inv_g", ['GN', 'g', 'VDD', 'VSS'], {'WN' : 250e-9, 'WP' : 400e-9})
+    DLN_DL = Symsubcircuit("DLN_DL", ['D', 'GN', 'Q', 'QN', 'VDD', 'VSS'])
+    inv_g = inv_par("inv_g", ['GN', 'g', 'VDD', 'VSS'], {'WN' : 200e-9, 'WP' : 300e-9})
     inv_gn = inv_par("inv_gn", ['g', 'gn', 'VDD', 'VSS'], {'WN' : 150e-9, 'WP' : 230e-9})
 
     invz1 = invz_par("invz1", ['qi', 'gn', 'g', 'qin', 'VDD', 'VSS'], {'WN' : 150e-9, 'WP' : 230e-9, 'WEAK' : 1})
@@ -49,13 +49,13 @@ def generate(genFlat = True, anonimize = True):
     inv_qi = inv_par("inv_qi", ['qin', 'qi', 'VDD', 'VSS'], {'WN' : 200e-9, 'WP' : 300e-9})
     inv_QN = inv_par("inv_QN", ['qi', 'QN', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
 
-    DLN_D1.addElement([inv_g, inv_gn, invz1, invz2, inv_Q, inv_qi, inv_QN])
+    DLN_DL.addElement([inv_g, inv_gn, invz1, invz2, inv_Q, inv_qi, inv_QN])
 
     # Flatten the circuit
     if genFlat:
-        DLN_D1_flat = DLN_D1.flat()
+        DLN_DL_flat = DLN_DL.flat()
     if anonimize:
-        DLN_D1_flat.anonimize()
+        DLN_DL_flat.anonimize()
 
 def check(verbose = False):
     """

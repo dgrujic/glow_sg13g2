@@ -224,7 +224,13 @@ MUX4_D1
 # Latches
 #
 
+DL_DL
+DL_D1
+DL_D2
+
+DLN_DL
 DLN_D1
+DLN_D2
 
 #
 # Flip-flops
