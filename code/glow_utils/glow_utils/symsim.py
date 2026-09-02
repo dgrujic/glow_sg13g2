@@ -458,8 +458,8 @@ class Symsim:
 
         # Check CLR
         # Check for mutually exclusive sets upfront
-        has_sync_clr = (ispec['CLR'] is not None) and (ispec['CLRN'] is not None)
-        has_async_clr = (ispec['ACLR'] is not None) and (ispec['ACLRN'] is not None)
+        has_sync_clr = (ispec['CLR'] is not None) or (ispec['CLRN'] is not None)
+        has_async_clr = (ispec['ACLR'] is not None) or (ispec['ACLRN'] is not None)
 
         if has_sync_clr and has_async_clr:
             self.msg('Symsim::ffCheck:ERROR: Both synchronous and asynchronous CLR are given')
