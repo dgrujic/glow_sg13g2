@@ -42,8 +42,8 @@ class Symsim:
 
         self.rinit = 1e5
 
-        self.highThreshold = 0.9
-        self.lowThreshold = 0.1
+        self.highThreshold = 0.8
+        self.lowThreshold = 0.2
 
     def msg(self, text):
         if self.verbose:
@@ -487,11 +487,11 @@ class Symsim:
             return False
 
         # Determine SET type and extract pin/inv states
-        if all(sync_set):
+        if any(sync_set):
             hasSet, asyncSet = True, False
             setPin = ispec['SET'] if ispec['SET'] is not None else ispec['SETN']
             setInv = (ispec['SET'] is None)
-        elif all(async_set):
+        elif any(async_set):
             hasSet, asyncSet = True, True
             setPin = ispec['ASET'] if ispec['ASET'] is not None else ispec['ASETN']
             setInv = (ispec['ASET'] is None)
@@ -524,7 +524,7 @@ class Symsim:
             setIdle = IEEE1164.ONE if setInv else IEEE1164.ZERO
         else:
             setAct = None
-            setIdle = None  
+            setIdle = None
         
         res = { 'dPin' : dPin, 'dInv' : dInv, 'qPin' : qPin, 'qnPin' : qnPin,
                 'clkPin' : clkPin, 'clkInv' : clkInv,
@@ -915,7 +915,7 @@ class Symsim:
 
         # Check CLR
         # Check for mutually exclusive sets upfront
-        has_clr = (ispec['ACLR'] is not None) and (ispec['ACLRN'] is not None)
+        has_clr = (ispec['ACLR'] is not None) or (ispec['ACLRN'] is not None)
 
         # Extract the appropriate pins based on availability
         if has_clr:
@@ -927,7 +927,7 @@ class Symsim:
 
         # Check SET
         # Check for mutually exclusive sets upfront
-        has_set = (ispec['ASET'] is not None) and (ispec['ASETN'] is not None)
+        has_set = (ispec['ASET'] is not None) or (ispec['ASETN'] is not None)
 
         # Extract the appropriate pins based on availability
         if has_set:
