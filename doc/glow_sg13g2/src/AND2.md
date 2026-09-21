@@ -13,7 +13,9 @@
 # Logic function and Truth table
 
 ## Logic function (Python)
+<div align="center">
 Y = And(A, B)
+</div>
 
 ## Logic function (Boolean)
 \\[Y = A \cdot B\\]
