@@ -16,7 +16,7 @@
 Y = And(A, B)
 
 ## Logic function (Boolean)
-$Y = A \cdot B$
+\\[Y = A \cdot B\\]
 
 ## Truth table
 
