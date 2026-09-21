@@ -2,7 +2,7 @@
 
 
 
-# Pin information
+## Pin information
 
 | Pin   | Description   |
 | :-:    | :-            |
@@ -10,17 +10,17 @@
 | B     | Input B       |
 | Y     | Output Y      |
 
-# Logic function and Truth table
+## Logic function and Truth table
 
-## Logic function (Python)
+### Logic function (Python)
 <div align="center">
 Y = And(A, B)
 </div>
 
-## Logic function (Boolean)
+### Logic function (Boolean)
 \\[Y = A \cdot B\\]
 
-## Truth table
+### Truth table
 
 | A   | B   | Y   |
 | :-: | :-: | :-: |
@@ -29,19 +29,19 @@ Y = And(A, B)
 | 1   | 0   | 0   |
 | 1   | 1   | 1   |
 
-# Symbol
+## Symbol
 
 <div align="center">
 <img src="figs/AND2_sym.svg" />
 </div>
 
-# Schematic
+## Schematic
 
 <div align="center">
 <img src="figs/AND2_sch.svg" />
 </div>
 
-# Cell variants
+## Cell variants
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
@@ -50,41 +50,41 @@ Y = And(A, B)
 | [AND2_D2](#and2_d2)   | TBD   | TBD   |
 | [AND2_D4](#and2_d4)   | TBD   | TBD   |
 
-## AND2_DL
+### AND2_DL
 
-Hierarchical SPICE netlist
+#### Hierarchical SPICE netlist
 
-CDL netlist
+#### CDL netlist
 
-Layout
-
-<div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
-</div>
-
-## AND2_D1
+#### Layout
 
 <div align="center">
 <img src="figs/empty_cell_layout.svg" width=500/>
 </div>
 
-## AND2_D2
+### AND2_D1
 
 <div align="center">
 <img src="figs/empty_cell_layout.svg" width=500/>
 </div>
 
-## AND2_D4
+### AND2_D2
 
 <div align="center">
 <img src="figs/empty_cell_layout.svg" width=500/>
 </div>
 
-# Pin capacitance
+### AND2_D4
 
-# Static power
+<div align="center">
+<img src="figs/empty_cell_layout.svg" width=500/>
+</div>
 
-# Dynamic power
+## Pin capacitance
 
-# Delay
+## Static power
+
+## Dynamic power
+
+## Delay
 
