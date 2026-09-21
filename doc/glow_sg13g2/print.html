@@ -30,13 +30,15 @@
 
         <!-- Custom theme stylesheets -->
 
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
         <!-- Provide site root and default themes to javascript -->
         <script>
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-bb3298ea.js";
+            window.path_to_searchindex_js = "searchindex-5c697e0e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-7a9c5143.js"></script>
@@ -689,7 +691,7 @@ XMP0 A ENB B VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2
 <h2 id="logic-function-python"><a class="header" href="#logic-function-python">Logic function (Python)</a></h2>
 <p>Y = And(A, B)</p>
 <h2 id="logic-function-boolean"><a class="header" href="#logic-function-boolean">Logic function (Boolean)</a></h2>
-<p>$Y = A \cdot B$</p>
+<p>\[Y = A \cdot B\]</p>
 <h2 id="truth-table"><a class="header" href="#truth-table">Truth table</a></h2>
 <div class="table-wrapper">
 <table>
@@ -800,7 +802,9 @@ XMP0 A ENB B VDD sg13_lv_pmos w={WP} l={L} ad={WP*3.1e-07} as={WP*3.1e-07} pd={2
 
         <script>
         window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
         });
         </script>
 
