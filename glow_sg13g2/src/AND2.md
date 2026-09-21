@@ -43,12 +43,12 @@ Y = And(A, B)
 
 # Cell variants
 
-| Cell name <br> | Width <br> [unit sites] | Area <br> [$\mu m^2$] |
+| Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
-| AND2_DL   | TBD   | TBD   |
-| AND2_D1   | TBD   | TBD   |
-| AND2_D2   | TBD   | TBD   |
-| AND2_D4   | TBD   | TBD   |
+| [AND2_DL](#and2_dl)   | TBD   | TBD   |
+| [AND2_D1](#and2_d1)   | TBD   | TBD   |
+| [AND2_D2](#and2_d2)   | TBD   | TBD   |
+| [AND2_D4](#and2_d4)   | TBD   | TBD   |
 
 ## AND2_DL
 
