@@ -1095,6 +1095,7 @@ gencell cell_name [options]
 | --quiet   | Print only essential info. |
 | --nospice | Don't write SPICE netlist. |
 | --nocdl   | Don't write CDL netlist.   |
+| --noflat  | Don't flatten the SPICE netlist.   |
 
 Running the following command in the `$GLOW_ROOT/cells/INV_D1` directory
 ```sh
