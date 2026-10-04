@@ -44,12 +44,8 @@ def printusage():
     print("--quiet          Print only essential info.")
     print("--nospice        Don't write SPICE netlist.")
     print("--nocdl          Don't write CDL netlist.")
+    print("--noflat         Don't flatten SPICE netlist.")
     print("*"*80)
-
-def dir_exists(dir_name):
-    if Path(dir_name).is_dir():
-        return True
-    return False
 
 def file_exists(file_name):
     if Path(file_name).is_file():
@@ -63,14 +59,15 @@ def writeNetlist(cell_module, flat = True, SPICE = True, CDL = True, verbose = F
     cellInfo = cell_module.info()
     name = cellInfo["name"]
     allCircuits = Symsubcircuit.getSubckts()
-    if flat:
-        circuit = allCircuits[ name + "_flat" ]
-    else:
-        circuit = allCircuits[ name + "_flat" ]
+    circuit_flat = allCircuits[ name + "_flat" ]
+    circuit_hier = allCircuits[ name ]
     if SPICE:
-        circuit.write_SPICE(name, printOutput = verbose)
+        if flat:
+            circuit_flat.write_SPICE(name, printOutput = verbose)
+        else:
+            circuit_hier.write_SPICE(name, printOutput = verbose)
     if CDL:
-        circuit.write_CDL(name, printOutput = verbose)
+        circuit_flat.write_CDL(name, printOutput = verbose)
 
 #
 # Main code
@@ -81,6 +78,7 @@ def main():
     parser.add_argument('--quiet', action='store_true')
     parser.add_argument('--nospice', action='store_true')
     parser.add_argument('--nocdl', action='store_true')
+    parser.add_argument('--noflat', action='store_true')
     try:
         args = parser.parse_args()
     except:
@@ -90,6 +88,7 @@ def main():
     quiet = True if args.quiet else False
     nospice = True if args.nospice else False
     nocdl = True if args.nocdl else False
+    noflat = True if args.noflat else False
 
     if not quiet:
         print("*"*80)
@@ -143,9 +142,12 @@ def main():
         exit(1)
 
     try:
-        writeNetlist(cell_module, SPICE=not(nospice), CDL=not(nocdl), verbose=not(quiet))
+        writeNetlist(cell_module, flat=not(noflat), SPICE=not(nospice), CDL=not(nocdl), verbose=not(quiet))
         if not nospice and not quiet:
-            print("INFO : Writing SPICE netlist", cell_name + ".sp")
+            if noflat:
+                print("INFO : Writing hierarchical SPICE netlist", cell_name + ".sp")
+            else:
+                print("INFO : Writing flat SPICE netlist", cell_name + ".sp")
         if not nocdl and not quiet:
             print("INFO : Writing CLD netlist", cell_name + ".cdl")
     except:
