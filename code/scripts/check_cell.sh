@@ -18,8 +18,8 @@
 #
 ########################################################################
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 input_file cell_name"
+if [ "$#" -ne 2 -a "$#" -ne 3 ]; then
+    echo "Usage: $0 input_file cell_name [skiplvs]"
     exit 1
 fi
 
@@ -32,6 +32,8 @@ if [ -z "$PDK" ]; then
     echo "PDK is not set"
     exit 1
 fi
+
+SKIP_LVS="${3:-runlvs}"
 
 echo -n "Checking $2"
 
@@ -66,14 +68,19 @@ fi
 echo -e -n "\t | LVS "
 rm -rf lvs
 
-python3 $PDK_ROOT/$PDK/libs.tech/klayout/tech/lvs/run_lvs.py --layout=$1 --topcell=$2 --netlist=$2.cdl --run_dir=lvs > /dev/null 2>&1
+if [ "$SKIP_LVS" = "runlvs" ]; then
+    python3 $PDK_ROOT/$PDK/libs.tech/klayout/tech/lvs/run_lvs.py --layout=$1 --topcell=$2 --netlist=$2.cdl --run_dir=lvs > /dev/null 2>&1
 
-if grep -q "PASS (netlists match)" lvs/lvs_run*.log; then
-    LVS_STATUS=0
-    echo -e -n "OK"
+    if grep -q "PASS (netlists match)" lvs/lvs_run*.log; then
+        LVS_STATUS=0
+        echo -e -n "OK"
+    else
+        LVS_STATUS=1
+        echo -e -n "ERROR"
+    fi
 else
-    LVS_STATUS=1
-    echo -e -n "ERROR"
+    LVS_STATUS=0
+    echo -e -n "SKIP"
 fi
 
 if [ "$GDSINFO_STATUS" -eq 0 ] && [ "$DRC_STATUS" -eq 0 ] && [ "$LVS_STATUS" -eq 0 ]; then
