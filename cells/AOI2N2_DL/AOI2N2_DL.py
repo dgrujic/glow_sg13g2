@@ -78,7 +78,8 @@ def check(verbose = False):
     """
     Check if the circuit works as expected
     """
-    expectedFns = [ And(Or(x, y), Or(Not(z), Not(w))) ]
+    #expectedFns = [ And(Or(x, y), Or(Not(z), Not(w))) ]
+    expectedFns = [ Not(Or(And(Not(x), Not(y)), And(z, w))) ]
     cellInfo = info()
     name = cellInfo["name"]
     allCircuits = Symsubcircuit.getSubckts()
