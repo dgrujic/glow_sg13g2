@@ -353,6 +353,9 @@ class Symsim:
                 return False
             else:
                 self.msg("Function " + str(expectedFns[i]) + " successfully mapped to " + str(logicExpr[i]))
+                eq, syms = mapping
+                symMap = "\n\t"+"\n\t".join(f"{k} -> {v}" for k, v in syms.items())
+                self.msg("\tSymbol mapping : " + symMap)
         return True
 
     #######################################
