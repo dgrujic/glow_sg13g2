@@ -35,10 +35,12 @@ def info():
     return cellInfo
 
 def generate(genFlat = True, anonimize = True):
+    cellInfo = info()
+
     wn = SymTech.technology["invx2WN"]
     wp = SymTech.technology["invx2WP"]
 
-    DL_D2 = Symsubcircuit("DL_D2", ['D', 'G', 'Q', 'QN', 'VDD', 'VSS'])
+    DL_D2 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
     inv_g = inv_par("inv_g", ['G', 'gn', 'VDD', 'VSS'], {'WN' : 300e-9, 'WP' : 500e-9})
     inv_gn = inv_par("inv_gn", ['gn', 'g', 'VDD', 'VSS'], {'WN' : 250e-9, 'WP' : 400e-9})
 

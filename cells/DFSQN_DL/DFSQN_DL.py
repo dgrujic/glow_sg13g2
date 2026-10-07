@@ -39,7 +39,7 @@ def generate(genFlat = True, anonimize = True):
     wn = SymTech.technology["invx1WN"] / 2
     wp = SymTech.technology["invx1WP"] / 2
 
-    DFSQN_DL = Symsubcircuit(cellInfo['name'], ['D', 'CLK', 'S', 'QN', 'VDD', 'VSS'])
+    DFSQN_DL = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
     # Clock inverters
     inv_clkn = inv_par("inv_clkn", ['CLK', 'clkn', 'VDD', 'VSS'], {'WN' : 200e-9, 'WP' : 300e-9})
     inv_clki = inv_par("inv_clki", ['clkn', 'clki', 'VDD', 'VSS'], {'WN' : 200e-9, 'WP' : 300e-9})

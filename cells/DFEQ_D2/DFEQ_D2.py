@@ -49,7 +49,7 @@ def generate(genFlat = True, anonimize = True):
     wpdn = 250e-9
     wpun = 400e-9
 
-    DFEQ_D2 = Symsubcircuit(cellInfo['name'], ['D', 'E', 'CLK', 'Q', 'VDD', 'VSS'])
+    DFEQ_D2 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
     # Clock inverters
     inv_clkn = inv_par("inv_clkn", ['CLK', 'clkn', 'VDD', 'VSS'], {'WN' : wnx1, 'WP' : wpx1})
     inv_clki = inv_par("inv_clki", ['clkn', 'clki', 'VDD', 'VSS'], {'WN' : wnx1 / 2, 'WP' : wpx1 / 2})

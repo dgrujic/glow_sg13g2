@@ -35,10 +35,12 @@ def info():
     return cellInfo
 
 def generate(genFlat = True, anonimize = True):
+    cellInfo = info()
+
     wn = SymTech.technology["invx1WN"] / 2
     wp = SymTech.technology["invx1WP"] / 2
 
-    DFQQN_DL = Symsubcircuit("DFQQN_DL", ['D', 'CLK', 'Q', 'QN', 'VDD', 'VSS'])
+    DFQQN_DL = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
     # Clock inverters
     inv_clkn = inv_par("inv_clkn", ['CLK', 'clkn', 'VDD', 'VSS'], {'WN' : 200e-9, 'WP' : 300e-9})
     inv_clki = inv_par("inv_clki", ['clkn', 'clki', 'VDD', 'VSS'], {'WN' : 200e-9, 'WP' : 300e-9})

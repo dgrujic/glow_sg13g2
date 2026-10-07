@@ -50,7 +50,7 @@ def generate(genFlat = True, anonimize = True):
     wpp = wp
     lmin = SymTech.technology['Lmin']
 
-    OAI22_D1 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
+    OAI22_DL = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
 
     n0 = SymNMOS("N0", ['nabp', 'C', 'VSS', 'VSS'], {'w' : wn, 'l' : lmin })
     n1 = SymNMOS("N1", ['nabp', 'D', 'VSS', 'VSS'], {'w' : wn, 'l' : lmin })
