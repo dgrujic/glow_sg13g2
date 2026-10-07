@@ -16,32 +16,11 @@
 #
 ########################################################################
 
-from pathlib import Path
-import importlib
-import os
-import sys
-
 from glow_parcells import *
 from glow_utils.symsim import Symsim
 from glow_utils.symtech import SymTech
 from sympy import Nand, Not
 from sympy.abc import x, y, z, w
-
-def file_exists(file_name):
-    if Path(file_name).is_file():
-        return True
-    return False
-
-def importCell(cell_name):
-    if not file_exists("../" + cell_name + "/" + cell_name + ".py"):
-        print("ERROR : File", cell_name+".py", "does not exist.")
-        exit(1)
-
-    # Dynamically load the cell
-    path = os.getcwd() + "/../" + cell_name
-    sys.path.insert(0, path)
-    cell_module = importlib.import_module(cell_name)
-    cell_module.generate()
 
 def info():
     """
@@ -67,7 +46,7 @@ def generate(genFlat = True, anonimize = True):
 
     NAND4N2_D1 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
     nand_name = "NAND4_D1"
-    importCell(nand_name)
+    Symsubcircuit.importCell(nand_name)
     nand4_cell = Symsubcircuit.getSubckts()[nand_name]
     nand4_cell_pins = nand4_cell.getTerminals()
     nand4_inst = nand4_cell('nand4_inst', nand4_cell_pins)

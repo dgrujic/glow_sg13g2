@@ -24,6 +24,11 @@ to which device instances can be added.
 Generated classes can be instantiated hiearchicaly to build complex circuits.
 """
 
+from pathlib import Path
+import importlib
+import os
+import sys
+
 from copy import deepcopy
 from copy import copy
 import textwrap
@@ -244,6 +249,29 @@ class Symsubcircuit(object):
                         
                     newNodes.append( netTranslator[nodeName] )
             elem.nodes = newNodes
+
+    @staticmethod
+    def file_exists(file_name):
+        if Path(file_name).is_file():
+            return True
+        return False
+
+    @classmethod
+    def importCell(cls, cell_name):
+        if cell_name in cls.subCkts:
+            # Cell is already loaded, skip loading it
+            return
+
+        cellRoot = os.getenv("GLOW_ROOT") + "/cells"
+
+        if not cls.file_exists(cellRoot + "/" + cell_name + "/" + cell_name + ".py"):
+            raise FileExistsError("ERROR : File " + cell_name + ".py does not exist.")
+
+        # Dynamically load the cell
+        path = cellRoot + "/" + cell_name
+        sys.path.insert(0, path)
+        cell_module = importlib.import_module(cell_name)
+        cell_module.generate()
 
     #************************
     # Instance methods, for subcircuit instances

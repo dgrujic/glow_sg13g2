@@ -16,33 +16,12 @@
 #
 ########################################################################
 
-from pathlib import Path
-import importlib
-import os
-import sys
-
 from glow_parcells import *
 from glow_utils.symsim import Symsim
 from glow_utils.symtech import SymTech
 from glow_utils.symmosfet import SymNMOS, SymPMOS
 from sympy import And, Or, Not
 from sympy.abc import x, y, z
-
-def file_exists(file_name):
-    if Path(file_name).is_file():
-        return True
-    return False
-
-def importCell(cell_name):
-    if not file_exists("../" + cell_name + "/" + cell_name + ".py"):
-        print("ERROR : File", cell_name+".py", "does not exist.")
-        exit(1)
-
-    # Dynamically load the cell
-    path = os.getcwd() + "/../" + cell_name
-    sys.path.insert(0, path)
-    cell_module = importlib.import_module(cell_name)
-    cell_module.generate()
 
 def info():
     """
@@ -69,7 +48,7 @@ def generate(genFlat = True, anonimize = True):
     AOI2N1_D2 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
 
     cell_name = "AOI2N1_D1"
-    importCell(cell_name)
+    Symsubcircuit.importCell(cell_name)
     AOI2N1_cell = Symsubcircuit.getSubckts()[cell_name]
     AOI2N1_inst1 = AOI2N1_cell('AOI2N1_inst1', cellInfo['pinList'])
     AOI2N1_inst2 = AOI2N1_cell('AOI2N1_inst2', cellInfo['pinList'])
