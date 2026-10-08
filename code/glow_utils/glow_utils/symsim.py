@@ -322,7 +322,7 @@ class Symsim:
         else:
             return IEEE1164.toList(outputs[0])
 
-    def combCheck(self, expectedFns):
+    def combCheck(self, expectedFns, strict=False):
         """
         Simulate the function of a combinatorial circuit and check if the output function(s)
         are equivalent to the expected functions.
@@ -353,9 +353,13 @@ class Symsim:
                 return False
             else:
                 self.msg("Function " + str(expectedFns[i]) + " successfully mapped to " + str(logicExpr[i]))
-                eq, syms = mapping
+                syms = mapping[1]
                 symMap = "\n\t"+"\n\t".join(f"{k} -> {v}" for k, v in syms.items())
                 self.msg("\tSymbol mapping : " + symMap)
+                if strict:
+                    if not all(keys == vals for keys, vals in symMap.items()):
+                        self.msg("ERROR : Running in strict mode, but expected and circuit symbols are not the same.")
+                        return False
         return True
 
     #######################################

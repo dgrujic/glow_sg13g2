@@ -237,7 +237,15 @@ def main():
                     print(outName, "\tERROR")
                     err = True
                 else:
-                    print(outName, "\tMATCH")
+                    if strict:
+                        syms = mapping[1]
+                        if not all(keys == vals for keys, vals in syms.items()):
+                            print(outName, "\tERROR : Running in strict mode, but expected and circuit symbols are not the same.")
+                            err = True
+                        else:
+                            print(outName, "\tMATCH")
+                    else:
+                        print(outName, "\tMATCH")
             else:
                 print("ERROR : No expected function is given for the output", outName)
                 err = True
