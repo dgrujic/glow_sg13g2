@@ -109,6 +109,8 @@ class Symsubcircuit(object):
     subCktDefaultFunctions = None   # Dictionary of default functions
     subCktElements = None           # List of subcircuit elements
 
+    cellRoot = os.getenv("GLOW_ROOT") + "/cells"
+
     #************************
     # New class creation
     #************************    
@@ -262,13 +264,11 @@ class Symsubcircuit(object):
             # Cell is already loaded, skip loading it
             return
 
-        cellRoot = os.getenv("GLOW_ROOT") + "/cells"
-
-        if not cls.file_exists(cellRoot + "/" + cell_name + "/" + cell_name + ".py"):
+        if not cls.file_exists(cls.cellRoot + "/" + cell_name + "/" + cell_name + ".py"):
             raise FileExistsError("ERROR : File " + cell_name + ".py does not exist.")
 
         # Dynamically load the cell
-        path = cellRoot + "/" + cell_name
+        path = cls.cellRoot + "/" + cell_name
         sys.path.insert(0, path)
         cell_module = importlib.import_module(cell_name)
         cell_module.generate()
