@@ -1301,6 +1301,7 @@ END INV_D1
 
 Script `ngcombsim` is an utility to simulate a combinatorial circuit's SPICE netlist in NGSPICE and determine its logic function.
 It can be used to determine a logic function and check against a given Boolean function.
+Stict mode forces checks that all specified functions match and that all symbols have the same names.
 
 Script is invoked as:
 ```sh
