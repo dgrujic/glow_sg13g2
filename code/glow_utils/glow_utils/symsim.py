@@ -891,9 +891,28 @@ class Symsim:
                 'ASET', 'ASETN',
                 'EN', 'ENB', 'SCVAL']
         ispec = dict.fromkeys(keys, None)
+
+        keyAliases = {
+            'data_in' : 'D', 'data_in_inv'   : 'DN',
+            'data_out' : 'Q', 'data_out_inv' : 'QN',
+            'latch' : 'G', 'latch_inv' : 'GN',
+            'async_clear' : 'ACLR', 'async_clear_inv' : 'ACLRN',
+            'async_set' : 'ASET', 'async_set_inv' : 'ASETN',
+            'enable' : 'EN', 'enable_inv' : 'ENB',
+            'set_clr_val' : 'SCVAL'
+        }
+
         # Update specification with given values
-        ispec.update(spec)
-        
+        for key in spec:
+            val = spec[key]
+            if key in keys:
+                # Short name
+                ispec.update({key : val})
+            elif key in keyAliases:
+                # Long name, use alias dictionary
+                ispec.update({keyAliases[key] : val})
+            else:
+                raise ValueError('Symsim::latchParse: Invalid specification given ' + key)        
         # Check if the specification is valid
         # Check D/DN
         d, dn = ispec['D'], ispec['DN']
