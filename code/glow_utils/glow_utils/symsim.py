@@ -362,7 +362,7 @@ class Symsim:
                 symMap = "\n\t"+"\n\t".join(f"{k} -> {v}" for k, v in syms.items())
                 self.msg("\tSymbol mapping : " + symMap)
                 if strict:
-                    if not all(keys == vals for keys, vals in symMap.items()):
+                    if not all(keys == vals for keys, vals in syms.items()):
                         self.msg("ERROR : Running in strict mode, but expected and circuit symbols are not the same.")
                         return False
         return True
