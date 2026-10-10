@@ -30,7 +30,7 @@ def info():
     pinList     List of cell pins
     description Cell description
     """
-    cellInfo = { 'name' : 'INV_D14',
+    cellInfo = { 'name' : 'INV_D16',
                  'pinList' : ['A', 'Y', 'VDD', 'VSS'],
                  'description' : 'Inverter with drive strength x16'
     }
