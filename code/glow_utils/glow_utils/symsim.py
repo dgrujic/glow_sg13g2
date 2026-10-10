@@ -433,15 +433,15 @@ class Symsim:
         # Update specification with given values
         for key in spec:
             val = spec[key]
-            if key in keys:
+            if val in keys:
                 # Short name
                 ispec.update({key : val})
-            elif key in keyAliases:
+            elif val in keyAliases:
                 # Long name, use alias dictionary
-                ispec.update({keyAliases[key] : val})
+                ispec.update({keyAliases[val] : key})
             else:
-                raise ValueError('Symsim::dffParse: Invalid specification given ' + key)
-        
+                raise ValueError('Symsim::latchParse: Invalid specification given ' + key)        
+
         # Check if the specification is valid
         # Check D/DN
         d, dn = ispec['D'], ispec['DN']
