@@ -26,6 +26,8 @@ from sympy import symbols
 from sympy.logic import SOPform
 from sympy.logic import simplify_logic
 from sympy import bool_map
+from sympy.parsing.sympy_parser import parse_expr
+from sympy import Symbol
 import numpy as np
 
 class Symsim:
@@ -347,7 +349,10 @@ class Symsim:
             self.msg("\t" + str(expectedFns[i]))
 
         for i in range(len(expectedFns)):
-            mapping = bool_map(expectedFns[i], logicExpr[i])
+            expectedFn = expectedFns[i]
+            if isinstance(expectedFn, str):
+                expectedFn = parse_expr(expectedFn, global_dict={"Symbol": Symbol})
+            mapping = bool_map(expectedFn, logicExpr[i])
             if (mapping is None) or (mapping is False):
                 self.msg("ERROR : Circuit function #" + str(i) +" "+str(expectedFns[i])+" does not operate as expected.")
                 return False
@@ -905,14 +910,15 @@ class Symsim:
         # Update specification with given values
         for key in spec:
             val = spec[key]
-            if key in keys:
+            if val in keys:
                 # Short name
                 ispec.update({key : val})
-            elif key in keyAliases:
+            elif val in keyAliases:
                 # Long name, use alias dictionary
-                ispec.update({keyAliases[key] : val})
+                ispec.update({keyAliases[val] : key})
             else:
                 raise ValueError('Symsim::latchParse: Invalid specification given ' + key)        
+
         # Check if the specification is valid
         # Check D/DN
         d, dn = ispec['D'], ispec['DN']

@@ -132,7 +132,9 @@ class Symsubcircuit(object):
                     'subCktDefaultParameters' : Symdict({}, subCktDefaultParameters),
                     'subCktDefaultFunctions' : Symdict({}, subCktDefaultFunctions),
                     'subCktElements' : [],
-                    'subCktElementNames' : set()
+                    'subCktElementNames' : set(),
+                    'subCktCheck' : cls.subCktCheckFn,
+                    'subCktInfo' : cls.subCktInfoFn
                    }
 
         newClass = type(subCktClassName, (Symsubcircuit,), newDict) # Return the newly created class
@@ -253,10 +255,44 @@ class Symsubcircuit(object):
             elem.nodes = newNodes
 
     @staticmethod
-    def file_exists(file_name):
-        if Path(file_name).is_file():
+    def file_exists(fileName):
+        if Path(fileName).is_file():
             return True
         return False
+
+    @classmethod
+    def cellExists(cls, cellName, view='python'):
+        if view == 'python':
+            if cls.file_exists(cls.cellRoot + "/" + cellName + "/" + cellName + ".py"):
+                return True
+            else:
+                return False
+        if view == 'layout':
+            if cls.file_exists(cls.cellRoot + "/" + cellName + "/" + cellName + ".gds"):
+                return True
+            else:
+                return False
+        if view == 'spice':
+            if cls.file_exists(cls.cellRoot + "/" + cellName + "/" + cellName + ".sp"):
+                return True
+            else:
+                return False
+        if view == 'cdl':
+            if cls.file_exists(cls.cellRoot + "/" + cellName + "/" + cellName + ".cdl"):
+                return True
+            else:
+                return False
+        return False
+
+    @classmethod
+    def subCktCheckFn(cls):
+        # Placeholder for subcircuit check method
+        return None
+    
+    @classmethod
+    def subCktInfoFn(cls):
+        # Placeholder for subcircuit check method
+        return None
 
     @classmethod
     def importCell(cls, cell_name):
@@ -272,6 +308,8 @@ class Symsubcircuit(object):
         sys.path.insert(0, path)
         cell_module = importlib.import_module(cell_name)
         cell_module.generate()
+        cls.subCkts[cell_name].subCktCheck = cell_module.check
+        cls.subCkts[cell_name].subCktInfo = cell_module.info
 
     #************************
     # Instance methods, for subcircuit instances
