@@ -24,4 +24,5 @@ from .symsim import *
 from .netlist import *
 from .lef import *
 from .ngspice import *
+from .manifest import *
 

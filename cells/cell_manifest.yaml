@@ -1,0 +1,2403 @@
+#
+# GLOW SG13G2 Standard digital library
+# Standard cell manifest
+#
+
+#
+# AND
+#
+
+AND2:
+    description: "Two input AND gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A & B
+    cells:
+        - AND2_DL
+        - AND2_D1
+        - AND2_D2
+        - AND2_D4
+    optional:
+        latex: "Y = A \\cdot B"
+
+AND3:
+    description: "Three input AND gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A & B & C
+    cells:
+        - AND3_DL
+        - AND3_D1
+        - AND3_D2
+        - AND3_D4
+    optional:
+        latex: "Y = A \\cdot B \\cdot C"
+
+AND4:
+    description: "Four input AND gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        D:
+            type: input
+            description: "Input D"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A & B & C & D
+    cells:
+        - AND4_DL
+        - AND4_D1
+        - AND4_D2
+        - AND4_D4
+    optional:
+        latex: "Y = A \\cdot B \\cdot C \\cdot D"
+
+#
+# AND - OR 
+#
+
+AO21:
+    description: "AND-OR gate with two AND inputs and one direct OR input"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to AND gate"
+        B:
+            type: input
+            description: "Input B, connected to AND gate"
+        C:
+            type: input
+            description: "Input C, direct input to OR gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  (A & B) | C
+    cells:
+        - AO21_DL
+        - AO21_D1
+        - AO21_D2
+    optional:
+        latex: "Y = (A \\cdot B) + C"
+
+AO22:
+    description: "AND-OR gate with two two-input AND gates"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to first AND gate"
+        B:
+            type: input
+            description: "Input B, connected to first AND gate"
+        C:
+            type: input
+            description: "Input C, connected to second AND gate"
+        D:
+            type: input
+            description: "Input D, connected to second AND gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  (A & B) | (C & D)
+    cells:
+        - AO22_DL
+        - AO22_D1
+        - AO22_D2
+    optional:
+        latex: "Y = (A \\cdot B) + (C \\cdot D)"
+
+#
+# AND - OR - INV
+#
+
+AOI21:
+    description: "Inverted output AND-OR gate with two AND inputs and one direct OR input"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to AND gate"
+        B:
+            type: input
+            description: "Input B, connected to AND gate"
+        C:
+            type: input
+            description: "Input C, direct input to OR gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((A & B) | C)
+    cells:
+        - AOI21_DL
+        - AOI21_D1
+        - AOI21_D2
+    optional:
+        latex: "Y = \\overline{(A \\cdot B) + C}"
+
+AOI22:
+    description: "Inverted output AND-OR gate with two two-input AND gates"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to first AND gate"
+        B:
+            type: input
+            description: "Input B, connected to first AND gate"
+        C:
+            type: input
+            description: "Input C, connected to second AND gate"
+        D:
+            type: input
+            description: "Input D, connected to second AND gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((A & B) | (C & D))
+    cells:
+        - AOI22_DL
+        - AOI22_D1
+    optional:
+        latex: "Y = \\overline{(A \\cdot B) + (C \\cdot D)}"
+
+AOI211:
+    description: "Inverted output AND-OR gate with two input AND gate and two direct inputs to OR gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to AND gate"
+        B:
+            type: input
+            description: "Input B, connected to AND gate"
+        C:
+            type: input
+            description: "Input C, connected to OR gate"
+        D:
+            type: input
+            description: "Input D, connected to OR gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((A & B) | C | D)
+    cells:
+        - AOI211_DL
+        - AOI211_D1
+        - AOI211_D2
+    optional:
+        latex: "Y = \\overline{(A \\cdot B) + C + D}"
+
+AOI221:
+    description: "Inverted output AND-OR gate with two two-input AND gates and one direct input to OR gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to first AND gate"
+        B:
+            type: input
+            description: "Input B, connected to first AND gate"
+        C:
+            type: input
+            description: "Input C, connected to second AND gate"
+        D:
+            type: input
+            description: "Input D, connected to second AND gate"
+        E:
+            type: input
+            description: "Input E, connected to OR gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(((A & B) | (C & D)) | E)
+    cells:
+        - AOI221_DL
+        - AOI221_D1
+    optional:
+        latex: "Y = \\overline{(A \\cdot B) + (C \\cdot D) + E}"
+
+AOI222:
+    description: "Inverted output AND-OR gate with three two-input AND gates"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to first AND gate"
+        B:
+            type: input
+            description: "Input B, connected to first AND gate"
+        C:
+            type: input
+            description: "Input C, connected to second AND gate"
+        D:
+            type: input
+            description: "Input D, connected to second AND gate"
+        E:
+            type: input
+            description: "Input E, connected to third AND gate"
+        F:
+            type: input
+            description: "Input F, connected to third AND gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((A & B) | (C & D) | (E & F))
+    cells:
+        - AOI222_DL
+        - AOI222_D1
+    optional:
+        latex: "Y = \\overline{(A \\cdot B) + (C \\cdot D) + (E \\cdot F)}"
+
+AOI2N1:
+    description: "Inverted output AND-OR gate with two inverted AND inputs and one direct OR input. Eqivalent to OR-AND gate with inverted direct OR input."
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, inverted and connected to AND gate"
+        B:
+            type: input
+            description: "Input B, inverted and connected to AND gate"
+        C:
+            type: input
+            description: "Input C, direct input to OR gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((~A & ~B) | C)
+    cells:
+        - AOI2N1_DL
+        - AOI2N1_D1
+        - AOI2N1_D2
+    optional:
+        latex: "Y = \\overline{(\\overline{A} \\cdot \\overline{B}) + C}"
+
+AOI2N2:
+    description: "Inverted output AND-OR gate with two two-input AND gates. One AND gate has inverted inputs."
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, inverted and connected to first AND gate"
+        B:
+            type: input
+            description: "Input B, inverted and connected to first AND gate"
+        C:
+            type: input
+            description: "Input C,  connected to second AND gate"
+        D:
+            type: input
+            description: "Input D,  connected to second AND gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((~A & ~B) | (C & D))
+    cells:
+        - AOI2N1_DL
+        - AOI2N2_D1
+    optional:
+        latex: "Y = \\overline{(\\overline{A} \\cdot \\overline{B}) + (C \\cdot B)}"
+
+#
+# Buffers
+#
+
+BUF:
+    description: "Standard buffer"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Buffer input"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A
+    cells:
+        - BUF_DL
+        - BUF_D1
+        - BUF_D2
+        - BUF_D3
+        - BUF_D4
+        - BUF_D6
+        - BUF_D8
+        - BUF_D12
+    optional:
+        latex: "Y = A"
+
+#
+# Clock buffers
+#
+
+CLKBUF:
+    description: "Clock buffer for clock tree synthesis"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Buffer input"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A
+    cells:
+        - CLKBUF_D1
+        - CLKBUF_D2
+        - CLKBUF_D3
+        - CLKBUF_D4
+        - CLKBUF_D6
+        - CLKBUF_D8
+        - CLKBUF_D12
+        - CLKBUF_D16
+    optional:
+        latex: "Y = A"
+
+#
+# Clock inverters
+#
+
+CLKINV:
+    description: "Inverter for clock signals"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Buffer input"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~A
+    cells:
+        - CLKINV_D1
+        - CLKINV_D2
+        - CLKINV_D4
+        - CLKINV_D8
+        - CLKINV_D16
+    optional:
+        latex: "Y = \\overline{A}"
+
+#
+# OR
+#
+
+OR2:
+    description: "Two input OR gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A | B
+    cells:
+        - OR2_DL
+        - OR2_D1
+        - OR2_D2
+        - OR2_D4
+    optional:
+        latex: "Y = A + B"
+
+OR3:
+    description: "Three input OR gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A | B | C
+    cells:
+        - OR3_DL
+        - OR3_D1
+        - OR3_D2
+        - OR3_D4
+    optional:
+        latex: "Y = A + B + C"
+
+OR4:
+    description: "Four input OR gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        D:
+            type: input
+            description: "Input D"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A | B | C | D
+    cells:
+        - OR4_DL
+        - OR4_D1
+        - OR4_D2
+        - OR4_D4
+    optional:
+        latex: "Y = A + B + C + D"
+
+#
+# OR - AND
+#
+
+OA21:
+    description: "OR-AND gate with two OR inputs and one direct AND input"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to OR gate"
+        B:
+            type: input
+            description: "Input B, connected to OR gate"
+        C:
+            type: input
+            description: "Input C, direct input to AND gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  (A | B) & C
+    cells:
+        - OA21_DL
+        - OA21_D1
+        - OA21_D2
+        - OA21_D4
+    optional:
+        latex: "Y = (A + B) \\cdot C"
+
+OA22:
+    description: "OR-AND gate with two two-input OR gates"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to first OR gate"
+        B:
+            type: input
+            description: "Input B, connected to first OR gate"
+        C:
+            type: input
+            description: "Input C, connected to second OR gate"
+        D:
+            type: input
+            description: "Input D, connected to second OR gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  (A | B) & (C | D)
+    cells:
+        - OA22_DL
+        - OA22_D1
+        - OA22_D2
+    optional:
+        latex: "Y = (A + B) \\cdot (C + D)"
+
+#
+# OR - AND - INV
+#
+
+OAI21:
+    description: "Inverted output OR-AND gate with two OR inputs and one direct AND input"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to OR gate"
+        B:
+            type: input
+            description: "Input B, connected to OR gate"
+        C:
+            type: input
+            description: "Input C, direct input to AND gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((A | B) & C)
+    cells:
+        - OAI21_DL
+        - OAI21_D1
+    optional:
+        latex: "Y = \\overline{(A + B) \\cdot C}"
+
+OAI21:
+    description: "Inverted output OR-AND gate with two two-input OR gates"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to first OR gate"
+        B:
+            type: input
+            description: "Input B, connected to first OR gate"
+        C:
+            type: input
+            description: "Input C, connected to second OR gate"
+        D:
+            type: input
+            description: "Input D, connected to second OR gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((A | B) & (C | D))
+    cells:
+        - OAI22_DL
+        - OAI22_D1
+    optional:
+        latex: "Y = \\overline{(A + B) \\cdot (C + D)}"
+
+OAI211:
+    description: "Inverted output OR-AND gate with two input OR gate and two direct inputs to AND gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to OR gate"
+        B:
+            type: input
+            description: "Input B, connected to OR gate"
+        C:
+            type: input
+            description: "Input C, connected to AND gate"
+        D:
+            type: input
+            description: "Input D, connected to AND gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((A | B) & C & D)
+    cells:
+        - OAI211_DL
+        - OAI211_D1
+    optional:
+        latex: "Y = \\overline{(A + B) \\cdot C \\cdot D}"
+
+OAI221:
+    description: "Inverted output AND-OR gate with two two-input OR gates and one direct input to AND gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to first OR gate"
+        B:
+            type: input
+            description: "Input B, connected to first OR gate"
+        C:
+            type: input
+            description: "Input C, connected to second OR gate"
+        D:
+            type: input
+            description: "Input D, connected to second OR gate"
+        E:
+            type: input
+            description: "Input E, connected to AND gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((A | B) & (C | D) & E)
+    cells:
+        - OAI221_DL
+        - OAI221_D1
+    optional:
+        latex: "Y = \\overline{(A + B) \\cdot (C + D) \\cdot E}"
+
+OAI222:
+    description: "Inverted output OR-AND gate with three two-input OR gates"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, connected to first OR gate"
+        B:
+            type: input
+            description: "Input B, connected to first OR gate"
+        C:
+            type: input
+            description: "Input C, connected to second OR gate"
+        D:
+            type: input
+            description: "Input D, connected to second OR gate"
+        E:
+            type: input
+            description: "Input E, connected to third OR gate"
+        F:
+            type: input
+            description: "Input F, connected to third OR gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((A | B) & (C | D) & (E | F))
+    cells:
+        - OAI222_DL
+        - OAI222_D1
+    optional:
+        latex: "Y = \\overline{(A + B) \\cdot (C + D) \\cdot (E + F)}"
+
+OAI2N1:
+    description: "Inverted output OR-AND gate with two inverted OR inputs and one direct OR input. Eqivalent to AND-OR gate with inverted direct AND input."
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A, inverted and connected to OR gate"
+        B:
+            type: input
+            description: "Input B, inverted and connected to OR gate"
+        C:
+            type: input
+            description: "Input C, direct input to AND gate"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((~A | ~B) & C)
+    cells:
+        - AOI2N1_DL
+        - AOI2N1_D1
+    optional:
+        latex: "Y = \\overline{(\\overline{A} + \\overline{B}) \\cdot C}"
+
+#
+# Inverters
+#
+
+INV:
+    description: "Standard inverter"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Inverter input"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~A
+    cells:
+        - INV_DL
+        - INV_D1
+        - INV_D2
+        - INV_D4
+        - INV_D8
+        - INV_D12
+        - INV_D14
+        - INV_D16
+    optional:
+        latex: "Y = ~A"
+
+#
+# NAND
+#
+
+NAND2:
+    description: "Two input NAND gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(A & B)
+    cells:
+        - NAND2_DL
+        - NAND2_D1
+        - NAND2_D2
+        - NAND2_D4
+        - NAND2_D8
+    optional:
+        latex: "Y = \\overline{A \\cdot B}"
+
+NAND3:
+    description: "Three input NAND gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(A & B & C)
+    cells:
+        - NAND3_DL
+        - NAND3_D1
+        - NAND3_D2
+        - NAND3_D4
+    optional:
+        latex: "Y = \\overline{A \\cdot B \\cdot C}"
+
+NAND4:
+    description: "Four input NAND gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        D:
+            type: input
+            description: "Input D"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(A & B & C & D)
+    cells:
+        - NAND4_DL
+        - NAND4_D1
+        - NAND4_D2
+        - NAND4_D4
+    optional:
+        latex: "Y = \\overline{A \\cdot B \\cdot C \\cdot D}"
+
+NAND4N1:
+    description: "Four input NAND gate with one input inverted"
+    type: combinatorial
+    pins:
+        AN:
+            type: input
+            description: "Input AN, inverted"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        D:
+            type: input
+            description: "Input D"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(~AN & B & C & D)
+    cells:
+        - NAND4N1_DL
+        - NAND4N1_D1
+        - NAND4N1_D2
+    optional:
+        latex: "Y = \\overline{\\overline{AN} \\cdot B \\cdot C \\cdot D}"
+
+NAND4N2:
+    description: "Four input NAND gate with two inputs inverted"
+    type: combinatorial
+    pins:
+        AN:
+            type: input
+            description: "Input AN, inverted"
+        BN:
+            type: input
+            description: "Input BN, inverted"
+        C:
+            type: input
+            description: "Input C"
+        D:
+            type: input
+            description: "Input D"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(~AN & ~BN & C & D)
+    cells:
+        - NAND4N2_DL
+        - NAND4N2_D1
+        - NAND4N2_D2
+    optional:
+        latex: "Y = \\overline{\\overline{AN} \\cdot \\overline{BN} \\cdot C \\cdot D}"
+
+#
+# NOR
+#
+
+NOR2:
+    description: "Two input NOR gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(A | B)
+    cells:
+        - NOR2_DL
+        - NOR2_D1
+        - NOR2_D2
+        - NOR2_D4
+        - NOR2_D8
+    optional:
+        latex: "Y = \\overline{A + B}"
+
+NOR3:
+    description: "Three input NOR gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(A | B | C)
+    cells:
+        - NOR3_DL
+        - NOR3_D1
+        - NOR3_D2
+        - NOR3_D4
+    optional:
+        latex: "Y = \\overline{A + B + C}"
+
+NOR4:
+    description: "Four input NOR gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        D:
+            type: input
+            description: "Input D"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(A | B | C | D)
+    cells:
+        - NOR4_DL
+        - NOR4_D1
+        - NOR4_D2
+        - NOR4_D4
+    optional:
+        latex: "Y = \\overline{A + B + C + D}"
+
+NOR4N1:
+    description: "Four input NOR gate with one input inverted"
+    type: combinatorial
+    pins:
+        AN:
+            type: input
+            description: "Input AN, inverted"
+        B:
+            type: input
+            description: "Input B"
+        C:
+            type: input
+            description: "Input C"
+        D:
+            type: input
+            description: "Input D"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(~AN | B | C | D)
+    cells:
+        - NOR4N1_DL
+        - NOR4N1_D1
+        - NOR4N1_D2
+        - NOR4N1_D4
+    optional:
+        latex: "Y = \\overline{\\overline{AN} + B + C + D}"
+
+NOR4N2:
+    description: "Four input NOR gate with two inputs inverted"
+    type: combinatorial
+    pins:
+        AN:
+            type: input
+            description: "Input AN, inverted"
+        BN:
+            type: input
+            description: "Input BN, inverted"
+        C:
+            type: input
+            description: "Input C"
+        D:
+            type: input
+            description: "Input D"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(~AN | ~BN | C | D)
+    cells:
+        - NOR4N2_DL
+        - NOR4N2_D1
+        - NOR4N2_D2
+    optional:
+        latex: "Y = \\overline{\\overline{AN} + \\overline{BN} + C + D}"
+
+#
+# Multiplexers
+#
+
+MUX2:
+    description: "Two input multiplexer."
+    type: combinatorial
+    pins:
+        I0:
+            type: input
+            description: "Input 0"
+        I1:
+            type: input
+            description: "Input 1"
+        S0:
+            type: input
+            description: "Select control signal"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  (I0 & ~S0) | (I1 & S0)
+    cells:
+        - MUX2_DL
+        - MUX2_D1
+    optional:
+        latex: "Y = (I0 \\cdot \\overline{S0} + I1 \\cdot S0)"
+
+MUX2N:
+    description: "Two input multiplexer with inverted output."
+    type: combinatorial
+    pins:
+        I0:
+            type: input
+            description: "Input 0"
+        I1:
+            type: input
+            description: "Input 1"
+        S0:
+            type: input
+            description: "Select control signal"
+        YN:
+            type: output
+            description: "Output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~((I0 & ~S0) | (I1 & S0))
+    cells:
+        - MUX2N_DL
+        - MUX2N_D1
+    optional:
+        latex: "Y = \\overline{ (I0 \\cdot \\overline{S0} + I1 \\cdot S0) }"
+
+MUX3:
+    description: "Three input multiplexer."
+    type: combinatorial
+    pins:
+        I0:
+            type: input
+            description: "Input 0"
+        I1:
+            type: input
+            description: "Input 1"
+        I2:
+            type: input
+            description: "Input 2"
+        S0:
+            type: input
+            description: "Select control signal bit 0"
+        S1:
+            type: input
+            description: "Select control signal bit 1"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  (I0 & ~S0 & ~S1) | (I1 & S0 & ~S1) | (I2 & S1)
+    cells:
+        - MUX3_DL
+        - MUX3_D1
+    optional:
+        latex: "Y = (I0 \\cdot \\overline{S0} \\cdot \\overline{S1} + I1 \\cdot S0 \\cdot \\overline{S1} + I2 \\cdot S1)"
+
+MUX4:
+    description: "Four input multiplexer."
+    type: combinatorial
+    pins:
+        I0:
+            type: input
+            description: "Input 0"
+        I1:
+            type: input
+            description: "Input 1"
+        I2:
+            type: input
+            description: "Input 2"
+        I3:
+            type: input
+            description: "Input 3"
+        S0:
+            type: input
+            description: "Select control signal bit 0"
+        S1:
+            type: input
+            description: "Select control signal bit 1"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  (I0 & ~S0 & ~S1) | (I1 & S0 & ~S1) | (I2 & ~S0 & S1) | (I3 & S0 & S1)
+    cells:
+        - MUX4_DL
+        - MUX4_D1
+    optional:
+        latex: "Y = (I0 \\cdot \\overline{S0} \\cdot \\overline{S1} + I1 \\cdot S0 \\cdot \\overline{S1} + I2 \\cdot \\overline{S0} \\cdot S1 + I3 \\cdot I0 \\cdot I1)"
+
+#
+# XOR
+#
+
+XOR2:
+    description: "Two input exclusive OR."
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A ^ B
+    cells:
+        - XOR2_DL
+        - XOR2_D1
+    optional:
+        latex: "Y = A \\oplus B"
+
+XNOR2:
+    description: "Two input exclusive NOR."
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  ~(A ^ B)
+    cells:
+        - XNOR2_DL
+        - XNOR2_D1
+    optional:
+        latex: "Y = A \\oplus B"
+
+
+#
+# TIE cells
+#
+
+TIEH:
+    description: "Tie high cell - constant logic '1'."
+    type: constant
+    pins:
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  1
+    cells:
+        - TIEH
+    optional:
+        latex: "Y = 1"
+
+TIEL:
+    description: "Tie low cell - constant logic '0'."
+    type: constant
+    pins:
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  0
+    cells:
+        - TIEL
+    optional:
+        latex: "Y = 0"
+
+#
+# Latches
+#
+
+DL:
+    description: "D latch."
+    type: dlatch
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        G:
+            type: input
+            description: "Latch input"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        G: 'latch'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+    cells:
+        - DL_DL
+        - DL_D1
+        - DL_D2
+#    optional:
+#        latex: "Y = (I0 \\cdot \\overline{S0} \\cdot \\overline{S1} + I1 \\cdot S0 \\cdot \\overline{S1} + I2 \\cdot \\overline{S0} \\cdot S1 + I3 \\cdot I0 \\cdot I1)"
+
+DLN:
+    description: "D latch with inverted control signal."
+    type: dlatch
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        GN:
+            type: input
+            description: "Latch input, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        GN: 'latch_inv'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+    cells:
+        - DLN_DL
+        - DLN_D1
+        - DLN_D2
+#    optional:
+#        latex: "Y = (I0 \\cdot \\overline{S0} \\cdot \\overline{S1} + I1 \\cdot S0 \\cdot \\overline{S1} + I2 \\cdot \\overline{S0} \\cdot S1 + I3 \\cdot I0 \\cdot I1)"
+
+#
+# Flip-flops
+#
+
+DFQ:
+    description: "D flip-flop with output Q."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        Q:
+            type: output
+            description: "Data output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+    cells:
+        - DFQ_DL
+        - DFQ_D1
+        - DFQ_D2
+        - DFQ_D4
+
+DFQN:
+    description: "D flip-flop with output QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        QN: 'data_out_inv'
+    cells:
+        - DFQN_DL
+        - DFQN_D1
+        - DFQN_D2
+        - DFQN_D4
+
+DFQQN:
+    description: "D flip-flop with outputs Q and QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+    cells:
+        - DFQQN_DL
+        - DFQQN_D1
+        - DFQQN_D2
+        - DFQQN_D4
+
+DFARQN:
+    description: "D flip-flop with asynchronous reset and output QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        RN:
+            type: input
+            description: "Asynchronous reset, inverted"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        QN: 'data_out_inv'
+        RN: 'async_clear_inv'
+    cells:
+        - DFARQN_DL
+        - DFARQN_D1
+
+DFARQ:
+    description: "D flip-flop with asynchronous reset and output Q."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        RN:
+            type: input
+            description: "Asynchronous reset, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        RN: 'async_clear_inv'
+    cells:
+        - DFARQ_DL
+        - DFARQ_D1
+
+DFARQQN:
+    description: "D flip-flop with asynchronous reset and outputs Q and QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        RN:
+            type: input
+            description: "Asynchronous reset, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+        RN: 'async_clear_inv'
+    cells:
+        - DFARQQN_DL
+        - DFARQQN_D1
+
+DFASQN:
+    description: "D flip-flop with asynchronous set and output QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        SN:
+            type: input
+            description: "Asynchronous set, inverted"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        QN: 'data_out_inv'
+        SN: 'async_set_inv'
+    cells:
+        - DFASQN_DL
+        - DFASQN_D1
+
+DFASQ:
+    description: "D flip-flop with asynchronous set and output Q."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        SN:
+            type: input
+            description: "Asynchronous set, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        SN: 'async_set_inv'
+    cells:
+        - DFASQ_DL
+        - DFASQ_D1
+
+DFASQQN:
+    description: "D flip-flop with asynchronous set and outputs Q and QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        SN:
+            type: input
+            description: "Asynchronous set, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+        SN: 'async_set_inv'
+    cells:
+        - DFASQQN_DL
+        - DFASQQN_D1
+
+DFEQQN:
+    description: "D flip-flop with enable and outputs Q and QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        E:
+            type: input
+            description: "Enable"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+        E: 'enable'
+    cells:
+        - DFEQQN_DL
+        - DFEQQN_D1
+        - DFEQQN_D2
+
+DFEQ:
+    description: "D flip-flop with enable and output Q."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        E:
+            type: input
+            description: "Enable"
+        Q:
+            type: output
+            description: "Data output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        E: 'enable'
+    cells:
+        - DFEQ_DL
+        - DFEQ_D1
+        - DFEQ_D2
+
+DFEQN:
+    description: "D flip-flop with enable and output QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        E:
+            type: input
+            description: "Enable"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        QN: 'data_out_inv'
+        E: 'enable'
+    cells:
+        - DFEQN_DL
+        - DFEQN_D1
+        - DFEQN_D2
+
+DFERQQN:
+    description: "D flip-flop with enable, synchronous reset and outputs Q and QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        E:
+            type: input
+            description: "Enable"
+        RN:
+            type: input
+            description: "Synchronous reset, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+        E: 'enable'
+        RN: 'sync_clear_inv'
+    cells:
+        - DFERQQN_DL
+        - DFERQQN_D1
+        - DFERQQN_D2
+
+DFERQ:
+    description: "D flip-flop with enable, synchronous reset and output Q."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        E:
+            type: input
+            description: "Enable"
+        RN:
+            type: input
+            description: "Synchronous reset, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        E: 'enable'
+        RN: 'sync_clear_inv'
+    cells:
+        - DFERQ_DL
+        - DFERQ_D1
+        - DFERQ_D2
+
+DFERQN:
+    description: "D flip-flop with enable, synchronous reset and output QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        E:
+            type: input
+            description: "Enable"
+        RN:
+            type: input
+            description: "Synchronous reset, inverted"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        QN: 'data_out_inv'
+        E: 'enable'
+        RN: 'sync_clear_inv'
+    cells:
+        - DFERQN_DL
+        - DFERQN_D1
+        - DFERQN_D2
+
+DFESQQN:
+    description: "D flip-flop with enable, synchronous set and outputs Q and QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        E:
+            type: input
+            description: "Enable"
+        S:
+            type: input
+            description: "Synchronous set"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+        E: 'enable'
+        S: 'sync_set'
+    cells:
+        - DFESQQN_DL
+        - DFESQQN_D1
+        - DFESQQN_D2
+
+DFESQ:
+    description: "D flip-flop with enable, synchronous set and output Q."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        E:
+            type: input
+            description: "Enable"
+        S:
+            type: input
+            description: "Synchronous set"
+        Q:
+            type: output
+            description: "Data output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        E: 'enable'
+        S: 'sync_set'
+    cells:
+        - DFESQ_DL
+        - DFESQ_D1
+        - DFESQ_D2
+
+DFESQN:
+    description: "D flip-flop with enable, synchronous set and output QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        E:
+            type: input
+            description: "Enable"
+        S:
+            type: input
+            description: "Synchronous set"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        QN: 'data_out_inv'
+        E: 'enable'
+        S: 'sync_set'
+    cells:
+        - DFESQN_DL
+        - DFESQN_D1
+        - DFESQN_D2
+
+DFRQQN:
+    description: "D flip-flop with synchronous reset and outputs Q and QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        RN:
+            type: input
+            description: "Synchronous reset, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'        
+        QN: 'data_out_inv'
+        RN: 'sync_clear_inv'
+    cells:
+        - DFRQQN_DL
+        - DFRQQN_D1
+        - DFRQQN_D2
+
+DFRQ:
+    description: "D flip-flop with synchronous reset and output Q."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        RN:
+            type: input
+            description: "Synchronous reset, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'        
+        RN: 'sync_clear_inv'
+    cells:
+        - DFRQ_DL
+        - DFRQ_D1
+        - DFRQ_D2
+
+DFRQN:
+    description: "D flip-flop with synchronous reset and output QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        RN:
+            type: input
+            description: "Synchronous reset, inverted"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        QN: 'data_out_inv'
+        RN: 'sync_clear_inv'
+    cells:
+        - DFRQN_DL
+        - DFRQN_D1
+        - DFRQN_D2
+
+DFSQQN:
+    description: "D flip-flop with synchronous set and outputs Q and QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        S:
+            type: input
+            description: "Synchronous set"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+        S: 'sync_set'
+    cells:
+        - DFSQQN_DL
+        - DFSQQN_D1
+        - DFSQQN_D2
+
+DFSQ:
+    description: "D flip-flop with synchronous set and output Q."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        S:
+            type: input
+            description: "Synchronous set"
+        Q:
+            type: output
+            description: "Data output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        S: 'sync_set'
+    cells:
+        - DFSQ_DL
+        - DFSQ_D1
+        - DFSQ_D2
+
+DFSQN:
+    description: "D flip-flop with synchronous set and output QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        S:
+            type: input
+            description: "Synchronous set"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        QN: 'data_out_inv'
+        S: 'sync_set'
+    cells:
+        - DFSQN_DL
+        - DFSQN_D1
+        - DFSQN_D2
+
+
+
+# #
+# # Delay cells
+# #
+
+# DLY1_D1
+# DLY1_D4
+# DLY2_D1
+# DLY2_D4
+# DLY3_D1
+# DLY3_D4
+# DLY4_D1
+# DLY4_D4

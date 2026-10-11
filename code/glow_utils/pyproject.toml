@@ -15,7 +15,9 @@ requires-python = ">=3.9"
 dependencies = [
     "sympy",
     "gdstk",
-    "tabulate"
+    "tabulate",
+    "py-yaml12",
+    "Jinja2"
 ]
 
 [tool.setuptools.package-dir]
@@ -33,3 +35,4 @@ batch_checkcell = "glow_tools.batch_checkcell:main"
 batch_absgen = "glow_tools.batch_absgen:main"
 gds2svg = "glow_tools.gds2svg:main"
 ngcombsim = "glow_tools.ngcombsim:main"
+checkmanifest = "glow_tools.checkmanifest:main"
