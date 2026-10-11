@@ -23,7 +23,7 @@ from glow_utils.symieee1164 import IEEE1164
 from copy import copy
 from itertools import product
 from sympy import symbols
-from sympy.logic import SOPform
+from sympy.logic import SOPform, POSform, Or, And, Not
 from sympy.logic import simplify_logic
 from sympy import bool_map
 from sympy.parsing.sympy_parser import parse_expr
@@ -369,6 +369,101 @@ class Symsim:
                 else:
                     return True
         return True
+
+    def reducedTruthTables(self):
+        """
+        Returns a list of reduced truth tables.
+        Result is a list of tuples, where each tuple is
+        (outputName, table)
+        outputName is a string name of output
+        table is a list of rows, where each row is a list of input values, 
+        and the last value is the output value.
+        """
+        inputs, outputs = self.combSim()
+        inputSymbols = self.getInputSymbols()
+        outputNames = self.getOutputNames()
+        tbls = []
+        for nout in range(len(outputs[0])):
+            minterms = []
+            for nin in range(len(inputs)):
+                if outputs[nin][nout] == IEEE1164.ONE:
+                    minterms.append( [int(x.value) for x in inputs[nin]] )
+            tbl = []
+            logicExpr1 = SOPform(inputSymbols, minterms)
+            
+            if logicExpr1 == True:
+                tbls.append((outputNames[nout], [["-"] * len(inputSymbols) + ["1"]]))
+                continue
+            elif logicExpr1 != False:
+                productTerms1 = logicExpr1.args if isinstance(logicExpr1, Or) else [logicExpr1]
+                for term in productTerms1:
+                    row = []
+                    literals = term.args if isinstance(term, And) else [term]
+                    for sym in inputSymbols:
+                        if sym in literals:
+                            row.append("1")
+                        elif Not(sym) in literals:
+                            row.append("0")
+                        else:
+                            row.append("-")
+                    row.append("1") # Append output value = 1
+                    tbl.append(row)
+
+            logicExpr0 = POSform(inputSymbols, minterms)
+            if logicExpr0 == False:
+                tbls.append((outputNames[nout], [["-"] * len(inputSymbols) + ["0"]]))
+                continue
+            elif logicExpr0 != True:
+                productTerms0 = logicExpr0.args if isinstance(logicExpr0, And) else [logicExpr0]
+                for term in productTerms0:
+                    row = []
+                    literals = term.args if isinstance(term, Or) else [term]
+                    for sym in inputSymbols:
+                        if sym in literals:
+                            row.append("0")
+                        elif Not(sym) in literals:
+                            row.append("1")
+                        else:
+                            row.append("-")
+                    row.append("0")  # Append output value = 0
+                    tbl.append(row)
+            tbls.append((outputNames[nout], tbl))
+        return tbls
+
+    def formatReducedTruthTables(self, reducedTables):
+        """
+        Format reduced tables as strings suitable for printing.
+        Returns a list of strings, with each string representing table for one output
+        """
+        strTables = []
+        inputs = self.getInputNames()
+        for entry in reducedTables:
+            res = ""
+            outputName, tbl = entry
+            res += "Reduced truth table for output " + outputName + "\n"
+            nchars = 0
+            for name in inputs:
+                res += f"{name:<4}"
+                if len(name) < 4:
+                    nchars += 4
+                else:
+                    nchars += len(name)
+            res += f"{outputName:<4}"
+            if len(outputName) < 4:
+                nchars += 4
+            else:
+                nchars += len(outputName)
+            res += "\n"
+            res += "-" * nchars + "\n"
+
+            for i in range(len(tbl)):
+                row = tbl[i]
+                for val in row:
+                    res += f"{str(val):<4}"
+                res += "\n"
+            res += "-" * nchars
+            strTables.append(res)
+        return strTables
 
     #######################################
     # D flip-flop

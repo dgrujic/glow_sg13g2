@@ -19,7 +19,7 @@
 import os
 import argparse
 from sympy import symbols
-from sympy.logic import SOPform
+from sympy.logic import SOPform, POSform, And, Not, Or
 from sympy.logic import simplify_logic
 from sympy import sympify
 from sympy import bool_map
@@ -87,6 +87,64 @@ def getFunctions(in_vals, out_vals, in_names, out_names ):
         logicExpr = simplify_logic(SOPform(in_syms, minterms))
         fns.append([out_names[nout], logicExpr])
     return fns
+
+def reducedTruthTables(in_vals, out_vals, in_names, out_names ):
+    """
+    Returns a list of reduced truth tables.
+    Result is a list of tuples, where each tuple is
+    (outputName, table)
+    outputName is a string name of output
+    table is a list of rows, where each row is a list of input values, 
+    and the last value is the output value.
+    """
+    in_syms = getInputSymbols( in_names )
+    tbls = []
+    for nout in range(len(out_vals[0])):
+        minterms = []
+        for nin in range(len(in_vals)):
+            if out_vals[nin][nout] == '1':
+                minterms.append( [int(x) for x in in_vals[nin]] )
+        tbl = []
+        logicExpr1 = SOPform(in_syms, minterms)
+        
+        if logicExpr1 == True:
+            tbls.append((out_names[nout], [["-"] * len(in_syms) + ["1"]]))
+            continue
+        elif logicExpr1 != False:
+            productTerms1 = logicExpr1.args if isinstance(logicExpr1, Or) else [logicExpr1]
+            for term in productTerms1:
+                row = []
+                literals = term.args if isinstance(term, And) else [term]
+                for sym in in_syms:
+                    if sym in literals:
+                        row.append("1")
+                    elif Not(sym) in literals:
+                        row.append("0")
+                    else:
+                        row.append("-")
+                row.append("1") # Append output value = 1
+                tbl.append(row)
+
+        logicExpr0 = POSform(in_syms, minterms)
+        if logicExpr0 == False:
+            tbls.append((out_names[nout], [["-"] * len(in_syms) + ["0"]]))
+            continue
+        elif logicExpr0 != True:
+            productTerms0 = logicExpr0.args if isinstance(logicExpr0, And) else [logicExpr0]
+            for term in productTerms0:
+                row = []
+                literals = term.args if isinstance(term, Or) else [term]
+                for sym in in_syms:
+                    if sym in literals:
+                        row.append("0")
+                    elif Not(sym) in literals:
+                        row.append("1")
+                    else:
+                        row.append("-")
+                row.append("0")  # Append output value = 0
+                tbl.append(row)
+        tbls.append((out_names[nout], tbl))
+    return tbls
 
 #
 # Main code
@@ -190,6 +248,35 @@ def main():
         print("")
 
     print("-" * nchars)
+
+    reducedTables = reducedTruthTables(inputVals, outputVals, inputs, outputs )
+
+    for entry in reducedTables:
+        outputName, tbl = entry
+        print("")
+        print("Reduced truth table for output", outputName)
+        print("")
+        nchars = 0
+        for name in inputs:
+            print(f"{name:<4}", end="")
+            if len(name) < 4:
+                nchars += 4
+            else:
+                nchars += len(name)
+        print(f"{outputName:<4}", end="")
+        if len(outputName) < 4:
+            nchars += 4
+        else:
+            nchars += len(outputName)
+        print("")
+        print("-" * nchars)
+
+        for i in range(len(tbl)):
+            row = tbl[i]
+            for val in row:
+                print(f"{str(val):<4}", end="")
+            print("")
+        print("-" * nchars)
 
     fns = getFunctions(inputVals, outputVals, inputs, outputs )
 
