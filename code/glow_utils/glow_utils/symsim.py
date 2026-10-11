@@ -358,13 +358,16 @@ class Symsim:
                 return False
             else:
                 self.msg("Function " + str(expectedFns[i]) + " successfully mapped to " + str(logicExpr[i]))
-                syms = mapping[1]
-                symMap = "\n\t"+"\n\t".join(f"{k} -> {v}" for k, v in syms.items())
-                self.msg("\tSymbol mapping : " + symMap)
-                if strict:
-                    if not all(keys == vals for keys, vals in syms.items()):
-                        self.msg("ERROR : Running in strict mode, but expected and circuit symbols are not the same.")
-                        return False
+                if len(mapping) > 0:
+                    syms = mapping[1]
+                    symMap = "\n\t"+"\n\t".join(f"{k} -> {v}" for k, v in syms.items())
+                    self.msg("\tSymbol mapping : " + symMap)
+                    if strict:
+                        if not all(keys == vals for keys, vals in syms.items()):
+                            self.msg("ERROR : Running in strict mode, but expected and circuit symbols are not the same.")
+                            return False
+                else:
+                    return True
         return True
 
     #######################################
