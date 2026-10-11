@@ -29,7 +29,7 @@ def info():
     description Cell description
     """
     cellInfo = { 'name' : 'DFSQQN_DL',
-                 'pinList' : ['D', 'CLK', 'RN', 'Q', 'QN', 'VDD', 'VSS'],
+                 'pinList' : ['D', 'CLK', 'S', 'Q', 'QN', 'VDD', 'VSS'],
                  'description' : 'D flip-flop with synchronous set S, Q and QN outputs with weak drive strength'
     }
     return cellInfo
