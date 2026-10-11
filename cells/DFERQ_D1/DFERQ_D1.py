@@ -29,7 +29,7 @@ def info():
     pinList     List of cell pins
     description Cell description
     """
-    cellInfo = { 'name' : 'DFERQQN_D1',
+    cellInfo = { 'name' : 'DFERQ_D1',
                  'pinList' : ['D', 'E', 'RN', 'CLK', 'Q', 'VDD', 'VSS'],
                  'description' : 'D flip-flop with enable, reset and Q output with drive strength x1'
     }
