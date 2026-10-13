@@ -184,7 +184,7 @@ class Symsubcircuit(object):
         if name in cls.subCktElementNames:
             return False
         else:
-            cls.subCktElementNames.update(name)
+            cls.subCktElementNames.update([name])
             return True
 
     @classmethod
