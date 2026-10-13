@@ -53,21 +53,21 @@ def generate(genFlat = True, anonimize = True):
     inv_wn = SymTech.technology['invx1WN']
     inv_wp = SymTech.technology['invx1WP']
 
-    inv_inst_S0 = inv_par('inv_inst_S0', ['S0', 'S0B', 'VDD', 'VSS'], {'WN' : inv_ctrl0_wn, 'WP' : inv_ctrl0_wp})
-    inv_inst_S1 = inv_par('inv_inst_S1', ['S1', 'S1B', 'VDD', 'VSS'], {'WN' : inv_ctrl1_wn, 'WP' : inv_ctrl1_wp})
-    inv_inst_Y = inv_par('inv_inst_y', ['NY', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
+    inv_inst_S0 = inv_par('inv_S0', ['S0', 'S0B', 'VDD', 'VSS'], {'WN' : inv_ctrl0_wn, 'WP' : inv_ctrl0_wp})
+    inv_inst_S1 = inv_par('inv_S1', ['S1', 'S1B', 'VDD', 'VSS'], {'WN' : inv_ctrl1_wn, 'WP' : inv_ctrl1_wp})
+    inv_inst_Y = inv_par('inv_y', ['NY', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
 
     mux_wn = SymTech.technology['mux3x1WN']
     mux_wp = 3 * mux_wn / 2
     tg_wn = SymTech.technology['mux3x1WN']
     tg_wp = 3 * SymTech.technology['mux3x1WN'] / 2
-    invz_inst_I0 = invz_par('invz_inst_I0', ['I0', 'S0B', 'S0', 'int0NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
-    invz_inst_I1 = invz_par('invz_inst_I1', ['I1', 'S0', 'S0B', 'int0NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
-    invz_inst_I2 = invz_par('invz_inst_I2', ['I2', 'S0B', 'S0', 'int1NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
-    invz_inst_I3 = invz_par('invz_inst_I3', ['I3', 'S0', 'S0B', 'int1NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
+    invz_inst_I0 = invz_par('invz_I0', ['I0', 'S0B', 'S0', 'int0NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
+    invz_inst_I1 = invz_par('invz_I1', ['I1', 'S0', 'S0B', 'int0NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
+    invz_inst_I2 = invz_par('invz_I2', ['I2', 'S0B', 'S0', 'int1NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
+    invz_inst_I3 = invz_par('invz_I3', ['I3', 'S0', 'S0B', 'int1NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
 
-    tgate_inst1 = tgate_par('tgate_inst1', ['int0NY', 'NY', 'S1B', 'S1', 'VDD', 'VSS'], {'WN' : tg_wn, 'WP' : tg_wp})
-    tgate_inst2 = tgate_par('tgate_inst2', ['int1NY', 'NY', 'S1', 'S1B', 'VDD', 'VSS'], {'WN' : tg_wn, 'WP' : tg_wp})
+    tgate_inst1 = tgate_par('tgate1', ['int0NY', 'NY', 'S1B', 'S1', 'VDD', 'VSS'], {'WN' : tg_wn, 'WP' : tg_wp})
+    tgate_inst2 = tgate_par('tgate2', ['int1NY', 'NY', 'S1', 'S1B', 'VDD', 'VSS'], {'WN' : tg_wn, 'WP' : tg_wp})
 
     MUX4_D1.addElement([inv_inst_S0, inv_inst_S1, inv_inst_Y])
     MUX4_D1.addElement([invz_inst_I0, invz_inst_I1, invz_inst_I2, invz_inst_I3])

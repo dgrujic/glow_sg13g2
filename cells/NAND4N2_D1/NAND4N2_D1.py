@@ -49,11 +49,11 @@ def generate(genFlat = True, anonimize = True):
     Symsubcircuit.importCell(nand_name)
     nand4_cell = Symsubcircuit.getSubckts()[nand_name]
     nand4_cell_pins = nand4_cell.getTerminals()
-    nand4_inst = nand4_cell('nand4_inst', nand4_cell_pins)
+    nand4_inst = nand4_cell('nand4', nand4_cell_pins)
     inv_wn = 200e-9
     inv_wp = 300e-9
-    invA_inst = inv_par('inv_inst', ['AN', 'A', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
-    invB_inst = inv_par('inv_inst', ['BN', 'B', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
+    invA_inst = inv_par('inv1', ['AN', 'A', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
+    invB_inst = inv_par('inv2', ['BN', 'B', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
     NAND4N2_D1.addElement([nand4_inst, invA_inst, invB_inst])
 
     # Flatten the circuit

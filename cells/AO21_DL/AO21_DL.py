@@ -63,7 +63,7 @@ def generate(genFlat = True, anonimize = True):
 
     inv_wn = 320e-9 #SymTech.technology['invx1WN'] / 2
     inv_wp = 660e-9 #SymTech.technology['invx1WP'] / 2
-    inv_inst = inv_par('inv_inst', ['NY', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
+    inv_inst = inv_par('inv', ['NY', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
     AO21_DL.addElement([n0, n1, n2, p0, p1, p2, inv_inst])
 
     # Flatten the circuit

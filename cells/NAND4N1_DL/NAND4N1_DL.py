@@ -51,7 +51,7 @@ def generate(genFlat = True, anonimize = True):
     nand4_inst = nand4_par('nand4', nand4_cell_pins, {'WN' : wn, 'WP' : wp})
     inv_wn = 150e-9
     inv_wp = 230e-9
-    inv_inst = inv_par('inv_inst', ['AN', 'A', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
+    inv_inst = inv_par('inv', ['AN', 'A', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
     NAND4N1_DL.addElement([nand4_inst, inv_inst])
 
     # Flatten the circuit

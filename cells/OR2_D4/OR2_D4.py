@@ -51,7 +51,7 @@ def generate(genFlat = True, anonimize = True):
     inv_wn = 1800e-9
     inv_wp = 2600e-9
     ng = 2
-    inv_inst = inv_par('inv_inst', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp, 'NGN' : ng, 'NGP' : ng})
+    inv_inst = inv_par('inv', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp, 'NGN' : ng, 'NGP' : ng})
     OR2_D4.addElement([nor2_inst, inv_inst])
 
     # Flatten the circuit

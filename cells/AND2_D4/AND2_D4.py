@@ -52,7 +52,7 @@ def generate(genFlat = True, anonimize = True):
     inv_wp = SymTech.technology['invx2WP']
     inv_ngn = 2
     inv_ngp = 2
-    inv_inst = inv_par('inv_inst', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : inv_ngn*inv_wn, 'WP' : inv_ngp*inv_wp, 'NGN' : inv_ngn, 'NGP' : inv_ngp})
+    inv_inst = inv_par('inv', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : inv_ngn*inv_wn, 'WP' : inv_ngp*inv_wp, 'NGN' : inv_ngn, 'NGP' : inv_ngp})
     AND2_D4.addElement([nand2_inst, inv_inst])
 
     # Flatten the circuit

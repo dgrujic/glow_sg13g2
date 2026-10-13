@@ -61,9 +61,9 @@ def generate(genFlat = True, anonimize = True):
     p0 = SymPMOS("P0", ['BN', 'AN', 'Y', 'VDD'], {'w' : wp, 'l' : lmin })
     p1 = SymPMOS("P1", ['BI', 'A', 'Y', 'VDD'], {'w' : wp, 'l' : lmin })
 
-    inv_inst1 = inv_par('inv_inst', ['BN', 'BI', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
-    inv_inst2 = inv_par('inv_inst', ['B', 'BN', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
-    inv_inst3 = inv_par('inv_inst', ['A', 'AN', 'VDD', 'VSS'], {'WN' : wnmin, 'WP' : wpmin})
+    inv_inst1 = inv_par('inv1', ['BN', 'BI', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
+    inv_inst2 = inv_par('inv2', ['B', 'BN', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
+    inv_inst3 = inv_par('inv3', ['A', 'AN', 'VDD', 'VSS'], {'WN' : wnmin, 'WP' : wpmin})
     XOR2_D1.addElement([inv_inst1, inv_inst2, inv_inst3, n0, n1, p0, p1])
 
     # Flatten the circuit

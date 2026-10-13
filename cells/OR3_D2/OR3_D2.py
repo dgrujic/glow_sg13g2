@@ -51,7 +51,7 @@ def generate(genFlat = True, anonimize = True):
     inv_wn = SymTech.technology['invx2WN']
     inv_wp = SymTech.technology['invx2WP']
     ng = 2
-    inv_inst = inv_par('inv_inst', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp, 'NGN' : ng, 'NGP' : ng})
+    inv_inst = inv_par('inv', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp, 'NGN' : ng, 'NGP' : ng})
     OR3_D2.addElement([nor3_inst, inv_inst])
 
     # Flatten the circuit

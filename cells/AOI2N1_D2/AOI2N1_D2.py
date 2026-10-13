@@ -50,8 +50,8 @@ def generate(genFlat = True, anonimize = True):
     cell_name = "AOI2N1_D1"
     Symsubcircuit.importCell(cell_name)
     AOI2N1_cell = Symsubcircuit.getSubckts()[cell_name]
-    AOI2N1_inst1 = AOI2N1_cell('AOI2N1_inst1', cellInfo['pinList'])
-    AOI2N1_inst2 = AOI2N1_cell('AOI2N1_inst2', cellInfo['pinList'])
+    AOI2N1_inst1 = AOI2N1_cell('AOI2N1_1', cellInfo['pinList'])
+    AOI2N1_inst2 = AOI2N1_cell('AOI2N1_2', cellInfo['pinList'])
 
     AOI2N1_D2.addElement([AOI2N1_inst1, AOI2N1_inst2])
 

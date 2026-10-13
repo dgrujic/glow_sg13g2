@@ -50,7 +50,7 @@ def generate(genFlat = True, anonimize = True):
     nand2_inst = nand2_par('nand2', ['A', 'B', 'NO', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
     inv_wn = SymTech.technology['invx1WN'] / 2
     inv_wp = SymTech.technology['invx1WP'] / 2
-    inv_inst = inv_par('inv_inst', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
+    inv_inst = inv_par('inv', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
     AND2_DL.addElement([nand2_inst, inv_inst])
 
     # Flatten the circuit

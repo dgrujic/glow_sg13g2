@@ -66,11 +66,11 @@ def generate(genFlat = True, anonimize = True):
     p0 = SymPMOS("P0", ['n1', 'A', 'VDD', 'VDD'], {'w' : 2 * wp, 'l' : lmin, 'ng' : 2 })
     p1 = SymPMOS("P1", ['n1', 'B', 'VDD', 'VDD'], {'w' : 2 * wp, 'l' : lmin, 'ng' : 2 })
 
-    p2_0 = SymPMOS("P2", ['n2_0', 'C', 'n1', 'VDD'], {'w' : wp, 'l' : lmin })
-    p3_0 = SymPMOS("P3", ['Y', 'D', 'n2_0', 'VDD'], {'w' : wp, 'l' : lmin })
+    p2_0 = SymPMOS("P2_0", ['n2_0', 'C', 'n1', 'VDD'], {'w' : wp, 'l' : lmin })
+    p3_0 = SymPMOS("P3_0", ['Y', 'D', 'n2_0', 'VDD'], {'w' : wp, 'l' : lmin })
 
-    p2_1 = SymPMOS("P2", ['n2_1', 'C', 'n1', 'VDD'], {'w' : wp, 'l' : lmin })
-    p3_1 = SymPMOS("P3", ['Y', 'D', 'n2_1', 'VDD'], {'w' : wp, 'l' : lmin })
+    p2_1 = SymPMOS("P2_1", ['n2_1', 'C', 'n1', 'VDD'], {'w' : wp, 'l' : lmin })
+    p3_1 = SymPMOS("P3_1", ['Y', 'D', 'n2_1', 'VDD'], {'w' : wp, 'l' : lmin })
 
 
     AOI211_D2.addElement([n0_0, n0_1, n1_0, n1_1, n2_0, n2_1, n3_0, n3_1, p0, p1, p2_0, p2_1, p3_0, p3_1])

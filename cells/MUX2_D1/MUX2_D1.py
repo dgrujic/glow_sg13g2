@@ -49,13 +49,13 @@ def generate(genFlat = True, anonimize = True):
     inv_min_wp = SymTech.technology['invmWP']
     inv_wn = SymTech.technology['invx1WN']
     inv_wp = SymTech.technology['invx1WP']
-    inv_inst_S0 = inv_par('inv_inst_S0', ['S0', 'S0B', 'VDD', 'VSS'], {'WN' : inv_min_wn, 'WP' : inv_min_wp})
-    inv_inst_Y = inv_par('inv_inst_y', ['NY', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
+    inv_inst_S0 = inv_par('inv_S0', ['S0', 'S0B', 'VDD', 'VSS'], {'WN' : inv_min_wn, 'WP' : inv_min_wp})
+    inv_inst_Y = inv_par('inv_y', ['NY', 'Y', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
 
     mux_wn = SymTech.technology['mux2x1WN']
     mux_wp = 3 * mux_wn / 2
-    invz_inst_I0 = invz_par('invz_inst_I0', ['I0', 'S0B', 'S0', 'NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
-    invz_inst_I1 = invz_par('invz_inst_I1', ['I1', 'S0', 'S0B', 'NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
+    invz_inst_I0 = invz_par('invz_I0', ['I0', 'S0B', 'S0', 'NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
+    invz_inst_I1 = invz_par('invz_I1', ['I1', 'S0', 'S0B', 'NY', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
 
     MUX2_D1.addElement([inv_inst_S0, inv_inst_Y, invz_inst_I0, invz_inst_I1])
 

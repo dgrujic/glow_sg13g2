@@ -47,12 +47,12 @@ def generate(genFlat = True, anonimize = True):
     MUX2N_D1 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
     inv_min_wn = 240e-9
     inv_min_wp = 3 * inv_min_wn / 2
-    inv_inst_S0 = inv_par('inv_inst_S0', ['S0', 'S0B', 'VDD', 'VSS'], {'WN' : inv_min_wn, 'WP' : inv_min_wp})
+    inv_inst_S0 = inv_par('inv_S0', ['S0', 'S0B', 'VDD', 'VSS'], {'WN' : inv_min_wn, 'WP' : inv_min_wp})
 
     mux_wn = SymTech.technology['invx1WN']
     mux_wp = 3 * mux_wn / 2
-    invz_inst_I0 = invz_par('invz_inst_I0', ['I0', 'S0B', 'S0', 'YN', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
-    invz_inst_I1 = invz_par('invz_inst_I1', ['I1', 'S0', 'S0B', 'YN', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
+    invz_inst_I0 = invz_par('invz_I0', ['I0', 'S0B', 'S0', 'YN', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
+    invz_inst_I1 = invz_par('invz_I1', ['I1', 'S0', 'S0B', 'YN', 'VDD', 'VSS'], {'WN' : mux_wn, 'WP' : mux_wp})
 
     MUX2N_D1.addElement([inv_inst_S0, invz_inst_I0, invz_inst_I1])
 

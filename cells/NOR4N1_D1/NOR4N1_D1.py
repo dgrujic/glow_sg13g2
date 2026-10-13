@@ -49,7 +49,7 @@ def generate(genFlat = True, anonimize = True):
     nor4 = nor4_par('nor4', nor4_pins)
     inv_wn = 200e-9
     inv_wp = 300e-9
-    inv_inst = inv_par('inv_inst', ['AN', 'A', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
+    inv_inst = inv_par('inv', ['AN', 'A', 'VDD', 'VSS'], {'WN' : inv_wn, 'WP' : inv_wp})
     NOR4N1_D1.addElement([inv_inst, nor4])
 
     # Flatten the circuit

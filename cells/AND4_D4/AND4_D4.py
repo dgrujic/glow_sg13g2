@@ -47,12 +47,12 @@ def generate(genFlat = True, anonimize = True):
     AND4_D4 = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
     wn = 720e-9
     wp = 620e-9
-    nand4_inst1 = nand4_par('nand4_inst1', ['A', 'B', 'C', 'D', 'NO', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
-    nand4_inst2 = nand4_par('nand4_inst2', ['A', 'B', 'C', 'D', 'NO', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
+    nand4_inst1 = nand4_par('nand4_1', ['A', 'B', 'C', 'D', 'NO', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
+    nand4_inst2 = nand4_par('nand4_2', ['A', 'B', 'C', 'D', 'NO', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
     inv_wn = SymTech.technology['invx2WN']
     inv_wp = SymTech.technology['invx2WP']
     ng = 2
-    inv_inst = inv_par('inv_inst', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : ng * inv_wn, 'WP' : ng * inv_wp, 'NGN' : ng, 'NGP' : ng})
+    inv_inst = inv_par('inv', ['NO', 'Y', 'VDD', 'VSS'], {'WN' : ng * inv_wn, 'WP' : ng * inv_wp, 'NGN' : ng, 'NGP' : ng})
     AND4_D4.addElement([nand4_inst1, nand4_inst2, inv_inst])
 
     # Flatten the circuit
