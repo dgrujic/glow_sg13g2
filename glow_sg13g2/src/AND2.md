@@ -2,6 +2,8 @@
 
 Two input AND gate
 
+* Generated on : 14-10-2026 22:36:49 *
+
 ## Pin information
 
 | Pin   | Description   |
