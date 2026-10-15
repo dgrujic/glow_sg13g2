@@ -2,7 +2,7 @@
 
 Standard inverter
 
-<em>Generated on : 15-10-2026 19:36:32</em>
+<em>Generated on : 15-10-2026 19:50:12</em>
 
 ## Pin information
 
@@ -89,7 +89,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=6.6e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ### INV_D1
@@ -153,7 +153,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ### INV_D4
@@ -185,7 +185,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ng=2
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ### INV_D8
@@ -217,7 +217,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=6.4e-06 l=1.3e-07 ng=4
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ### INV_D12
@@ -249,7 +249,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=9.6e-06 l=1.3e-07 ng=6
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ### INV_D14
@@ -313,7 +313,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=1.28e-05 l=1.3e-07 ng=8
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ## Pin capacitance

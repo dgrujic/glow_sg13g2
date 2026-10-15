@@ -2,7 +2,7 @@
 
 Four input NAND gate with two inputs inverted
 
-* Generated on : 14-10-2026 22:36:49 *
+<em>Generated on : 15-10-2026 19:50:12</em>
 
 ## Pin information
 
@@ -112,7 +112,7 @@ MP5 n3 BN VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ### NAND4N2_D1
@@ -166,7 +166,7 @@ MP5 n3 BN VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ### NAND4N2_D2
@@ -220,7 +220,7 @@ MP5 n3 BN VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ## Pin capacitance
