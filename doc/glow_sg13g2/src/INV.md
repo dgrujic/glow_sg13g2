@@ -2,7 +2,7 @@
 
 Standard inverter
 
-<em>Generated on : 15-10-2026 19:32:42</em>
+<em>Generated on : 15-10-2026 19:36:32</em>
 
 ## Pin information
 
@@ -281,7 +281,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=1.12e-05 l=1.3e-07 ng=7
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" width=500/>
+<img src="figs/empty_cell_layout.svg" height=500/>
 </div>
 
 ### INV_D16
