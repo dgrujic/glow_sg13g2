@@ -121,7 +121,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/INV_D1.svg" width=500/>
+<img src="figs/INV_D1.svg" height=500/>
 </div>
 
 ### INV_D2
