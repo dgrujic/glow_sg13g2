@@ -38,10 +38,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-32bcef4c.js";
+            window.path_to_searchindex_js = "searchindex-90656bae.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-462bdc68.js"></script>
+        <script src="toc-bd0c06f3.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -879,12 +879,278 @@ MP2 Y n1 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ng=2
 <h2 id="delay"><a class="header" href="#delay">Delay</a></h2>
 <p>No delay data</p>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="inv"><a class="header" href="#inv">INV</a></h1>
+<p>Standard inverter</p>
+<p><em>Generated on : 15-10-2026 19:32:42</em></p>
+<h2 id="pin-information-1"><a class="header" href="#pin-information-1">Pin information</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">Pin</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center">A</td><td style="text-align: left">Inverter input</td></tr>
+<tr><td style="text-align: center">Y</td><td style="text-align: left">Output</td></tr>
+<tr><td style="text-align: center">VDD</td><td style="text-align: left">Power supply</td></tr>
+<tr><td style="text-align: center">VSS</td><td style="text-align: left">Ground</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="logic-function-and-truth-table-1"><a class="header" href="#logic-function-and-truth-table-1">Logic function and Truth table</a></h2>
+<h3 id="logic-function-python-1"><a class="header" href="#logic-function-python-1">Logic function (Python)</a></h3>
+<div align="center">
+Y = ~A
+</div>
+
+<h3 id="logic-function-boolean-1"><a class="header" href="#logic-function-boolean-1">Logic function (Boolean)</a></h3>
+<p>\[ Y = ~A \]</p>
+<h3 id="truth-table-for-y-1"><a class="header" href="#truth-table-for-y-1">Truth Table for Y</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">A</th><th style="text-align: left">Y</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left">0</td><td style="text-align: left">1</td></tr>
+<tr><td style="text-align: left">1</td><td style="text-align: left">0</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="symbol-1"><a class="header" href="#symbol-1">Symbol</a></h2>
+<div align="center">
+<img src="figs/INV_sym.svg" />
+</div>
+
+<h2 id="schematic-1"><a class="header" href="#schematic-1">Schematic</a></h2>
+<div align="center">
+<img src="figs/INV_sch.svg" />
+</div>
+
+<h2 id="cell-variants-1"><a class="header" href="#cell-variants-1">Cell variants</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Cell name <br></th><th style="text-align: center">Width <br> [unit sites]</th><th style="text-align: center">Area <br> [\(\mu m^2\)]</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><a href="#inv_dl">INV_DL</a></td><td style="text-align: center">TBD</td><td style="text-align: center">TBD</td></tr>
+<tr><td style="text-align: left"><a href="#inv_d1">INV_D1</a></td><td style="text-align: center">TBD</td><td style="text-align: center">TBD</td></tr>
+<tr><td style="text-align: left"><a href="#inv_d2">INV_D2</a></td><td style="text-align: center">TBD</td><td style="text-align: center">TBD</td></tr>
+<tr><td style="text-align: left"><a href="#inv_d4">INV_D4</a></td><td style="text-align: center">TBD</td><td style="text-align: center">TBD</td></tr>
+<tr><td style="text-align: left"><a href="#inv_d8">INV_D8</a></td><td style="text-align: center">TBD</td><td style="text-align: center">TBD</td></tr>
+<tr><td style="text-align: left"><a href="#inv_d12">INV_D12</a></td><td style="text-align: center">TBD</td><td style="text-align: center">TBD</td></tr>
+<tr><td style="text-align: left"><a href="#inv_d14">INV_D14</a></td><td style="text-align: center">TBD</td><td style="text-align: center">TBD</td></tr>
+<tr><td style="text-align: left"><a href="#inv_d16">INV_D16</a></td><td style="text-align: center">TBD</td><td style="text-align: center">TBD</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="inv_dl"><a class="header" href="#inv_dl">INV_DL</a></h3>
+<h4 id="hierarchical-spice-netlist-4"><a class="header" href="#hierarchical-spice-netlist-4">Hierarchical SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_DL A Y VDD VSS
+Xinvl A Y VDD VSS inv_par WN=3.2e-07 WP=6.6e-07 
+.ends
+</code></pre>
+<h4 id="flat-spice-netlist-4"><a class="header" href="#flat-spice-netlist-4">Flat SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_DL A Y VDD VSS
+XMN0 Y A VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ad=9.92e-14 as=9.92e-14 pd=1.26e-06 ps=1.26e-06 ng=1 
+XMP0 Y A VDD VDD sg13_lv_pmos w=6.6e-07 l=1.3e-07 ad=2.046e-13 as=2.046e-13 pd=1.94e-06 ps=1.94e-06 ng=1 
+.ends
+</code></pre>
+<h4 id="cdl-netlist-4"><a class="header" href="#cdl-netlist-4">CDL netlist</a></h4>
+<pre><code class="language-cdl">.SUBCKT INV_DL A Y VDD VSS
+*.PININFO A:I Y:O VDD:B VSS:B 
+MN0 Y A VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
+MP0 Y A VDD VDD sg13_lv_pmos w=6.6e-07 l=1.3e-07 ng=1 
+.ENDS
+</code></pre>
+<h4 id="layout-4"><a class="header" href="#layout-4">Layout</a></h4>
+<div align="center">
+<img src="figs/empty_cell_layout.svg" width="500/">
+</div>
+
+<h3 id="inv_d1"><a class="header" href="#inv_d1">INV_D1</a></h3>
+<h4 id="hierarchical-spice-netlist-1-1"><a class="header" href="#hierarchical-spice-netlist-1-1">Hierarchical SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D1 A Y VDD VSS
+Xinv1 A Y VDD VSS inv_par WN=6.4e-07 WP=9.8e-07 
+.ends
+</code></pre>
+<h4 id="flat-spice-netlist-1-1"><a class="header" href="#flat-spice-netlist-1-1">Flat SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D1 A Y VDD VSS
+XMN0 Y A VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ad=1.984e-13 as=1.984e-13 pd=1.9e-06 ps=1.9e-06 ng=1 
+XMP0 Y A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=2.58e-06 ps=2.58e-06 ng=1 
+.ends
+</code></pre>
+<h4 id="cdl-netlist-1-1"><a class="header" href="#cdl-netlist-1-1">CDL netlist</a></h4>
+<pre><code class="language-cdl">.SUBCKT INV_D1 A Y VDD VSS
+*.PININFO A:I Y:O VDD:B VSS:B 
+MN0 Y A VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
+MP0 Y A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
+.ENDS
+</code></pre>
+<h4 id="layout-1-1"><a class="header" href="#layout-1-1">Layout</a></h4>
+<div align="center">
+<img src="figs/INV_D1.svg" width="500/">
+</div>
+
+<h3 id="inv_d2"><a class="header" href="#inv_d2">INV_D2</a></h3>
+<h4 id="hierarchical-spice-netlist-2-1"><a class="header" href="#hierarchical-spice-netlist-2-1">Hierarchical SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D2 A Y VDD VSS
+Xinv2 A Y VDD VSS inv_par WN=1.07e-06 WP=1.6e-06 
+.ends
+</code></pre>
+<h4 id="flat-spice-netlist-2-1"><a class="header" href="#flat-spice-netlist-2-1">Flat SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D2 A Y VDD VSS
+XMN0 Y A VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ad=3.317e-13 as=3.317e-13 pd=2.76e-06 ps=2.76e-06 ng=1 
+XMP0 Y A VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.82e-06 ps=3.82e-06 ng=1 
+.ends
+</code></pre>
+<h4 id="cdl-netlist-2-1"><a class="header" href="#cdl-netlist-2-1">CDL netlist</a></h4>
+<pre><code class="language-cdl">.SUBCKT INV_D2 A Y VDD VSS
+*.PININFO A:I Y:O VDD:B VSS:B 
+MN0 Y A VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
+MP0 Y A VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ng=1 
+.ENDS
+</code></pre>
+<h4 id="layout-2-1"><a class="header" href="#layout-2-1">Layout</a></h4>
+<div align="center">
+<img src="figs/empty_cell_layout.svg" width="500/">
+</div>
+
+<h3 id="inv_d4"><a class="header" href="#inv_d4">INV_D4</a></h3>
+<h4 id="hierarchical-spice-netlist-3-1"><a class="header" href="#hierarchical-spice-netlist-3-1">Hierarchical SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D4 A Y VDD VSS
+Xinv4 A Y VDD VSS inv_par WN=2.14e-06 WP=3.2e-06 NGN=2 NGP=2 
+.ends
+</code></pre>
+<h4 id="flat-spice-netlist-3-1"><a class="header" href="#flat-spice-netlist-3-1">Flat SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D4 A Y VDD VSS
+XMN0 Y A VSS VSS sg13_lv_nmos w=2.14e-06 l=1.3e-07 ad=6.634e-13 as=6.634e-13 pd=4.9e-06 ps=4.9e-06 ng=2 
+XMP0 Y A VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd=7.02e-06 ps=7.02e-06 ng=2 
+.ends
+</code></pre>
+<h4 id="cdl-netlist-3-1"><a class="header" href="#cdl-netlist-3-1">CDL netlist</a></h4>
+<pre><code class="language-cdl">.SUBCKT INV_D4 A Y VDD VSS
+*.PININFO A:I Y:O VDD:B VSS:B 
+MN0 Y A VSS VSS sg13_lv_nmos w=2.14e-06 l=1.3e-07 ng=2 
+MP0 Y A VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ng=2 
+.ENDS
+</code></pre>
+<h4 id="layout-3-1"><a class="header" href="#layout-3-1">Layout</a></h4>
+<div align="center">
+<img src="figs/empty_cell_layout.svg" width="500/">
+</div>
+
+<h3 id="inv_d8"><a class="header" href="#inv_d8">INV_D8</a></h3>
+<h4 id="hierarchical-spice-netlist-4-1"><a class="header" href="#hierarchical-spice-netlist-4-1">Hierarchical SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D8 A Y VDD VSS
+Xinv8 A Y VDD VSS inv_par WN=4.28e-06 WP=6.4e-06 NGN=4 NGP=4 
+.ends
+</code></pre>
+<h4 id="flat-spice-netlist-4-1"><a class="header" href="#flat-spice-netlist-4-1">Flat SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D8 A Y VDD VSS
+XMN0 Y A VSS VSS sg13_lv_nmos w=4.28e-06 l=1.3e-07 ad=1.327e-12 as=1.327e-12 pd=9.18e-06 ps=9.18e-06 ng=4 
+XMP0 Y A VDD VDD sg13_lv_pmos w=6.4e-06 l=1.3e-07 ad=1.984e-12 as=1.984e-12 pd=1.342e-05 ps=1.342e-05 ng=4 
+.ends
+</code></pre>
+<h4 id="cdl-netlist-4-1"><a class="header" href="#cdl-netlist-4-1">CDL netlist</a></h4>
+<pre><code class="language-cdl">.SUBCKT INV_D8 A Y VDD VSS
+*.PININFO A:I Y:O VDD:B VSS:B 
+MN0 Y A VSS VSS sg13_lv_nmos w=4.28e-06 l=1.3e-07 ng=4 
+MP0 Y A VDD VDD sg13_lv_pmos w=6.4e-06 l=1.3e-07 ng=4 
+.ENDS
+</code></pre>
+<h4 id="layout-4-1"><a class="header" href="#layout-4-1">Layout</a></h4>
+<div align="center">
+<img src="figs/empty_cell_layout.svg" width="500/">
+</div>
+
+<h3 id="inv_d12"><a class="header" href="#inv_d12">INV_D12</a></h3>
+<h4 id="hierarchical-spice-netlist-5"><a class="header" href="#hierarchical-spice-netlist-5">Hierarchical SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D12 A Y VDD VSS
+Xinv12 A Y VDD VSS inv_par WN=6.4199999999999995e-06 WP=9.6e-06 NGN=6 NGP=6 
+.ends
+</code></pre>
+<h4 id="flat-spice-netlist-5"><a class="header" href="#flat-spice-netlist-5">Flat SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D12 A Y VDD VSS
+XMN0 Y A VSS VSS sg13_lv_nmos w=6.42e-06 l=1.3e-07 ad=1.99e-12 as=1.99e-12 pd=1.346e-05 ps=1.346e-05 ng=6 
+XMP0 Y A VDD VDD sg13_lv_pmos w=9.6e-06 l=1.3e-07 ad=2.976e-12 as=2.976e-12 pd=1.982e-05 ps=1.982e-05 ng=6 
+.ends
+</code></pre>
+<h4 id="cdl-netlist-5"><a class="header" href="#cdl-netlist-5">CDL netlist</a></h4>
+<pre><code class="language-cdl">.SUBCKT INV_D12 A Y VDD VSS
+*.PININFO A:I Y:O VDD:B VSS:B 
+MN0 Y A VSS VSS sg13_lv_nmos w=6.42e-06 l=1.3e-07 ng=6 
+MP0 Y A VDD VDD sg13_lv_pmos w=9.6e-06 l=1.3e-07 ng=6 
+.ENDS
+</code></pre>
+<h4 id="layout-5"><a class="header" href="#layout-5">Layout</a></h4>
+<div align="center">
+<img src="figs/empty_cell_layout.svg" width="500/">
+</div>
+
+<h3 id="inv_d14"><a class="header" href="#inv_d14">INV_D14</a></h3>
+<h4 id="hierarchical-spice-netlist-6"><a class="header" href="#hierarchical-spice-netlist-6">Hierarchical SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D14 A Y VDD VSS
+Xinv14 A Y VDD VSS inv_par WN=7.4899999999999994e-06 WP=1.12e-05 NGN=7 NGP=7 
+.ends
+</code></pre>
+<h4 id="flat-spice-netlist-6"><a class="header" href="#flat-spice-netlist-6">Flat SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D14 A Y VDD VSS
+XMN0 Y A VSS VSS sg13_lv_nmos w=7.49e-06 l=1.3e-07 ad=2.322e-12 as=2.322e-12 pd=1.56e-05 ps=1.56e-05 ng=7 
+XMP0 Y A VDD VDD sg13_lv_pmos w=1.12e-05 l=1.3e-07 ad=3.472e-12 as=3.472e-12 pd=2.302e-05 ps=2.302e-05 ng=7 
+.ends
+</code></pre>
+<h4 id="cdl-netlist-6"><a class="header" href="#cdl-netlist-6">CDL netlist</a></h4>
+<pre><code class="language-cdl">.SUBCKT INV_D14 A Y VDD VSS
+*.PININFO A:I Y:O VDD:B VSS:B 
+MN0 Y A VSS VSS sg13_lv_nmos w=7.49e-06 l=1.3e-07 ng=7 
+MP0 Y A VDD VDD sg13_lv_pmos w=1.12e-05 l=1.3e-07 ng=7 
+.ENDS
+</code></pre>
+<h4 id="layout-6"><a class="header" href="#layout-6">Layout</a></h4>
+<div align="center">
+<img src="figs/empty_cell_layout.svg" width="500/">
+</div>
+
+<h3 id="inv_d16"><a class="header" href="#inv_d16">INV_D16</a></h3>
+<h4 id="hierarchical-spice-netlist-7"><a class="header" href="#hierarchical-spice-netlist-7">Hierarchical SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D16 A Y VDD VSS
+Xinv16 A Y VDD VSS inv_par WN=8.56e-06 WP=1.28e-05 NGN=8 NGP=8 
+.ends
+</code></pre>
+<h4 id="flat-spice-netlist-7"><a class="header" href="#flat-spice-netlist-7">Flat SPICE netlist</a></h4>
+<pre><code class="language-spice">.subckt INV_D16 A Y VDD VSS
+XMN0 Y A VSS VSS sg13_lv_nmos w=8.56e-06 l=1.3e-07 ad=2.654e-12 as=2.654e-12 pd=1.774e-05 ps=1.774e-05 ng=8 
+XMP0 Y A VDD VDD sg13_lv_pmos w=1.28e-05 l=1.3e-07 ad=3.968e-12 as=3.968e-12 pd=2.622e-05 ps=2.622e-05 ng=8 
+.ends
+</code></pre>
+<h4 id="cdl-netlist-7"><a class="header" href="#cdl-netlist-7">CDL netlist</a></h4>
+<pre><code class="language-cdl">.SUBCKT INV_D16 A Y VDD VSS
+*.PININFO A:I Y:O VDD:B VSS:B 
+MN0 Y A VSS VSS sg13_lv_nmos w=8.56e-06 l=1.3e-07 ng=8 
+MP0 Y A VDD VDD sg13_lv_pmos w=1.28e-05 l=1.3e-07 ng=8 
+.ENDS
+</code></pre>
+<h4 id="layout-7"><a class="header" href="#layout-7">Layout</a></h4>
+<div align="center">
+<img src="figs/empty_cell_layout.svg" width="500/">
+</div>
+
+<h2 id="pin-capacitance-1"><a class="header" href="#pin-capacitance-1">Pin capacitance</a></h2>
+<p>No pin capacitance data</p>
+<h2 id="static-power-1"><a class="header" href="#static-power-1">Static power</a></h2>
+<p>No static power data</p>
+<h2 id="dynamic-power-1"><a class="header" href="#dynamic-power-1">Dynamic power</a></h2>
+<p>No dynamic power data</p>
+<h2 id="delay-1"><a class="header" href="#delay-1">Delay</a></h2>
+<p>No delay data</p>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="nand4n2"><a class="header" href="#nand4n2">NAND4N2</a></h1>
 <p>Four input NAND gate with two inputs inverted</p>
 <ul>
 <li>Generated on : 14-10-2026 22:36:49 *</li>
 </ul>
-<h2 id="pin-information-1"><a class="header" href="#pin-information-1">Pin information</a></h2>
+<h2 id="pin-information-2"><a class="header" href="#pin-information-2">Pin information</a></h2>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -901,15 +1167,15 @@ MP2 Y n1 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ng=2
 </tbody>
 </table>
 </div>
-<h2 id="logic-function-and-truth-table-1"><a class="header" href="#logic-function-and-truth-table-1">Logic function and Truth table</a></h2>
-<h3 id="logic-function-python-1"><a class="header" href="#logic-function-python-1">Logic function (Python)</a></h3>
+<h2 id="logic-function-and-truth-table-2"><a class="header" href="#logic-function-and-truth-table-2">Logic function and Truth table</a></h2>
+<h3 id="logic-function-python-2"><a class="header" href="#logic-function-python-2">Logic function (Python)</a></h3>
 <div align="center">
 Y = ~(~AN &amp; ~BN &amp; C &amp; D)
 </div>
 
-<h3 id="logic-function-boolean-1"><a class="header" href="#logic-function-boolean-1">Logic function (Boolean)</a></h3>
+<h3 id="logic-function-boolean-2"><a class="header" href="#logic-function-boolean-2">Logic function (Boolean)</a></h3>
 <p>\[ Y = \overline{\overline{AN} \cdot \overline{BN} \cdot C \cdot D} \]</p>
-<h3 id="truth-table-for-y-1"><a class="header" href="#truth-table-for-y-1">Truth Table for Y</a></h3>
+<h3 id="truth-table-for-y-2"><a class="header" href="#truth-table-for-y-2">Truth Table for Y</a></h3>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -924,17 +1190,17 @@ Y = ~(~AN &amp; ~BN &amp; C &amp; D)
 </tbody>
 </table>
 </div>
-<h2 id="symbol-1"><a class="header" href="#symbol-1">Symbol</a></h2>
+<h2 id="symbol-2"><a class="header" href="#symbol-2">Symbol</a></h2>
 <div align="center">
 <img src="figs/NAND4N2_sym.svg" />
 </div>
 
-<h2 id="schematic-1"><a class="header" href="#schematic-1">Schematic</a></h2>
+<h2 id="schematic-2"><a class="header" href="#schematic-2">Schematic</a></h2>
 <div align="center">
 <img src="figs/NAND4N2_sch.svg" />
 </div>
 
-<h2 id="cell-variants-1"><a class="header" href="#cell-variants-1">Cell variants</a></h2>
+<h2 id="cell-variants-2"><a class="header" href="#cell-variants-2">Cell variants</a></h2>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -948,14 +1214,14 @@ Y = ~(~AN &amp; ~BN &amp; C &amp; D)
 </table>
 </div>
 <h3 id="nand4n2_dl"><a class="header" href="#nand4n2_dl">NAND4N2_DL</a></h3>
-<h4 id="hierarchical-spice-netlist-4"><a class="header" href="#hierarchical-spice-netlist-4">Hierarchical SPICE netlist</a></h4>
+<h4 id="hierarchical-spice-netlist-8"><a class="header" href="#hierarchical-spice-netlist-8">Hierarchical SPICE netlist</a></h4>
 <pre><code class="language-spice">.subckt NAND4N2_DL AN BN C D Y VDD VSS
 Xnand4 A B C D Y VDD VSS nand4_par WN=3.8e-07 WP=3e-07 
 Xinv1 AN A VDD VSS inv_par WN=1.5e-07 WP=2.3e-07 
 Xinv2 BN B VDD VSS inv_par WN=1.5e-07 WP=2.3e-07 
 .ends
 </code></pre>
-<h4 id="flat-spice-netlist-4"><a class="header" href="#flat-spice-netlist-4">Flat SPICE netlist</a></h4>
+<h4 id="flat-spice-netlist-8"><a class="header" href="#flat-spice-netlist-8">Flat SPICE netlist</a></h4>
 <pre><code class="language-spice">.subckt NAND4N2_DL AN BN C D Y VDD VSS
 XMN0 n0 D VSS VSS sg13_lv_nmos w=3.8e-07 l=1.3e-07 ad=1.178e-13 as=1.178e-13 pd=1.38e-06 ps=1.38e-06 ng=1 
 XMN1 n1 C n0 VSS sg13_lv_nmos w=3.8e-07 l=1.3e-07 ad=1.178e-13 as=1.178e-13 pd=1.38e-06 ps=1.38e-06 ng=1 
@@ -971,7 +1237,7 @@ XMN5 n3 BN VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ad=4.65e-14 as=4.65e-14 pd=9
 XMP5 n3 BN VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ad=7.13e-14 as=7.13e-14 pd=1.08e-06 ps=1.08e-06 ng=1 
 .ends
 </code></pre>
-<h4 id="cdl-netlist-4"><a class="header" href="#cdl-netlist-4">CDL netlist</a></h4>
+<h4 id="cdl-netlist-8"><a class="header" href="#cdl-netlist-8">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4N2_DL AN BN C D Y VDD VSS
 *.PININFO AN:I D:I BN:I C:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=3.8e-07 l=1.3e-07 ng=1 
@@ -988,20 +1254,20 @@ MN5 n3 BN VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1
 MP5 n3 BN VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ng=1 
 .ENDS
 </code></pre>
-<h4 id="layout-4"><a class="header" href="#layout-4">Layout</a></h4>
+<h4 id="layout-8"><a class="header" href="#layout-8">Layout</a></h4>
 <div align="center">
 <img src="figs/empty_cell_layout.svg" width="500/">
 </div>
 
 <h3 id="nand4n2_d1"><a class="header" href="#nand4n2_d1">NAND4N2_D1</a></h3>
-<h4 id="hierarchical-spice-netlist-1-1"><a class="header" href="#hierarchical-spice-netlist-1-1">Hierarchical SPICE netlist</a></h4>
+<h4 id="hierarchical-spice-netlist-1-2"><a class="header" href="#hierarchical-spice-netlist-1-2">Hierarchical SPICE netlist</a></h4>
 <pre><code class="language-spice">.subckt NAND4N2_D1 AN BN C D Y VDD VSS
 Xnand4 A B C D Y VDD VSS NAND4_D1 
 Xinv1 AN A VDD VSS inv_par WN=2e-07 WP=3e-07 
 Xinv2 BN B VDD VSS inv_par WN=2e-07 WP=3e-07 
 .ends
 </code></pre>
-<h4 id="flat-spice-netlist-1-1"><a class="header" href="#flat-spice-netlist-1-1">Flat SPICE netlist</a></h4>
+<h4 id="flat-spice-netlist-1-2"><a class="header" href="#flat-spice-netlist-1-2">Flat SPICE netlist</a></h4>
 <pre><code class="language-spice">.subckt NAND4N2_D1 AN BN C D Y VDD VSS
 XMN0 n0 D VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ad=2.48e-13 as=2.48e-13 pd=2.22e-06 ps=2.22e-06 ng=1 
 XMN1 n1 C n0 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ad=2.48e-13 as=2.48e-13 pd=2.22e-06 ps=2.22e-06 ng=1 
@@ -1017,7 +1283,7 @@ XMN5 n3 BN VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ad=6.2e-14 as=6.2e-14 pd=1.02e
 XMP5 n3 BN VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ad=9.3e-14 as=9.3e-14 pd=1.22e-06 ps=1.22e-06 ng=1 
 .ends
 </code></pre>
-<h4 id="cdl-netlist-1-1"><a class="header" href="#cdl-netlist-1-1">CDL netlist</a></h4>
+<h4 id="cdl-netlist-1-2"><a class="header" href="#cdl-netlist-1-2">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4N2_D1 AN BN C D Y VDD VSS
 *.PININFO AN:I D:I BN:I C:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
@@ -1034,20 +1300,20 @@ MN5 n3 BN VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1
 MP5 n3 BN VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 .ENDS
 </code></pre>
-<h4 id="layout-1-1"><a class="header" href="#layout-1-1">Layout</a></h4>
+<h4 id="layout-1-2"><a class="header" href="#layout-1-2">Layout</a></h4>
 <div align="center">
 <img src="figs/empty_cell_layout.svg" width="500/">
 </div>
 
 <h3 id="nand4n2_d2"><a class="header" href="#nand4n2_d2">NAND4N2_D2</a></h3>
-<h4 id="hierarchical-spice-netlist-2-1"><a class="header" href="#hierarchical-spice-netlist-2-1">Hierarchical SPICE netlist</a></h4>
+<h4 id="hierarchical-spice-netlist-2-2"><a class="header" href="#hierarchical-spice-netlist-2-2">Hierarchical SPICE netlist</a></h4>
 <pre><code class="language-spice">.subckt NAND4N2_D2 AN BN C D Y VDD VSS
 Xnand4 A B C D Y VDD VSS NAND4_D2 
 Xinv1 AN A VDD VSS inv_par WN=4e-07 WP=6e-07 
 Xinv2 BN B VDD VSS inv_par WN=4e-07 WP=6e-07 
 .ends
 </code></pre>
-<h4 id="flat-spice-netlist-2-1"><a class="header" href="#flat-spice-netlist-2-1">Flat SPICE netlist</a></h4>
+<h4 id="flat-spice-netlist-2-2"><a class="header" href="#flat-spice-netlist-2-2">Flat SPICE netlist</a></h4>
 <pre><code class="language-spice">.subckt NAND4N2_D2 AN BN C D Y VDD VSS
 XMN0 n0 D VSS VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ad=4.34e-13 as=4.34e-13 pd=3.42e-06 ps=3.42e-06 ng=2 
 XMN1 n1 C n0 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ad=4.34e-13 as=4.34e-13 pd=3.42e-06 ps=3.42e-06 ng=2 
@@ -1063,7 +1329,7 @@ XMN5 n3 BN VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ad=1.24e-13 as=1.24e-13 pd=1.4
 XMP5 n3 BN VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ad=1.86e-13 as=1.86e-13 pd=1.82e-06 ps=1.82e-06 ng=1 
 .ends
 </code></pre>
-<h4 id="cdl-netlist-2-1"><a class="header" href="#cdl-netlist-2-1">CDL netlist</a></h4>
+<h4 id="cdl-netlist-2-2"><a class="header" href="#cdl-netlist-2-2">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4N2_D2 AN BN C D Y VDD VSS
 *.PININFO AN:I D:I BN:I C:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
@@ -1080,18 +1346,18 @@ MN5 n3 BN VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ng=1
 MP5 n3 BN VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1 
 .ENDS
 </code></pre>
-<h4 id="layout-2-1"><a class="header" href="#layout-2-1">Layout</a></h4>
+<h4 id="layout-2-2"><a class="header" href="#layout-2-2">Layout</a></h4>
 <div align="center">
 <img src="figs/empty_cell_layout.svg" width="500/">
 </div>
 
-<h2 id="pin-capacitance-1"><a class="header" href="#pin-capacitance-1">Pin capacitance</a></h2>
+<h2 id="pin-capacitance-2"><a class="header" href="#pin-capacitance-2">Pin capacitance</a></h2>
 <p>No pin capacitance data</p>
-<h2 id="static-power-1"><a class="header" href="#static-power-1">Static power</a></h2>
+<h2 id="static-power-2"><a class="header" href="#static-power-2">Static power</a></h2>
 <p>No static power data</p>
-<h2 id="dynamic-power-1"><a class="header" href="#dynamic-power-1">Dynamic power</a></h2>
+<h2 id="dynamic-power-2"><a class="header" href="#dynamic-power-2">Dynamic power</a></h2>
 <p>No dynamic power data</p>
-<h2 id="delay-1"><a class="header" href="#delay-1">Delay</a></h2>
+<h2 id="delay-2"><a class="header" href="#delay-2">Delay</a></h2>
 <p>No delay data</p>
 
                     </main>
