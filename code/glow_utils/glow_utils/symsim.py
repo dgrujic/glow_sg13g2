@@ -384,51 +384,57 @@ class Symsim:
         inputSymbols = self.getInputSymbols()
         outputNames = self.getOutputNames()
         tbls = []
-        for nout in range(len(outputs[0])):
-            minterms = []
-            for nin in range(len(inputs)):
-                if outputs[nin][nout] == IEEE1164.ONE:
-                    minterms.append( [int(x.value) for x in inputs[nin]] )
-            tbl = []
-            logicExpr1 = SOPform(inputSymbols, minterms)
-            
-            if logicExpr1 == True:
-                tbls.append((outputNames[nout], [["-"] * len(inputSymbols) + ["1"]]))
-                continue
-            elif logicExpr1 != False:
-                productTerms1 = logicExpr1.args if isinstance(logicExpr1, Or) else [logicExpr1]
-                for term in productTerms1:
-                    row = []
-                    literals = term.args if isinstance(term, And) else [term]
-                    for sym in inputSymbols:
-                        if sym in literals:
-                            row.append("1")
-                        elif Not(sym) in literals:
-                            row.append("0")
-                        else:
-                            row.append("-")
-                    row.append("1") # Append output value = 1
-                    tbl.append(row)
+        if inputs != [()]:
+            for nout in range(len(outputs[0])):
+                minterms = []
+                for nin in range(len(inputs)):
+                    if outputs[nin][nout] == IEEE1164.ONE:
+                        minterms.append( [int(x.value) for x in inputs[nin]] )
+                tbl = []
+                logicExpr1 = SOPform(inputSymbols, minterms)
+                
+                if logicExpr1 == True:
+                    tbls.append((outputNames[nout], [["-"] * len(inputSymbols) + ["1"]]))
+                    continue
+                elif logicExpr1 != False:
+                    productTerms1 = logicExpr1.args if isinstance(logicExpr1, Or) else [logicExpr1]
+                    for term in productTerms1:
+                        row = []
+                        literals = term.args if isinstance(term, And) else [term]
+                        for sym in inputSymbols:
+                            if sym in literals:
+                                row.append("1")
+                            elif Not(sym) in literals:
+                                row.append("0")
+                            else:
+                                row.append("-")
+                        row.append("1") # Append output value = 1
+                        tbl.append(row)
 
-            logicExpr0 = POSform(inputSymbols, minterms)
-            if logicExpr0 == False:
-                tbls.append((outputNames[nout], [["-"] * len(inputSymbols) + ["0"]]))
-                continue
-            elif logicExpr0 != True:
-                productTerms0 = logicExpr0.args if isinstance(logicExpr0, And) else [logicExpr0]
-                for term in productTerms0:
-                    row = []
-                    literals = term.args if isinstance(term, Or) else [term]
-                    for sym in inputSymbols:
-                        if sym in literals:
-                            row.append("0")
-                        elif Not(sym) in literals:
-                            row.append("1")
-                        else:
-                            row.append("-")
-                    row.append("0")  # Append output value = 0
-                    tbl.append(row)
-            tbls.append((outputNames[nout], tbl))
+                logicExpr0 = POSform(inputSymbols, minterms)
+                if logicExpr0 == False:
+                    tbls.append((outputNames[nout], [["-"] * len(inputSymbols) + ["0"]]))
+                    continue
+                elif logicExpr0 != True:
+                    productTerms0 = logicExpr0.args if isinstance(logicExpr0, And) else [logicExpr0]
+                    for term in productTerms0:
+                        row = []
+                        literals = term.args if isinstance(term, Or) else [term]
+                        for sym in inputSymbols:
+                            if sym in literals:
+                                row.append("0")
+                            elif Not(sym) in literals:
+                                row.append("1")
+                            else:
+                                row.append("-")
+                        row.append("0")  # Append output value = 0
+                        tbl.append(row)
+                tbls.append((outputNames[nout], tbl))
+            else:
+                if outputs[0][0] == IEEE1164.ONE:
+                    tbls.append((outputNames[0], [['1']]))
+                else:
+                    tbls.append((outputNames[0], [['0']]))
         return tbls
 
     def formatReducedTruthTables(self, reducedTables):
@@ -1139,44 +1145,230 @@ class Symsim:
     # Latch
     #######################################
 
+    def latchTable(self, spec):
+        """
+        Returns truth table of a D latch from its specification.
+        Result is a tuple (pins, rows), where pins is a list of pin names,
+        and rows is a list of lists that contain signal values.
+        Return result can be easily printed in a table as
+        tabulate(rows, headers=pins, tablefmt="grid")
+        """
+        pspec = self.latchParse(spec)
+
+        ind = 0
+        pins = []
+        indexes = {}
+        pins.append( pspec['gPin'] )
+        indexes.update( {'gPin' : ind} )
+        ind += 1
+        pins.append( pspec['dPin'] )
+        indexes.update( {'dPin' : ind} )
+        ind += 1
+        if pspec['hasEn']:
+            pins.append( pspec['enPin'] )
+            indexes.update( {'enPin' : ind} )
+            ind += 1
+        if pspec['hasClr']:
+            pins.append( pspec['clrPin'] )
+            indexes.update( {'clrPin' : ind} )
+            ind += 1
+        if pspec['hasSet']:
+            pins.append( pspec['setPin'] )
+            indexes.update( {'setPin' : ind} )
+            ind += 1
+        if pspec['qPin'] is not None:
+            pins.append( pspec['qPin'] )
+            indexes.update( {'qPin' : ind} )
+            ind += 1
+        if pspec['qnPin'] is not None:
+            pins.append( pspec['qnPin'] )
+            indexes.update( {'qnPin' : ind} )
+            ind += 1
+
+        pins.append( 'Description' )
+        indexes.update( {'description' : ind} )
+        ind += 1
+        rows = []
+
+        # Make a vector with default signal values
+        defaultValues = [None] * ind
+        if not pspec['gInv']:
+            defaultValues[indexes['gPin']] = '1'
+        else:
+            defaultValues[indexes['gPin']] = '0'
+        if not pspec['dInv']:
+            defaultValues[indexes['dPin']] = '0'
+        else:
+            defaultValues[indexes['dPin']] = '1'
+        if pspec['hasEn']:
+            if not pspec['enInv']:
+                defaultValues[indexes['enPin']] = '1'
+            else:
+                defaultValues[indexes['enPin']] = '0'
+        if pspec['hasClr']:
+            if not pspec['clrInv']:
+                defaultValues[indexes['clrPin']] = '0'
+            else:
+                defaultValues[indexes['clrPin']] = '1'
+        if pspec['hasSet']:
+            if not pspec['setInv']:
+                defaultValues[indexes['setPin']] = '0'
+            else:
+                defaultValues[indexes['setPin']] = '1'
+        if pspec['qPin'] is not None:
+            defaultValues[indexes['qPin']] = '0'
+        if pspec['qnPin'] is not None:
+            defaultValues[indexes['qnPin']] = '1'
+        defaultValues[indexes['description']] = ''
+
+        # Regular D latch operation
+        # q = din
+        row = copy(defaultValues)
+        row[indexes['dPin']] = 'D'
+        if pspec['qPin'] is not None:
+            row[indexes['qPin']] = 'D'
+        if pspec['qnPin'] is not None:
+            row[indexes['qnPin']] = '~D'
+        row[indexes['description']] = 'Transparent'
+        rows.append(row)
+
+        # q = q
+        row = copy(defaultValues)
+        row[indexes['dPin']] = '-'
+        if not pspec['gInv']:
+            row[indexes['gPin']] = '0'
+        else:
+            row[indexes['gPin']] = '1'
+        if pspec['qPin'] is not None:
+            row[indexes['qPin']] = 'Q'
+        if pspec['qnPin'] is not None:
+            row[indexes['qnPin']] = 'QN'
+        row[indexes['description']] = 'Latch'
+        rows.append(row)
+
+        # Latch disabled
+        if pspec['hasEn']:
+            row = copy(defaultValues)
+            if not pspec['enInv']:
+                row[indexes['enPin']] = '0'
+            else:
+                row[indexes['enPin']] = '1'
+            row[indexes['dPin']] = '-'
+            if pspec['qPin'] is not None:
+                row[indexes['qPin']] = pspec['qPin']
+            if pspec['qnPin'] is not None:
+                row[indexes['qnPin']] = pspec['qnPin']
+            if pspec['hasClr']:
+                if not pspec['asyncClr']:
+                    row[indexes['clrPin']] = '-'
+            if pspec['hasSet']:
+                if not pspec['asyncSet']:
+                    row[indexes['setPin']] = '-'
+            row[indexes['description']] = 'Disabled'
+            rows.append(row)
+
+        # Latch clear
+        if pspec['hasClr']:
+            row = copy(defaultValues)
+            row[indexes['dPin']] = '-'
+            if pspec['asyncClr']:
+                row[indexes['gPin']] = '-'
+            if not pspec['clrInv']:
+                row[indexes['clrPin']] = '1'
+            else:
+                row[indexes['clrPin']] = '0'
+            if pspec['qPin'] is not None:
+                row[indexes['qPin']] = '0'
+            if pspec['qnPin'] is not None:
+                row[indexes['qnPin']] = '1'
+            row[indexes['description']] = 'Clear'
+            rows.append(row)
+
+        # Latch set
+        if pspec['hasSet']:
+            row = copy(defaultValues)
+            row[indexes['dPin']] = '-'
+            if pspec['asyncSet']:
+                row[indexes['gPin']] = '-'
+            if not pspec['setInv']:
+                row[indexes['setPin']] = '1'
+            else:
+                row[indexes['setPin']] = '0'
+            if pspec['qPin'] is not None:
+                row[indexes['qPin']] = '1'
+            if pspec['qnPin'] is not None:
+                row[indexes['qnPin']] = '0'
+            row[indexes['description']] = 'Set'
+            rows.append(row)
+
+        # Latch set and clear
+        if pspec['hasSCVAL'] and pspec['hasSet'] and pspec['hasClr']:
+            row = copy(defaultValues)
+            row[indexes['dPin']] = '-'
+            if pspec['asyncSet']:
+                row[indexes['gPin']] = '-'
+            if not pspec['setInv']:
+                row[indexes['setPin']] = '1'
+            else:
+                row[indexes['setPin']] = '0'
+            if not pspec['clrInv']:
+                row[indexes['clrPin']] = '1'
+            else:
+                row[indexes['clrPin']] = '0'
+            if pspec['qPin'] is not None:
+                if pspec['SCVAL']:
+                    row[indexes['qPin']] = '1'
+                else:
+                    row[indexes['qPin']] = '0'
+            if pspec['qnPin'] is not None:
+                if pspec['SCVAL']:
+                    row[indexes['qnPin']] = '0'
+                else:
+                    row[indexes['qnPin']] = '1'
+            row[indexes['description']] = 'Set & clear'
+            rows.append(row)
+        return (pins, rows)
+
+
     def latchParse(self, spec):
-        # Parse given latch specification
+        """
+        Parse given latch specification
 
-        # Parse specification and make a dictionary with the following keys
-        # | Variable  | Description                                 |
-        # |-----------|---------------------------------------------|
-        # |   dPin    | Pin name for D input                        |
-        # |   dInv    | Is data input inverted?                     |
-        # |   qPin    | Pin name for Q output. None if not present. |
-        # |   qnPin   | Pin name for QN output. None if not present.|
-        # |  gPin     | Pin name for latch input.                   |
-        # |  gInv     | Is latch inverted?                          |
-        # |  hasEn    | Latch has an enable pin?                    |
-        # |  enPin    | Pin name for enable.                        |
-        # |  enInv    | Is enable inverted?                         |
-        # | hasSCVAL  | Is value for simultaneous set/clear given?  |
-        # |  SCVAL    | Output value for simultaneous set/clear.    |
-        # | hasClr    | latch has CLR pin?                          |
-        # | clrPin    | Pin name for CLR.                           |
-        # | clrInv    | Is CLR inverted?                            |
-        # | hasSet    | Latch has SET pin?                          |
-        # | setPin    | Pin name for SET.                           |
-        # | setInv    | Is SET inverted?                            |
-        #
-        # Based on these flags, active/inactive signal values are determined
-        # | Variable  | Description                                 |
-        # |-----------|---------------------------------------------|
-        # |   dAct    | Active ('1') value for data input.          |
-        # |   dIdle   | Idle ('0') value for data input.            |
-        # |   gAct    | Active value for clock input.               |
-        # |  gIdle    | Idle value for clock input.                 |
-        # |  enAct    | Active value for enable input.              |
-        # |  enIdle   | Idle value for enable input.                |
-        # |  clrAct   | Active value for clear input.               |
-        # | clrIdle   | Idle value for clear input.                 |
-        # |  setAct   | Active value for set input.                 |
-        # | setIdle   | Idle value for set input.                   |
+        Parse specification and make a dictionary with the following keys
+        | Variable  | Description                                 |
+        |-----------|---------------------------------------------|
+        |   dPin    | Pin name for D input                        |
+        |   dInv    | Is data input inverted?                     |
+        |   qPin    | Pin name for Q output. None if not present. |
+        |   qnPin   | Pin name for QN output. None if not present.|
+        |  gPin     | Pin name for latch input.                   |
+        |  gInv     | Is latch inverted?                          |
+        |  hasEn    | Latch has an enable pin?                    |
+        |  enPin    | Pin name for enable.                        |
+        |  enInv    | Is enable inverted?                         |
+        | hasSCVAL  | Is value for simultaneous set/clear given?  |
+        |  SCVAL    | Output value for simultaneous set/clear.    |
+        | hasClr    | latch has CLR pin?                          |
+        | clrPin    | Pin name for CLR.                           |
+        | clrInv    | Is CLR inverted?                            |
+        | hasSet    | Latch has SET pin?                          |
+        | setPin    | Pin name for SET.                           |
+        | setInv    | Is SET inverted?                            |
 
+        Based on these flags, active/inactive signal values are determined
+        | Variable  | Description                                 |
+        |-----------|---------------------------------------------|
+        |   dAct    | Active ('1') value for data input.          |
+        |   dIdle   | Idle ('0') value for data input.            |
+        |   gAct    | Active value for clock input.               |
+        |  gIdle    | Idle value for clock input.                 |
+        |  enAct    | Active value for enable input.              |
+        |  enIdle   | Idle value for enable input.                |
+        |  clrAct   | Active value for clear input.               |
+        | clrIdle   | Idle value for clear input.                 |
+        |  setAct   | Active value for set input.                 |
+        | setIdle   | Idle value for set input.                   |
+        """
         # Make a dictionary containing all valid keys with value None to avoid errors from missing keys
         keys = ['D', 'DN', 'Q', 'QN', 'G', 'GN',
                 'ACLR', 'ACLRN',
