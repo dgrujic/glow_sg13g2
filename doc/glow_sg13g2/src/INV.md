@@ -2,7 +2,7 @@
 
 Standard inverter
 
-<em>Generated on : 15-10-2026 19:50:12</em>
+<em>Generated on : 16-10-2026 16:38:11</em>
 
 ## Pin information
 
@@ -50,7 +50,7 @@ Y = ~A
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
 | [INV_DL](#inv_dl) | TBD | TBD |
-| [INV_D1](#inv_d1) | TBD | TBD |
+| [INV_D1](#inv_d1) | 2 | 4.1472 |
 | [INV_D2](#inv_d2) | TBD | TBD |
 | [INV_D4](#inv_d4) | TBD | TBD |
 | [INV_D8](#inv_d8) | TBD | TBD |
