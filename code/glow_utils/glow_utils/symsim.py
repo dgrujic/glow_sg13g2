@@ -430,11 +430,11 @@ class Symsim:
                         row.append("0")  # Append output value = 0
                         tbl.append(row)
                 tbls.append((outputNames[nout], tbl))
+        else:
+            if outputs[0][0] == IEEE1164.ONE:
+                tbls.append((outputNames[0], [['1']]))
             else:
-                if outputs[0][0] == IEEE1164.ONE:
-                    tbls.append((outputNames[0], [['1']]))
-                else:
-                    tbls.append((outputNames[0], [['0']]))
+                tbls.append((outputNames[0], [['0']]))
         return tbls
 
     def formatReducedTruthTables(self, reducedTables):
