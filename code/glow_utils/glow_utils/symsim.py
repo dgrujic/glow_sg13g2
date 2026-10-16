@@ -28,6 +28,7 @@ from sympy.logic import simplify_logic
 from sympy import bool_map
 from sympy.parsing.sympy_parser import parse_expr
 from sympy import Symbol
+from tabulate import tabulate
 import numpy as np
 
 class Symsim:
@@ -468,6 +469,194 @@ class Symsim:
     #######################################
     # D flip-flop
     #######################################
+
+    def dffTable(self, spec):
+        """
+        Returns truth table of a D flip-flop from its specification.
+        Result is a tuple (pins, rows), where pins is a list of pin names,
+        and rows is a list of lists that contain signal values.
+        Return result can be easily printed in a table as
+        tabulate(rows, headers=pins, tablefmt="grid")
+        """
+        pspec = self.dffParse(spec)
+
+        ind = 0
+        pins = []
+        indexes = {}
+        pins.append( pspec['clkPin'] )
+        indexes.update( {'clkPin' : ind} )
+        ind += 1
+        pins.append( pspec['dPin'] )
+        indexes.update( {'dPin' : ind} )
+        ind += 1
+        if pspec['hasEn']:
+            pins.append( pspec['enPin'] )
+            indexes.update( {'enPin' : ind} )
+            ind += 1
+        if pspec['hasClr']:
+            pins.append( pspec['clrPin'] )
+            indexes.update( {'clrPin' : ind} )
+            ind += 1
+        if pspec['hasSet']:
+            pins.append( pspec['setPin'] )
+            indexes.update( {'setPin' : ind} )
+            ind += 1
+        if pspec['qPin'] is not None:
+            pins.append( pspec['qPin'] )
+            indexes.update( {'qPin' : ind} )
+            ind += 1
+        if pspec['qnPin'] is not None:
+            pins.append( pspec['qnPin'] )
+            indexes.update( {'qnPin' : ind} )
+            ind += 1
+
+        pins.append( 'Description' )
+        indexes.update( {'description' : ind} )
+        ind += 1
+        rows = []
+
+        # Make a vector with default signal values
+        defaultValues = [None] * ind
+        if not pspec['clkInv']:
+            defaultValues[indexes['clkPin']] = '↑'
+        else:
+            defaultValues[indexes['clkPin']] = '↓'
+        if not pspec['dInv']:
+            defaultValues[indexes['dPin']] = '0'
+        else:
+            defaultValues[indexes['dPin']] = '1'
+        if pspec['hasEn']:
+            if not pspec['enInv']:
+                defaultValues[indexes['enPin']] = '1'
+            else:
+                defaultValues[indexes['enPin']] = '0'
+        if pspec['hasClr']:
+            if not pspec['clrInv']:
+                defaultValues[indexes['clrPin']] = '0'
+            else:
+                defaultValues[indexes['clrPin']] = '1'
+        if pspec['hasSet']:
+            if not pspec['setInv']:
+                defaultValues[indexes['setPin']] = '0'
+            else:
+                defaultValues[indexes['setPin']] = '1'
+        if pspec['qPin'] is not None:
+            defaultValues[indexes['qPin']] = '0'
+        if pspec['qnPin'] is not None:
+            defaultValues[indexes['qnPin']] = '1'
+        defaultValues[indexes['description']] = ''
+
+        # Regular FF operation
+        # din = 0
+        row = copy(defaultValues)
+        if not pspec['dInv']:
+            row[indexes['description']] = 'Write 0'
+        else:
+            row[indexes['description']] = 'Write 1'
+        rows.append(row)
+        # din = 1
+        row = copy(defaultValues)
+        if pspec['qPin'] is not None:
+            row[indexes['qPin']] = '1'
+        if pspec['qnPin'] is not None:
+            row[indexes['qnPin']] = '0'
+        if not pspec['dInv']:
+            row[indexes['dPin']] = '1'
+            row[indexes['description']] = 'Write 1'
+        else:
+            row[indexes['dPin']] = '0'
+            row[indexes['description']] = 'Write 0'
+        rows.append(row)
+
+        # FF disabled
+        if pspec['hasEn']:
+            row = copy(defaultValues)
+            if not pspec['enInv']:
+                row[indexes['enPin']] = '0'
+            else:
+                row[indexes['enPin']] = '1'
+            row[indexes['dPin']] = '-'
+            if pspec['qPin'] is not None:
+                row[indexes['qPin']] = pspec['qPin']
+            if pspec['qnPin'] is not None:
+                row[indexes['qnPin']] = pspec['qnPin']
+            if pspec['hasClr']:
+                if not pspec['asyncClr']:
+                    row[indexes['clrPin']] = '-'
+            if pspec['hasSet']:
+                if not pspec['asyncSet']:
+                    row[indexes['setPin']] = '-'
+            row[indexes['description']] = 'Disabled'
+            rows.append(row)
+
+        # FF clear
+        if pspec['hasClr']:
+            row = copy(defaultValues)
+            row[indexes['dPin']] = '-'
+            if pspec['asyncClr']:
+                row[indexes['clkPin']] = '-'
+            if not pspec['clrInv']:
+                row[indexes['clrPin']] = '1'
+            else:
+                row[indexes['clrPin']] = '0'
+            if pspec['qPin'] is not None:
+                row[indexes['qPin']] = '0'
+            if pspec['qnPin'] is not None:
+                row[indexes['qnPin']] = '1'
+            row[indexes['description']] = 'Clear'
+            rows.append(row)
+
+        # FF set
+        if pspec['hasSet']:
+            row = copy(defaultValues)
+            row[indexes['dPin']] = '-'
+            if pspec['asyncSet']:
+                row[indexes['clkPin']] = '-'
+            if not pspec['setInv']:
+                row[indexes['setPin']] = '1'
+            else:
+                row[indexes['setPin']] = '0'
+            if pspec['qPin'] is not None:
+                row[indexes['qPin']] = '1'
+            if pspec['qnPin'] is not None:
+                row[indexes['qnPin']] = '0'
+            row[indexes['description']] = 'Set'
+            rows.append(row)
+
+        # FF set and clear
+        if pspec['hasSCVAL'] and pspec['hasSet'] and pspec['hasClr']:
+            row = copy(defaultValues)
+            row[indexes['dPin']] = '-'
+            if pspec['asyncSet']:
+                row[indexes['clkPin']] = '-'
+            if not pspec['setInv']:
+                row[indexes['setPin']] = '1'
+            else:
+                row[indexes['setPin']] = '0'
+            if not pspec['clrInv']:
+                row[indexes['clrPin']] = '1'
+            else:
+                row[indexes['clrPin']] = '0'
+            if pspec['qPin'] is not None:
+                if pspec['SCVAL']:
+                    row[indexes['qPin']] = '1'
+                else:
+                    row[indexes['qPin']] = '0'
+            if pspec['qnPin'] is not None:
+                if pspec['SCVAL']:
+                    row[indexes['qnPin']] = '0'
+                else:
+                    row[indexes['qnPin']] = '1'
+            row[indexes['description']] = 'Set & clear'
+            rows.append(row)
+        return (pins, rows)
+
+    def formatDffTable(self, dffTable):
+        """
+        Returns a string representation of a DFF table
+        """
+        pins, rows = dffTable
+        return tabulate(rows, headers=pins, tablefmt="grid")
 
     def dffParse(self, spec):
         # Parse given FF specification
