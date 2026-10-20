@@ -55,8 +55,8 @@ def generate(genFlat = True, anonimize = True):
 
     inv_qi = inv_par("inv_qi", ['qi', 'qn', 'VDD', 'VSS'], {'WN' : 200e-9, 'WP' : 300e-9})
 
-    inv_Q = inv_par("inv_Q", ['qi', 'QN', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
-    inv_QN = inv_par("inv_QN", ['qn', 'Q', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
+    inv_QN = inv_par("inv_QN", ['qi', 'QN', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
+    inv_Q = inv_par("inv_Q", ['qn', 'Q', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
 
     DFARQQN_D1.addElement([inv_clkn, inv_clki, inv_r, invz_in, nor_ml, invz_mfb, invz_ms, nor_sl, invz_sfb, inv_qi, inv_Q, inv_QN])
 

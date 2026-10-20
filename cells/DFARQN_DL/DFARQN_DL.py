@@ -53,9 +53,9 @@ def generate(genFlat = True, anonimize = True):
     nor_sl = nor2_par("nor_sl", ['qin', 'ri', 'qi', 'VDD', 'VSS'], {'WN' : 300e-9, 'WP' : 300e-9})
     invz_sfb = invz_par("invz_sfb", ['qi', 'clkn', 'clki', 'qin', 'VDD', 'VSS'], {'WN' : 150e-9, 'WP' : 150e-9})
 
-    inv_Q = inv_par("inv_Q", ['qi', 'QN', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
+    inv_QN = inv_par("inv_QN", ['qi', 'QN', 'VDD', 'VSS'], {'WN' : wn, 'WP' : wp})
 
-    DFARQN_DL.addElement([inv_clkn, inv_clki, inv_r, invz_in, nor_ml, invz_mfb, invz_ms, nor_sl, invz_sfb, inv_Q])
+    DFARQN_DL.addElement([inv_clkn, inv_clki, inv_r, invz_in, nor_ml, invz_mfb, invz_ms, nor_sl, invz_sfb, inv_QN])
 
     # Flatten the circuit
     if genFlat:
