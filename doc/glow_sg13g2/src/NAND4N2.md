@@ -2,8 +2,6 @@
 
 Four input NAND gate with two inputs inverted
 
-<em>Generated on : 15-10-2026 19:50:12</em>
-
 ## Pin information
 
 | Pin   | Description   |
@@ -93,7 +91,7 @@ XMP5 n3 BN VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ad=7.13e-14 as=7.13e-14 pd=1
 #### CDL netlist
 ```cdl
 .SUBCKT NAND4N2_DL AN BN C D Y VDD VSS
-*.PININFO AN:I D:I BN:I C:I Y:O VDD:B VSS:B 
+*.PININFO BN:I C:I AN:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=3.8e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=3.8e-07 l=1.3e-07 ng=1 
 MN2 n2 n3 n1 VSS sg13_lv_nmos w=3.8e-07 l=1.3e-07 ng=1 
@@ -147,7 +145,7 @@ XMP5 n3 BN VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ad=9.3e-14 as=9.3e-14 pd=1.22e
 #### CDL netlist
 ```cdl
 .SUBCKT NAND4N2_D1 AN BN C D Y VDD VSS
-*.PININFO AN:I D:I BN:I C:I Y:O VDD:B VSS:B 
+*.PININFO BN:I C:I AN:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN2 n2 n3 n1 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
@@ -201,7 +199,7 @@ XMP5 n3 BN VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ad=1.86e-13 as=1.86e-13 pd=1.8
 #### CDL netlist
 ```cdl
 .SUBCKT NAND4N2_D2 AN BN C D Y VDD VSS
-*.PININFO AN:I D:I BN:I C:I Y:O VDD:B VSS:B 
+*.PININFO BN:I C:I AN:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN1 n1 C n0 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN2 n2 n3 n1 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 

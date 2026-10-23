@@ -2,8 +2,6 @@
 
 Standard inverter
 
-<em>Generated on : 16-10-2026 16:38:11</em>
-
 ## Pin information
 
 | Pin   | Description   |
