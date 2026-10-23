@@ -1,0 +1,97 @@
+# {{ cell_group }}
+
+{{ cell_group_description }}
+
+## Pin information
+
+| Pin   | Description   |
+| :-:    | :-            |
+{% for name, description in pins.items() -%}
+
+| {{ name }} | {{ description }} |
+{% endfor %}
+
+## Truth table
+
+| {% for header in truthTable.0 %}{{ header }} | {% endfor %}
+| {% for header in truthTable.0 %}:--- | {% endfor %}
+{% for row in truthTable.1 %}| {% for value in row %}{{ value }} | {% endfor %}
+{% endfor %}
+
+## Symbol
+
+<div align="center">
+<img src="figs/{{ cell_group }}_sym.svg" />
+</div>
+
+## Schematic
+
+<div align="center">
+<img src="figs/{{ cell_group }}_sch.svg" />
+</div>
+
+## Cell variants
+
+| Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
+| :-        | :-:   | :-:   |
+{% for cell_name, properties in cellVariants.items() -%}
+
+| [{{ cell_name }}](#{{ cell_name | lower }}) | {{ properties.width | default("TBD") }} | {{ properties.area | default("TBD") }} |
+{% endfor %}
+
+{# Make a subsection for each cell variant #}
+{% for cell_name, properties in cellVariants.items() -%}
+### {{ cell_name }}
+
+#### Hierarchical SPICE netlist
+```spice
+{{ properties.spice | default('SPICE netlist is not available') }}
+```
+
+#### Flat SPICE netlist
+```spice
+{{ properties.spice_flat | default('SPICE netlist is not available') }}
+```
+
+#### CDL netlist
+```cdl
+{{ properties.cdl | default('CDL netlist is not available') }}
+```
+
+#### Layout
+
+<div align="center">
+<img src="figs/{{ properties.layout | default('empty_cell_layout') }}.svg" height=500/>
+</div>
+
+{% endfor -%}
+
+
+## Pin capacitance
+{% if pinCapacitance is defined -%}
+
+{% else -%}
+No pin capacitance data
+{% endif %}
+
+## Static power
+{% if staticPower is defined -%}
+
+{% else -%}
+No static power data
+{% endif %}
+
+## Dynamic power
+{% if staticPower is defined -%}
+
+{% else -%}
+No dynamic power data
+{% endif %}
+
+## Delay
+{% if delay is defined -%}
+
+{% else -%}
+No delay data
+{% endif %}
+
