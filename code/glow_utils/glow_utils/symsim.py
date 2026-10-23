@@ -586,13 +586,7 @@ class Symsim:
                 row[indexes['qPin']] = pspec['qPin']
             if pspec['qnPin'] is not None:
                 row[indexes['qnPin']] = pspec['qnPin']
-            if pspec['hasClr']:
-                if not pspec['asyncClr']:
-                    row[indexes['clrPin']] = '-'
-            if pspec['hasSet']:
-                if not pspec['asyncSet']:
-                    row[indexes['setPin']] = '-'
-            row[indexes['description']] = 'Disabled'
+            row[indexes['description']] = 'Write disabled'
             rows.append(row)
 
         # FF clear
@@ -609,6 +603,8 @@ class Symsim:
                 row[indexes['qPin']] = '0'
             if pspec['qnPin'] is not None:
                 row[indexes['qnPin']] = '1'
+            if pspec['hasEn']:
+                row[indexes['enPin']] = '-'
             row[indexes['description']] = 'Clear'
             rows.append(row)
 
@@ -626,6 +622,8 @@ class Symsim:
                 row[indexes['qPin']] = '1'
             if pspec['qnPin'] is not None:
                 row[indexes['qnPin']] = '0'
+            if pspec['hasEn']:
+                row[indexes['enPin']] = '-'
             row[indexes['description']] = 'Set'
             rows.append(row)
 
