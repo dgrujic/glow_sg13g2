@@ -25,7 +25,13 @@ from glow_utils.manifest import Manifest
 from glow_utils.symsubcircuit import Symsubcircuit
 from glow_utils.symsim import Symsim
 from glow_utils.symtech import SymTech
+from glow_utils.symieee1164 import IEEE1164
 from jinja2 import Environment, FileSystemLoader
+from glow_utils.symcheck import Symcheck
+from copy import copy
+import json
+import urllib.parse
+from itertools import groupby
 
 defaultTemplatePath = "$GLOW_ROOT/code/templates"
 defaultReportPath = "$GLOW_ROOT/doc/glow_sg13g2/src"
@@ -294,6 +300,18 @@ def combinatorialReport(manifest, groupName, templatePath):
 # D flip-flop report generator
 #
 
+def bitsToWavedrom(vals):
+    """
+    Convert consecutive 1s or 0s to Wavedrom hold format
+    """
+    result = []
+    
+    for bit, group in groupby(vals):
+        bitLen = len(list(group))
+        result.append(bit)
+        result.append('.' * (bitLen - 1))
+    return "".join(result)
+
 def dffReport(manifest, groupName, templatePath):
     """
     Generate a report for a D flip-flop
@@ -315,6 +333,24 @@ def dffReport(manifest, groupName, templatePath):
     spec = group['function']
     spec = {value: key for key, value in spec.items()}
     tbl = sim.dffTable(spec)
+    # Simulate the flip-flop
+    res = sim.dffCheck(spec)
+    wavedromData = None
+    if res:
+        # Simulation was successfull
+        signalPins = []
+        check = Symcheck(circuit)
+        id = check.identifyTerminals()
+        signalPins += sorted(id['I'])
+        signalPins += sorted(id['O'])
+        wave = sim.filterResults( signalPins )
+        signalData = []
+        for i in range(len(signalPins)):
+            name = signalPins[i]
+            waveData = IEEE1164.toList(wave[name])
+            signalData.append( {'name' : name, 'wave' : bitsToWavedrom("".join(map(str, waveData)))} )
+        wavedromData = { "signal" : signalData }
+
     # Process cell variants
     cellVariants = {}
     for cellName in group['cells']:
@@ -334,6 +370,17 @@ def dffReport(manifest, groupName, templatePath):
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template("report_dff.jinja")
 
+    # Make Wavedrom URLs for light and dark themes
+    jsonString = json.dumps(wavedromData, separators=(',', ':'))
+    url = urllib.parse.quote(jsonString)
+    lightWaveURL = "https://svg.wavedrom.com/" + url
+
+    darkWaveData = wavedromData.copy()
+    darkWaveData["config"] = {"skin": "dark"}
+    darkJsonString = json.dumps(darkWaveData, separators=(',', ':'))
+    url = urllib.parse.quote(darkJsonString)
+    darkWaveURL = "https://svg.wavedrom.com/" + url
+
     # Data for Jinja template
     data = {
         "cell_group": groupName,
@@ -342,9 +389,11 @@ def dffReport(manifest, groupName, templatePath):
         "optional" : optional,
         "truthTable" : tbl,
         "cellVariants" : cellVariants,
-        "timestamp" : datetime.datetime.now().strftime(r"%d-%m-%Y %H:%M:%S")
+        "timestamp" : datetime.datetime.now().strftime(r"%d-%m-%Y %H:%M:%S"),
+        "waveData" : wavedromData,
+        "lightWaveURL" : lightWaveURL,
+        "darkWaveURL" : darkWaveURL
     }
-
     return template.render(data)
 
 #
@@ -372,6 +421,24 @@ def dlatchReport(manifest, groupName, templatePath):
     spec = group['function']
     spec = {value: key for key, value in spec.items()}
     tbl = sim.latchTable(spec)
+    # Simulate the latch
+    res = sim.latchCheck(spec)
+    wavedromData = None
+    if res:
+        # Simulation was successfull
+        signalPins = []
+        check = Symcheck(circuit)
+        id = check.identifyTerminals()
+        signalPins += sorted(id['I'])
+        signalPins += sorted(id['O'])
+        wave = sim.filterResults( signalPins )
+        signalData = []
+        for i in range(len(signalPins)):
+            name = signalPins[i]
+            waveData = IEEE1164.toList(wave[name])
+            signalData.append( {'name' : name, 'wave' : bitsToWavedrom("".join(map(str, waveData)))} )
+        wavedromData = { "signal" : signalData }
+    
     # Process cell variants
     cellVariants = {}
     for cellName in group['cells']:
@@ -391,6 +458,17 @@ def dlatchReport(manifest, groupName, templatePath):
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template("report_dff.jinja")
 
+    # Make Wavedrom URLs for light and dark themes
+    jsonString = json.dumps(wavedromData, separators=(',', ':'))
+    url = urllib.parse.quote(jsonString)
+    lightWaveURL = "https://svg.wavedrom.com/" + url
+
+    darkWaveData = wavedromData.copy()
+    darkWaveData["config"] = {"skin": "dark"}
+    darkJsonString = json.dumps(darkWaveData, separators=(',', ':'))
+    url = urllib.parse.quote(darkJsonString)
+    darkWaveURL = "https://svg.wavedrom.com/" + url
+
     # Data for Jinja template
     data = {
         "cell_group": groupName,
@@ -399,7 +477,10 @@ def dlatchReport(manifest, groupName, templatePath):
         "optional" : optional,
         "truthTable" : tbl,
         "cellVariants" : cellVariants,
-        "timestamp" : datetime.datetime.now().strftime(r"%d-%m-%Y %H:%M:%S")
+        "timestamp" : datetime.datetime.now().strftime(r"%d-%m-%Y %H:%M:%S"),
+        "waveData" : wavedromData,
+        "lightWaveURL" : lightWaveURL,
+        "darkWaveURL" : darkWaveURL
     }
 
     return template.render(data)
