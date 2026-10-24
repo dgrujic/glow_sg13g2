@@ -79,7 +79,7 @@ XMP1 Y B VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=1
 #### CDL netlist
 ```cdl
 .SUBCKT NAND2_DL A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 Y B n0 VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
 MP0 Y A VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ng=1 
@@ -115,7 +115,7 @@ XMP1 Y B VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=2
 #### CDL netlist
 ```cdl
 .SUBCKT NAND2_D1 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 ng=1 
 MN1 Y B n0 VSS sg13_lv_nmos w=9e-07 l=1.3e-07 ng=1 
 MP0 Y A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
@@ -155,7 +155,7 @@ XMP1 Y B VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.8
 #### CDL netlist
 ```cdl
 .SUBCKT NAND2_D2 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 B VSS VSS sg13_lv_nmos w=7.25e-07 l=1.3e-07 ng=1 
 MN1 Y A n0 VSS sg13_lv_nmos w=7.25e-07 l=1.3e-07 ng=1 
 MN2 n1 B VSS VSS sg13_lv_nmos w=7.25e-07 l=1.3e-07 ng=1 
@@ -203,7 +203,7 @@ XMP3 Y B VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.8
 #### CDL netlist
 ```cdl
 .SUBCKT NAND2_D4 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 B VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MN1 Y A n0 VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MN2 n1 B VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
@@ -267,7 +267,7 @@ XMP5 Y B VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.8
 #### CDL netlist
 ```cdl
 .SUBCKT NAND2_D8 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 B VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MN1 Y A n0 VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MN2 n1 B VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 

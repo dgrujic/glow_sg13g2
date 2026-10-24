@@ -86,7 +86,7 @@ XMP4 n4 I1 VDD VDD sg13_lv_pmos w=4.8e-07 l=1.3e-07 ad=1.488e-13 as=1.488e-13 pd
 #### CDL netlist
 ```cdl
 .SUBCKT MUX2N_DL I0 I1 S0 YN VDD VSS
-*.PININFO I1:I S0:I I0:I YN:O VDD:B VSS:B 
+*.PININFO I0:I I1:I S0:I YN:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ng=1 
 MN1 YN n0 n1 VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
@@ -136,7 +136,7 @@ XMP4 n4 I1 VDD VDD sg13_lv_pmos w=9.6e-07 l=1.3e-07 ad=2.976e-13 as=2.976e-13 pd
 #### CDL netlist
 ```cdl
 .SUBCKT MUX2N_D1 I0 I1 S0 YN VDD VSS
-*.PININFO I1:I S0:I I0:I YN:O VDD:B VSS:B 
+*.PININFO I0:I I1:I S0:I YN:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=2.4e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=3.6e-07 l=1.3e-07 ng=1 
 MN1 YN n0 n1 VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 

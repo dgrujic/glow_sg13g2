@@ -86,7 +86,7 @@ XMP3 Y A n2 VDD sg13_lv_pmos w=8.4e-07 l=1.3e-07 ad=2.604e-13 as=2.604e-13 pd=2.
 #### CDL netlist
 ```cdl
 .SUBCKT NOR4_DL A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -130,7 +130,7 @@ XMP3 Y A n2 VDD sg13_lv_pmos w=1.4e-06 l=1.3e-07 ad=4.34e-13 as=4.34e-13 pd=3.42
 #### CDL netlist
 ```cdl
 .SUBCKT NOR4_D1 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -174,7 +174,7 @@ XMP3 Y A n2 VDD sg13_lv_pmos w=2.2e-06 l=1.3e-07 ad=6.82e-13 as=6.82e-13 pd=5.02
 #### CDL netlist
 ```cdl
 .SUBCKT NOR4_D2 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
@@ -218,7 +218,7 @@ XMP3 Y A n2 VDD sg13_lv_pmos w=4.41e-06 l=1.3e-07 ad=1.367e-12 as=1.367e-12 pd=9
 #### CDL netlist
 ```cdl
 .SUBCKT NOR4_D4 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=1.5e-06 l=1.3e-07 ng=2 
 MN1 Y B VSS VSS sg13_lv_nmos w=1.5e-06 l=1.3e-07 ng=2 
 MN2 Y C VSS VSS sg13_lv_nmos w=1.5e-06 l=1.3e-07 ng=2 

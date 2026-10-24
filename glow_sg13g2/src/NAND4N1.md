@@ -88,7 +88,7 @@ XMP4 n3 AN VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ad=7.13e-14 as=7.13e-14 pd=1
 #### CDL netlist
 ```cdl
 .SUBCKT NAND4N1_DL AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=3.6e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=3.6e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=3.6e-07 l=1.3e-07 ng=1 
@@ -137,7 +137,7 @@ XMP4 n3 AN VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ad=9.3e-14 as=9.3e-14 pd=1.22e
 #### CDL netlist
 ```cdl
 .SUBCKT NAND4N1_D1 AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
@@ -186,7 +186,7 @@ XMP4 n3 AN VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ad=1.86e-13 as=1.86e-13 pd=1.8
 #### CDL netlist
 ```cdl
 .SUBCKT NAND4N1_D2 AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN1 n1 C n0 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN2 n2 B n1 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 

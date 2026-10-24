@@ -86,7 +86,7 @@ XMP2 Y C n1 VDD sg13_lv_pmos w=9e-07 l=1.3e-07 ad=2.79e-13 as=2.79e-13 pd=2.42e-
 #### CDL netlist
 ```cdl
 .SUBCKT AOI21_DL A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN1 Y B n0 VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN2 Y C VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
@@ -131,7 +131,7 @@ XMP2 Y C n1 VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 pd=3
 #### CDL netlist
 ```cdl
 .SUBCKT AOI21_D1 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN1 Y B n0 VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN2 Y C VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
@@ -182,7 +182,7 @@ XMP5 Y C n2 VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 pd=3
 #### CDL netlist
 ```cdl
 .SUBCKT AOI21_D2 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1.8e-06 l=1.3e-07 ng=2 
 MN1 Y B n0 VSS sg13_lv_nmos w=1.8e-06 l=1.3e-07 ng=2 
 MN2 Y C VSS VSS sg13_lv_nmos w=1.28e-06 l=1.3e-07 ng=2 
