@@ -1757,7 +1757,7 @@ class Symsim:
                 self.nodes = newNodes
                 self.results.append( copy(self.nodes) )
                 if not self.areNodeValuesValid():
-                    print("Symsim::simstep: WARNING : Nodes contain invalid values.")
+                    self.msg("Symsim::simstep: WARNING : Nodes contain invalid values.")
                 return
             # Update node values and execute a new delta step
             self.nodes = newNodes
