@@ -106,8 +106,8 @@ class Symcheck():
         allDS = drainNodes.union(sourceNodes)
         nonPowerDS = allDS.difference(powerNodes, groundNodes)
         outputNodes = nonPowerDS.intersection(terminalNodes)
-        return {  'I' : list(inputNodes),
-                  'O' : list(outputNodes),
+        return {  'I' : sorted(list(inputNodes)),
+                  'O' : sorted(list(outputNodes)),
                   'P' : list(powerNodes),
                   'G' : list(groundNodes)}
 
