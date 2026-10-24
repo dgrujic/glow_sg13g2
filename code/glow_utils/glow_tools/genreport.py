@@ -183,6 +183,50 @@ def generateSummary(groups, templatePath):
     return template.render(data)
 
 #
+# Introduction generator
+#
+
+def generateIntroduction(manifest, groups, templatePath):
+    """
+    Generate introduction.md
+    """
+    template_dir = os.path.expandvars(templatePath)
+    env = Environment(loader=FileSystemLoader(template_dir))
+    template = env.get_template("report_introduction.jinja")
+
+    groupTypes = {}
+    for group in groups:
+        groupType = manifest.getCellGroupType(group)
+        if groupType in groupTypes.keys():
+            # Group type already exists
+            ngroups, ncells = groupTypes[groupType]
+        else:
+            # New group type
+            ncells = 0
+            ngroups = 0
+        ngroups += 1
+        ncells += len(manifest.getCellGroupCells(group))
+        groupTypes.update( { groupType : (ngroups, ncells)} )
+    cellCount = []
+    totalGroups = 0
+    totalCells = 0
+    for groupType in groupTypes:
+        ngroups, ncells = groupTypes[groupType]
+        totalGroups += ngroups
+        totalCells += ncells
+        cellCount.append( (groupType, ngroups, ncells) )
+
+    # Data for Jinja template
+    data = {
+        "cell_groups": groups,
+        "cell_count" : cellCount,
+        "total_groups" : totalGroups,
+        "total_cells"  : totalCells
+    }
+
+    return template.render(data)
+
+#
 # Combinatorial report generator
 #
 
@@ -424,29 +468,29 @@ def main():
         else:
             print(group, end="")
 
-#        try:
-        res = None
-        if groupType == "combinatorial" or groupType == "constant":
-            res = combinatorialReport(manifest, group, templatePath)
-        elif groupType == "dff":
-            res = dffReport(manifest, group, templatePath)
-        elif groupType == "dlatch":
-            res = dlatchReport(manifest, group, templatePath)
-        if res is not None:
-            # Write the report
-            reportFilename = os.path.expandvars(reportPath)
-            reportFilename += "/" + group + ".md"
-            with open(reportFilename, "w") as file:
-                file.write(res)
-            # Generate layout SVG
-            reportFigPath = os.path.expandvars(reportPath) + "/figs"
-            gdsToSVG(manifest, group, quiet, reportFigPath)
-            print("\tOK")
-        else:
-            print("\tWARNING : Unsupported group type", groupType, "SKIPPING")
-        # except:
-        #     print("\tERROR")
-        #     error_groups.append(group)
+        try:
+            res = None
+            if groupType == "combinatorial" or groupType == "constant":
+                res = combinatorialReport(manifest, group, templatePath)
+            elif groupType == "dff":
+                res = dffReport(manifest, group, templatePath)
+            elif groupType == "dlatch":
+                res = dlatchReport(manifest, group, templatePath)
+            if res is not None:
+                # Write the report
+                reportFilename = os.path.expandvars(reportPath)
+                reportFilename += "/" + group + ".md"
+                with open(reportFilename, "w") as file:
+                    file.write(res)
+                # Generate layout SVG
+                reportFigPath = os.path.expandvars(reportPath) + "/figs"
+                gdsToSVG(manifest, group, quiet, reportFigPath)
+                print("\tOK")
+            else:
+                print("\tWARNING : Unsupported group type", groupType, "SKIPPING")
+        except:
+            print("\tERROR")
+            error_groups.append(group)
 
     if args.summary:
         # Generate SUMMARY.md
@@ -460,6 +504,20 @@ def main():
             print("\tOK")
         except:
             print("\tERROR")
+            error_groups.append("SUMMARY")
+
+        # Generate intoduction.md
+        try:
+            print("Generating introduction...", end="")
+            res = generateIntroduction(manifest, groups, templatePath)
+            reportFilename = os.path.expandvars(reportPath)
+            reportFilename += "/introduction.md"
+            with open(reportFilename, "w") as file:
+                file.write(res)
+            print("\tOK")
+        except:
+            print("\tERROR")
+            error_groups.append("INTRODUCTION")
 
     if len(error_groups) > 0:
         print("ERROR in [" +str(len(error_groups))+ "] cells : " + " ".join(error_groups))

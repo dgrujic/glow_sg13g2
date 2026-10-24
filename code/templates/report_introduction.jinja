@@ -1,0 +1,20 @@
+# Introduction
+
+This document provides information about the GLOW SG13G2 digital standard cell library.
+Commonly used elementary used in other cells are parametrized and documented in [overview of parametrized cells](./parametrized_cells.md)
+
+Summary of standard cell library celss is given in the following table.
+
+| Category | Groups | Cells |
+| :------  | :---: | :---: |
+{% for category, ngroups, ncells  in cell_count -%}
+| {{ category }} | {{ ngroups }} | {{ ncells }} |
+{% endfor -%}
+| ∑ | {{ total_groups }} | {{ total_cells }}
+
+
+Documentation for groups of standard cells can be accessed from the following links.
+
+{% for name in cell_groups -%}
+- [{{ name }}](./{{ name }}.md)
+{% endfor %}
