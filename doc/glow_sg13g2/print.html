@@ -38,7 +38,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9bdec983.js";
+            window.path_to_searchindex_js = "searchindex-04ebe777.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-c63673e2.js"></script>
@@ -180,6 +180,94 @@
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>This document provides information about the GLOW SG13G2 digital standard cell library.
 Commonly used elementary used in other cells are parametrized and documented in <a href="#parametrized-cells">overview of parametrized cells</a></p>
+<p>Summary of standard cell library celss is given in the following table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Category</th><th style="text-align: center">Groups</th><th style="text-align: center">Cells</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left">combinatorial</td><td style="text-align: center">42</td><td style="text-align: center">144</td></tr>
+<tr><td style="text-align: left">dff</td><td style="text-align: center">24</td><td style="text-align: center">69</td></tr>
+<tr><td style="text-align: left">dlatch</td><td style="text-align: center">2</td><td style="text-align: center">6</td></tr>
+<tr><td style="text-align: left">constant</td><td style="text-align: center">2</td><td style="text-align: center">2</td></tr>
+<tr><td style="text-align: left">∑</td><td style="text-align: center">70</td><td style="text-align: center">221</td></tr>
+</tbody>
+</table>
+</div>
+<p>Documentation for groups of standard cells can be accessed from the following links.</p>
+<ul>
+<li><a href="#and2">AND2</a></li>
+<li><a href="#and3">AND3</a></li>
+<li><a href="#and4">AND4</a></li>
+<li><a href="#ao21">AO21</a></li>
+<li><a href="#ao22">AO22</a></li>
+<li><a href="#aoi21">AOI21</a></li>
+<li><a href="#aoi211">AOI211</a></li>
+<li><a href="#aoi22">AOI22</a></li>
+<li><a href="#aoi221">AOI221</a></li>
+<li><a href="#aoi222">AOI222</a></li>
+<li><a href="#aoi2n1">AOI2N1</a></li>
+<li><a href="#aoi2n2">AOI2N2</a></li>
+<li><a href="#buf">BUF</a></li>
+<li><a href="#clkbuf">CLKBUF</a></li>
+<li><a href="#clkinv">CLKINV</a></li>
+<li><a href="#dfarq">DFARQ</a></li>
+<li><a href="#dfarqn">DFARQN</a></li>
+<li><a href="#dfarqqn">DFARQQN</a></li>
+<li><a href="#dfasq">DFASQ</a></li>
+<li><a href="#dfasqn">DFASQN</a></li>
+<li><a href="#dfasqqn">DFASQQN</a></li>
+<li><a href="#dfeq">DFEQ</a></li>
+<li><a href="#dfeqn">DFEQN</a></li>
+<li><a href="#dfeqqn">DFEQQN</a></li>
+<li><a href="#dferq">DFERQ</a></li>
+<li><a href="#dferqn">DFERQN</a></li>
+<li><a href="#dferqqn">DFERQQN</a></li>
+<li><a href="#dfesq">DFESQ</a></li>
+<li><a href="#dfesqn">DFESQN</a></li>
+<li><a href="#dfesqqn">DFESQQN</a></li>
+<li><a href="#dfq">DFQ</a></li>
+<li><a href="#dfqn">DFQN</a></li>
+<li><a href="#dfqqn">DFQQN</a></li>
+<li><a href="#dfrq">DFRQ</a></li>
+<li><a href="#dfrqn">DFRQN</a></li>
+<li><a href="#dfrqqn">DFRQQN</a></li>
+<li><a href="#dfsq">DFSQ</a></li>
+<li><a href="#dfsqn">DFSQN</a></li>
+<li><a href="#dfsqqn">DFSQQN</a></li>
+<li><a href="#dl">DL</a></li>
+<li><a href="#dln">DLN</a></li>
+<li><a href="#inv">INV</a></li>
+<li><a href="#mux2">MUX2</a></li>
+<li><a href="#mux2n">MUX2N</a></li>
+<li><a href="#mux3">MUX3</a></li>
+<li><a href="#mux4">MUX4</a></li>
+<li><a href="#nand2">NAND2</a></li>
+<li><a href="#nand3">NAND3</a></li>
+<li><a href="#nand4">NAND4</a></li>
+<li><a href="#nand4n1">NAND4N1</a></li>
+<li><a href="#nand4n2">NAND4N2</a></li>
+<li><a href="#nor2">NOR2</a></li>
+<li><a href="#nor3">NOR3</a></li>
+<li><a href="#nor4">NOR4</a></li>
+<li><a href="#nor4n1">NOR4N1</a></li>
+<li><a href="#nor4n2">NOR4N2</a></li>
+<li><a href="#oa21">OA21</a></li>
+<li><a href="#oa22">OA22</a></li>
+<li><a href="#oai21">OAI21</a></li>
+<li><a href="#oai211">OAI211</a></li>
+<li><a href="#oai221">OAI221</a></li>
+<li><a href="#oai222">OAI222</a></li>
+<li><a href="#oai2n1">OAI2N1</a></li>
+<li><a href="#or2">OR2</a></li>
+<li><a href="#or3">OR3</a></li>
+<li><a href="#or4">OR4</a></li>
+<li><a href="#tieh">TIEH</a></li>
+<li><a href="#tiel">TIEL</a></li>
+<li><a href="#xnor2">XNOR2</a></li>
+<li><a href="#xor2">XOR2</a></li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="parametrized-cells"><a class="header" href="#parametrized-cells">Parametrized cells</a></h1>
 <p>Most digital gates can be constructed from few elementary gates that are commonly occurring.
@@ -754,7 +842,7 @@ XMP2 Y n1 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist"><a class="header" href="#cdl-netlist">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND2_DL A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1.8e-07 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=1.8e-07 l=1.3e-07 ng=1 
 MP0 n1 A VDD VDD sg13_lv_pmos w=2e-07 l=1.3e-07 ng=1 
@@ -787,7 +875,7 @@ XMP2 Y n1 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1"><a class="header" href="#cdl-netlist-1">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND2_D1 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
 MP0 n1 A VDD VDD sg13_lv_pmos w=3.6e-07 l=1.3e-07 ng=1 
@@ -820,7 +908,7 @@ XMP2 Y n1 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2"><a class="header" href="#cdl-netlist-2">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND2_D2 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MP0 n1 A VDD VDD sg13_lv_pmos w=5.5e-07 l=1.3e-07 ng=1 
@@ -853,7 +941,7 @@ XMP2 Y n1 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd=7.
 </code></pre>
 <h4 id="cdl-netlist-3"><a class="header" href="#cdl-netlist-3">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND2_D4 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1e-06 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=1e-06 l=1.3e-07 ng=1 
 MP0 n1 A VDD VDD sg13_lv_pmos w=1.1e-06 l=1.3e-07 ng=1 
@@ -961,7 +1049,7 @@ XMP3 Y n2 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-4"><a class="header" href="#cdl-netlist-4">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND3_DL A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=3.3e-07 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=3.3e-07 l=1.3e-07 ng=1 
 MN2 n2 A n1 VSS sg13_lv_nmos w=3.3e-07 l=1.3e-07 ng=1 
@@ -998,7 +1086,7 @@ XMP3 Y n2 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1-1"><a class="header" href="#cdl-netlist-1-1">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND3_D1 A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=4.2e-07 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=4.2e-07 l=1.3e-07 ng=1 
 MN2 n2 A n1 VSS sg13_lv_nmos w=4.2e-07 l=1.3e-07 ng=1 
@@ -1035,7 +1123,7 @@ XMP3 Y n2 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2-1"><a class="header" href="#cdl-netlist-2-1">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND3_D2 A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN2 n2 A n1 VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -1072,7 +1160,7 @@ XMP3 Y n2 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd=7.
 </code></pre>
 <h4 id="cdl-netlist-3-1"><a class="header" href="#cdl-netlist-3-1">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND3_D4 A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=1e-06 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=1e-06 l=1.3e-07 ng=1 
 MN2 n2 A n1 VSS sg13_lv_nmos w=1e-06 l=1.3e-07 ng=1 
@@ -1186,7 +1274,7 @@ XMP4 Y n3 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-5"><a class="header" href="#cdl-netlist-5">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND4_DL A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=3.4e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=3.4e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=3.4e-07 l=1.3e-07 ng=1 
@@ -1227,7 +1315,7 @@ XMP4 Y n3 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1-2"><a class="header" href="#cdl-netlist-1-2">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND4_D1 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
@@ -1268,7 +1356,7 @@ XMP4 Y n3 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2-2"><a class="header" href="#cdl-netlist-2-2">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND4_D2 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=7.5e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=7.5e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=7.5e-07 l=1.3e-07 ng=1 
@@ -1318,7 +1406,7 @@ XMP8 Y n3 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd=7.
 </code></pre>
 <h4 id="cdl-netlist-3-2"><a class="header" href="#cdl-netlist-3-2">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AND4_D4 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=7.2e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=7.2e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=7.2e-07 l=1.3e-07 ng=1 
@@ -1442,7 +1530,7 @@ XMP3 Y n1 VDD VDD sg13_lv_pmos w=6.6e-07 l=1.3e-07 ad=2.046e-13 as=2.046e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-6"><a class="header" href="#cdl-netlist-6">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AO21_DL A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 
 MN1 n1 B n0 VSS sg13_lv_nmos w=2e-07 l=1.3e-07 
 MN2 n1 C VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 
@@ -1484,7 +1572,7 @@ XMP3 Y n1 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1-3"><a class="header" href="#cdl-netlist-1-3">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AO21_D1 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
 MN1 n1 B n0 VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
 MN2 n1 C VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 
@@ -1526,7 +1614,7 @@ XMP3 Y n1 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2-3"><a class="header" href="#cdl-netlist-2-3">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AO21_D2 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN1 n1 B n0 VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN2 n1 C VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
@@ -1647,7 +1735,7 @@ XMP4 Y n1 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-7"><a class="header" href="#cdl-netlist-7">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AO22_DL A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 
 MN1 n1 B n0 VSS sg13_lv_nmos w=2e-07 l=1.3e-07 
 MN2 n2 C VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 
@@ -1695,7 +1783,7 @@ XMP4 Y n1 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1-4"><a class="header" href="#cdl-netlist-1-4">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AO22_D1 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
 MN1 n1 B n0 VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
 MN2 n2 C VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
@@ -1743,7 +1831,7 @@ XMP4 Y n1 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2-4"><a class="header" href="#cdl-netlist-2-4">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AO22_D2 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN1 n1 B n0 VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN2 n2 C VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
@@ -1856,7 +1944,7 @@ XMP2 Y C n1 VDD sg13_lv_pmos w=9e-07 l=1.3e-07 ad=2.79e-13 as=2.79e-13 pd=2.42e-
 </code></pre>
 <h4 id="cdl-netlist-8"><a class="header" href="#cdl-netlist-8">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI21_DL A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN1 Y B n0 VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN2 Y C VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
@@ -1893,7 +1981,7 @@ XMP2 Y C n1 VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-1-5"><a class="header" href="#cdl-netlist-1-5">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI21_D1 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN1 Y B n0 VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN2 Y C VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
@@ -1936,7 +2024,7 @@ XMP5 Y C n2 VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-2-5"><a class="header" href="#cdl-netlist-2-5">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI21_D2 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1.8e-06 l=1.3e-07 ng=2 
 MN1 Y B n0 VSS sg13_lv_nmos w=1.8e-06 l=1.3e-07 ng=2 
 MN2 Y C VSS VSS sg13_lv_nmos w=1.28e-06 l=1.3e-07 ng=2 
@@ -2054,7 +2142,7 @@ XMP3 Y D n2 VDD sg13_lv_pmos w=7.5e-07 l=1.3e-07 ad=2.325e-13 as=2.325e-13 pd=2.
 </code></pre>
 <h4 id="cdl-netlist-9"><a class="header" href="#cdl-netlist-9">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI211_DL A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y D VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
 MN1 Y C VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
 MN2 n0 B VSS VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 
@@ -2097,7 +2185,7 @@ XMP3 Y D n2 VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-1-6"><a class="header" href="#cdl-netlist-1-6">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI211_D1 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y D VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
 MN1 Y C VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
 MN2 n0 B VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
@@ -2152,7 +2240,7 @@ XMP5 Y D n4 VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-2-6"><a class="header" href="#cdl-netlist-2-6">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI211_D2 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y D VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
 MN1 Y D VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
 MN2 Y C VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
@@ -2275,7 +2363,7 @@ XMP3 Y D n2 VDD sg13_lv_pmos w=7.5e-07 l=1.3e-07 ad=2.325e-13 as=2.325e-13 pd=2.
 </code></pre>
 <h4 id="cdl-netlist-10"><a class="header" href="#cdl-netlist-10">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI22_DL A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN1 Y C n0 VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN2 n1 B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
@@ -2318,7 +2406,7 @@ XMP3 Y D n2 VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-1-7"><a class="header" href="#cdl-netlist-1-7">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI22_D1 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN1 Y C n0 VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN2 n1 B VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
@@ -2441,7 +2529,7 @@ XMP4 Y E n3 VDD sg13_lv_pmos w=8.7e-07 l=1.3e-07 ad=2.697e-13 as=2.697e-13 pd=2.
 </code></pre>
 <h4 id="cdl-netlist-11"><a class="header" href="#cdl-netlist-11">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI221_DL A B C D E Y VDD VSS
-*.PININFO C:I B:I D:I A:I E:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I E:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=6.25e-07 l=1.3e-07 
 MN1 Y C n0 VSS sg13_lv_nmos w=6.25e-07 l=1.3e-07 
 MN2 n1 B VSS VSS sg13_lv_nmos w=6.25e-07 l=1.3e-07 
@@ -2490,7 +2578,7 @@ XMP4 Y E n3 VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.82
 </code></pre>
 <h4 id="cdl-netlist-1-8"><a class="header" href="#cdl-netlist-1-8">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI221_D1 A B C D E Y VDD VSS
-*.PININFO C:I B:I D:I A:I E:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I E:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN1 Y C n0 VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN2 n1 B VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
@@ -2624,7 +2712,7 @@ XMP5 Y F n4 VDD sg13_lv_pmos w=1e-06 l=1.3e-07 ad=3.1e-13 as=3.1e-13 pd=2.62e-06
 </code></pre>
 <h4 id="cdl-netlist-12"><a class="header" href="#cdl-netlist-12">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI222_DL A B C D E F Y VDD VSS
-*.PININFO C:I B:I D:I A:I F:I E:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I E:I F:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN1 Y C n0 VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN2 n1 B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
@@ -2679,7 +2767,7 @@ XMP5 Y F n4 VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.82
 </code></pre>
 <h4 id="cdl-netlist-1-9"><a class="header" href="#cdl-netlist-1-9">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI222_D1 A B C D E F Y VDD VSS
-*.PININFO C:I B:I D:I A:I F:I E:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I E:I F:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN1 Y C n0 VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN2 n1 B VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
@@ -2798,7 +2886,7 @@ XMP3 n2 n0 VDD VDD sg13_lv_pmos w=6.4e-07 l=1.3e-07 ad=1.984e-13 as=1.984e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-13"><a class="header" href="#cdl-netlist-13">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI2N1_DL A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 
 MN2 Y n0 VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 
@@ -2841,7 +2929,7 @@ XMP3 n2 n0 VDD VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-10"><a class="header" href="#cdl-netlist-1-10">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI2N1_D1 A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN2 Y n0 VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
@@ -2886,7 +2974,7 @@ XMP7 n5 n3 VDD VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 p
 </code></pre>
 <h4 id="cdl-netlist-2-7"><a class="header" href="#cdl-netlist-2-7">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI2N1_D2 A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN2 Y n0 VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
@@ -3009,7 +3097,7 @@ XMP3 n2 n0 VDD VDD sg13_lv_pmos w=6.4e-07 l=1.3e-07 ad=1.984e-13 as=1.984e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-14"><a class="header" href="#cdl-netlist-14">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI2N1_DL A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 
 MN2 Y n0 VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 
@@ -3056,7 +3144,7 @@ XMP4 Y D n3 VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-1-11"><a class="header" href="#cdl-netlist-1-11">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI2N2_D1 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN2 Y n0 VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
@@ -3992,7 +4080,7 @@ XMP16 Q n17 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-18"><a class="header" href="#cdl-netlist-18">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFARQ_DL D CLK Q RN VDD VSS
-*.PININFO RN:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -4090,7 +4178,7 @@ XMP16 Q n17 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-15"><a class="header" href="#cdl-netlist-1-15">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFARQ_D1 D CLK Q RN VDD VSS
-*.PININFO RN:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -4247,7 +4335,7 @@ XMP15 QN n13 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 
 </code></pre>
 <h4 id="cdl-netlist-19"><a class="header" href="#cdl-netlist-19">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFARQN_DL D CLK QN RN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -4340,7 +4428,7 @@ XMP15 QN n13 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-16"><a class="header" href="#cdl-netlist-1-16">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFARQN_D1 D CLK QN RN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -4502,7 +4590,7 @@ XMP17 Q n17 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-20"><a class="header" href="#cdl-netlist-20">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFARQQN_DL D CLK Q QN RN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -4605,7 +4693,7 @@ XMP17 QN n13 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-17"><a class="header" href="#cdl-netlist-1-17">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFARQQN_D1 D CLK Q QN RN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -4764,7 +4852,7 @@ XMP15 Q n16 VDD VDD sg13_lv_pmos w=4.8e-07 l=1.3e-07 ad=1.488e-13 as=1.488e-13 p
 </code></pre>
 <h4 id="cdl-netlist-21"><a class="header" href="#cdl-netlist-21">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFASQ_DL D CLK Q SN VDD VSS
-*.PININFO D:I CLK:I SN:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I SN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -4857,7 +4945,7 @@ XMP15 Q n16 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-18"><a class="header" href="#cdl-netlist-1-18">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFASQ_D1 D CLK Q SN VDD VSS
-*.PININFO D:I CLK:I SN:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I SN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -5009,7 +5097,7 @@ XMP14 QN n13 VDD VDD sg13_lv_pmos w=4.8e-07 l=1.3e-07 ad=1.488e-13 as=1.488e-13 
 </code></pre>
 <h4 id="cdl-netlist-22"><a class="header" href="#cdl-netlist-22">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFASQN_DL D CLK QN SN VDD VSS
-*.PININFO D:I CLK:I SN:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I SN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -5097,7 +5185,7 @@ XMP14 QN n13 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-19"><a class="header" href="#cdl-netlist-1-19">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFASQN_D1 D CLK QN SN VDD VSS
-*.PININFO D:I CLK:I SN:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I SN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -5254,7 +5342,7 @@ XMP16 QN n13 VDD VDD sg13_lv_pmos w=4.8e-07 l=1.3e-07 ad=1.488e-13 as=1.488e-13 
 </code></pre>
 <h4 id="cdl-netlist-23"><a class="header" href="#cdl-netlist-23">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFASQQN_DL D CLK Q QN SN VDD VSS
-*.PININFO D:I CLK:I SN:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I SN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -5352,7 +5440,7 @@ XMP16 QN n13 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-20"><a class="header" href="#cdl-netlist-1-20">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFASQQN_D1 D CLK Q QN SN VDD VSS
-*.PININFO D:I CLK:I SN:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I SN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -5521,7 +5609,7 @@ XMP16 Q n14 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-24"><a class="header" href="#cdl-netlist-24">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFEQ_DL D E CLK Q VDD VSS
-*.PININFO E:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -5627,7 +5715,7 @@ XMP16 Q n14 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-21"><a class="header" href="#cdl-netlist-1-21">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFEQ_D1 D E CLK Q VDD VSS
-*.PININFO E:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -5738,7 +5826,7 @@ XMP18 Q n14 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-11"><a class="header" href="#cdl-netlist-2-11">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFEQ_D2 D E CLK Q VDD VSS
-*.PININFO E:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
@@ -5911,7 +5999,7 @@ XMP16 QN n6 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-25"><a class="header" href="#cdl-netlist-25">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFEQN_DL D E CLK QN VDD VSS
-*.PININFO E:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -6017,7 +6105,7 @@ XMP16 QN n6 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-22"><a class="header" href="#cdl-netlist-1-22">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFEQN_D1 D E CLK QN VDD VSS
-*.PININFO E:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -6128,7 +6216,7 @@ XMP18 QN n6 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-12"><a class="header" href="#cdl-netlist-2-12">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFEQN_D2 D E CLK QN VDD VSS
-*.PININFO E:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
@@ -6305,7 +6393,7 @@ XMP17 QN n6 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-26"><a class="header" href="#cdl-netlist-26">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFEQQN_DL D E CLK Q QN VDD VSS
-*.PININFO E:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -6416,7 +6504,7 @@ XMP17 QN n6 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-23"><a class="header" href="#cdl-netlist-1-23">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFEQQN_D1 D E CLK Q QN VDD VSS
-*.PININFO E:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -6532,7 +6620,7 @@ XMP19 QN n6 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-13"><a class="header" href="#cdl-netlist-2-13">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFEQQN_D2 D E CLK Q QN VDD VSS
-*.PININFO E:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
@@ -6713,7 +6801,7 @@ XMP17 Q n15 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-27"><a class="header" href="#cdl-netlist-27">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFERQ_DL D E RN CLK Q VDD VSS
-*.PININFO E:I RN:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I RN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -6825,7 +6913,7 @@ XMP17 Q n15 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-24"><a class="header" href="#cdl-netlist-1-24">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFERQ_D1 D E RN CLK Q VDD VSS
-*.PININFO E:I RN:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I RN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -6942,7 +7030,7 @@ XMP19 Q n15 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-14"><a class="header" href="#cdl-netlist-2-14">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFERQ_D2 D E RN CLK Q VDD VSS
-*.PININFO E:I RN:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I RN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -7123,7 +7211,7 @@ XMP17 QN n7 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-28"><a class="header" href="#cdl-netlist-28">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFERQN_DL D E RN CLK QN VDD VSS
-*.PININFO E:I RN:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I RN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -7235,7 +7323,7 @@ XMP17 QN n7 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-25"><a class="header" href="#cdl-netlist-1-25">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFERQN_D1 D E RN CLK QN VDD VSS
-*.PININFO E:I RN:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I RN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -7352,7 +7440,7 @@ XMP19 QN n7 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-15"><a class="header" href="#cdl-netlist-2-15">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFERQN_D2 D E RN CLK QN VDD VSS
-*.PININFO E:I RN:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I RN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -7537,7 +7625,7 @@ XMP18 QN n7 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-29"><a class="header" href="#cdl-netlist-29">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFERQQN_DL D E RN CLK Q QN VDD VSS
-*.PININFO E:I RN:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I RN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -7654,7 +7742,7 @@ XMP18 QN n7 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-26"><a class="header" href="#cdl-netlist-1-26">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFERQQN_D1 D E RN CLK Q QN VDD VSS
-*.PININFO E:I RN:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I RN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -7776,7 +7864,7 @@ XMP20 QN n7 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-16"><a class="header" href="#cdl-netlist-2-16">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFERQQN_D2 D E RN CLK Q QN VDD VSS
-*.PININFO E:I RN:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I RN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -7959,7 +8047,7 @@ XMP17 Q n15 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-30"><a class="header" href="#cdl-netlist-30">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFESQ_DL D E S CLK Q VDD VSS
-*.PININFO S:I E:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I S:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -8071,7 +8159,7 @@ XMP17 Q n15 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-27"><a class="header" href="#cdl-netlist-1-27">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFESQ_D1 D E S CLK Q VDD VSS
-*.PININFO S:I E:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I S:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -8188,7 +8276,7 @@ XMP19 Q n15 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-17"><a class="header" href="#cdl-netlist-2-17">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFESQ_D2 D E S CLK Q VDD VSS
-*.PININFO S:I E:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I S:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -8369,7 +8457,7 @@ XMP17 QN n6 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-31"><a class="header" href="#cdl-netlist-31">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFESQN_DL D E S CLK QN VDD VSS
-*.PININFO S:I E:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I S:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -8481,7 +8569,7 @@ XMP17 QN n6 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-28"><a class="header" href="#cdl-netlist-1-28">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFESQN_D1 D E S CLK QN VDD VSS
-*.PININFO S:I E:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I S:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -8598,7 +8686,7 @@ XMP19 QN n6 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-18"><a class="header" href="#cdl-netlist-2-18">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFESQN_D2 D E S CLK QN VDD VSS
-*.PININFO S:I E:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I S:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -8783,7 +8871,7 @@ XMP18 QN n6 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-32"><a class="header" href="#cdl-netlist-32">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFESQQN_DL D E S CLK Q QN VDD VSS
-*.PININFO S:I E:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I S:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -8900,7 +8988,7 @@ XMP18 QN n6 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-29"><a class="header" href="#cdl-netlist-1-29">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFESQQN_D1 D E S CLK Q QN VDD VSS
-*.PININFO S:I E:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I S:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -9022,7 +9110,7 @@ XMP20 QN n6 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-19"><a class="header" href="#cdl-netlist-2-19">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFESQQN_D2 D E S CLK Q QN VDD VSS
-*.PININFO S:I E:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I E:I S:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -9180,7 +9268,7 @@ XMP12 Q n8 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-33"><a class="header" href="#cdl-netlist-33">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQ_DL D CLK Q VDD VSS
-*.PININFO D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -9260,7 +9348,7 @@ XMP12 Q n8 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-1-30"><a class="header" href="#cdl-netlist-1-30">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQ_D1 D CLK Q VDD VSS
-*.PININFO D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -9340,7 +9428,7 @@ XMP12 Q n8 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-2-20"><a class="header" href="#cdl-netlist-2-20">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQ_D2 D CLK Q VDD VSS
-*.PININFO D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=4.2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=6.3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
@@ -9420,7 +9508,7 @@ XMP12 Q n8 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd=7
 </code></pre>
 <h4 id="cdl-netlist-3-6"><a class="header" href="#cdl-netlist-3-6">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQ_D4 D CLK Q VDD VSS
-*.PININFO D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=7.5e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=1.12e-06 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=5.5e-07 l=1.3e-07 ng=1 
@@ -9562,7 +9650,7 @@ XMP12 QN n11 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 
 </code></pre>
 <h4 id="cdl-netlist-34"><a class="header" href="#cdl-netlist-34">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQN_DL D CLK QN VDD VSS
-*.PININFO D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -9642,7 +9730,7 @@ XMP12 QN n11 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-31"><a class="header" href="#cdl-netlist-1-31">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQN_D1 D CLK QN VDD VSS
-*.PININFO D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -9722,7 +9810,7 @@ XMP12 QN n11 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-2-21"><a class="header" href="#cdl-netlist-2-21">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQN_D2 D CLK QN VDD VSS
-*.PININFO D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -9802,7 +9890,7 @@ XMP12 QN n11 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-3-7"><a class="header" href="#cdl-netlist-3-7">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQN_D4 D CLK QN VDD VSS
-*.PININFO D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=7.5e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=1.12e-06 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=5.5e-07 l=1.3e-07 ng=1 
@@ -9948,7 +10036,7 @@ XMP13 QN n11 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 
 </code></pre>
 <h4 id="cdl-netlist-35"><a class="header" href="#cdl-netlist-35">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQQN_DL D CLK Q QN VDD VSS
-*.PININFO D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -10033,7 +10121,7 @@ XMP13 QN n11 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-32"><a class="header" href="#cdl-netlist-1-32">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQQN_D1 D CLK Q QN VDD VSS
-*.PININFO D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -10118,7 +10206,7 @@ XMP13 QN n11 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-2-22"><a class="header" href="#cdl-netlist-2-22">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQQN_D2 D CLK Q QN VDD VSS
-*.PININFO D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -10203,7 +10291,7 @@ XMP13 QN n11 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-3-8"><a class="header" href="#cdl-netlist-3-8">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFQQN_D4 D CLK Q QN VDD VSS
-*.PININFO D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=7.5e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=1.12e-06 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=5.5e-07 l=1.3e-07 ng=1 
@@ -10353,7 +10441,7 @@ XMP14 Q n13 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-36"><a class="header" href="#cdl-netlist-36">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFRQ_DL D CLK RN Q VDD VSS
-*.PININFO RN:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -10442,7 +10530,7 @@ XMP14 Q n13 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-33"><a class="header" href="#cdl-netlist-1-33">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFRQ_D1 D CLK RN Q VDD VSS
-*.PININFO RN:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -10531,7 +10619,7 @@ XMP14 Q n13 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-23"><a class="header" href="#cdl-netlist-2-23">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFRQ_D2 D CLK RN Q VDD VSS
-*.PININFO RN:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -10683,7 +10771,7 @@ XMP14 QN n10 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 
 </code></pre>
 <h4 id="cdl-netlist-37"><a class="header" href="#cdl-netlist-37">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFRQN_DL D CLK RN QN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -10772,7 +10860,7 @@ XMP14 QN n10 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-34"><a class="header" href="#cdl-netlist-1-34">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFRQN_D1 D CLK RN QN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -10861,7 +10949,7 @@ XMP14 QN n10 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-2-24"><a class="header" href="#cdl-netlist-2-24">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFRQN_D2 D CLK RN QN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -11017,7 +11105,7 @@ XMP15 QN n10 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 
 </code></pre>
 <h4 id="cdl-netlist-38"><a class="header" href="#cdl-netlist-38">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFRQQN_DL D CLK RN Q QN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -11111,7 +11199,7 @@ XMP15 QN n10 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-35"><a class="header" href="#cdl-netlist-1-35">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFRQQN_D1 D CLK RN Q QN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -11205,7 +11293,7 @@ XMP15 QN n10 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-2-25"><a class="header" href="#cdl-netlist-2-25">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFRQQN_D2 D CLK RN Q QN VDD VSS
-*.PININFO RN:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I RN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -11359,7 +11447,7 @@ XMP14 Q n13 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 p
 </code></pre>
 <h4 id="cdl-netlist-39"><a class="header" href="#cdl-netlist-39">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFSQ_DL D CLK S Q VDD VSS
-*.PININFO S:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I S:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -11448,7 +11536,7 @@ XMP14 Q n13 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-36"><a class="header" href="#cdl-netlist-1-36">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFSQ_D1 D CLK S Q VDD VSS
-*.PININFO S:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I S:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -11537,7 +11625,7 @@ XMP14 Q n13 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-2-26"><a class="header" href="#cdl-netlist-2-26">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFSQ_D2 D CLK S Q VDD VSS
-*.PININFO S:I D:I CLK:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I S:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -11689,7 +11777,7 @@ XMP14 QN n10 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 
 </code></pre>
 <h4 id="cdl-netlist-40"><a class="header" href="#cdl-netlist-40">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFSQN_DL D CLK S QN VDD VSS
-*.PININFO S:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I S:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -11778,7 +11866,7 @@ XMP14 QN n10 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-37"><a class="header" href="#cdl-netlist-1-37">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFSQN_D1 D CLK S QN VDD VSS
-*.PININFO S:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I S:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -11867,7 +11955,7 @@ XMP14 QN n10 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-2-27"><a class="header" href="#cdl-netlist-2-27">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFSQN_D2 D CLK S QN VDD VSS
-*.PININFO S:I D:I CLK:I QN:O VDD:B VSS:B 
+*.PININFO CLK:I D:I S:I QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -12023,7 +12111,7 @@ XMP15 QN n10 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 
 </code></pre>
 <h4 id="cdl-netlist-41"><a class="header" href="#cdl-netlist-41">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFSQQN_DL D CLK S Q QN VDD VSS
-*.PININFO S:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I S:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -12117,7 +12205,7 @@ XMP15 QN n10 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 
 </code></pre>
 <h4 id="cdl-netlist-1-38"><a class="header" href="#cdl-netlist-1-38">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFSQQN_D1 D CLK S Q QN VDD VSS
-*.PININFO S:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I S:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -12211,7 +12299,7 @@ XMP15 QN n10 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-2-28"><a class="header" href="#cdl-netlist-2-28">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DFSQQN_D2 D CLK S Q QN VDD VSS
-*.PININFO S:I D:I CLK:I QN:O Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I S:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=4e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -12349,7 +12437,7 @@ XMP8 QN n3 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-42"><a class="header" href="#cdl-netlist-42">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DL_DL D G Q QN VDD VSS
-*.PININFO G:I D:I QN:O Q:O VDD:B VSS:B 
+*.PININFO D:I G:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 G VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 G VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.6e-07 l=1.3e-07 ng=1 
@@ -12411,7 +12499,7 @@ XMP8 QN n4 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-1-39"><a class="header" href="#cdl-netlist-1-39">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DL_D1 D G Q QN VDD VSS
-*.PININFO G:I D:I QN:O Q:O VDD:B VSS:B 
+*.PININFO D:I G:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 G VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 ng=1 
 MP0 n0 G VDD VDD sg13_lv_pmos w=4e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.6e-07 l=1.3e-07 ng=1 
@@ -12473,7 +12561,7 @@ XMP8 QN n4 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-2-29"><a class="header" href="#cdl-netlist-2-29">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DL_D2 D G Q QN VDD VSS
-*.PININFO G:I D:I QN:O Q:O VDD:B VSS:B 
+*.PININFO D:I G:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 G VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 G VDD VDD sg13_lv_pmos w=5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 ng=1 
@@ -12597,7 +12685,7 @@ XMP8 QN n4 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-43"><a class="header" href="#cdl-netlist-43">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DLN_DL D GN Q QN VDD VSS
-*.PININFO GN:I D:I QN:O Q:O VDD:B VSS:B 
+*.PININFO D:I GN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 GN VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 GN VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -12659,7 +12747,7 @@ XMP8 QN n4 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-1-40"><a class="header" href="#cdl-netlist-1-40">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DLN_D1 D GN Q QN VDD VSS
-*.PININFO GN:I D:I QN:O Q:O VDD:B VSS:B 
+*.PININFO D:I GN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 GN VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 ng=1 
 MP0 n0 GN VDD VDD sg13_lv_pmos w=4e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -12721,7 +12809,7 @@ XMP8 QN n4 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-2-30"><a class="header" href="#cdl-netlist-2-30">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT DLN_D2 D GN Q QN VDD VSS
-*.PININFO GN:I D:I QN:O Q:O VDD:B VSS:B 
+*.PININFO D:I GN:I Q:O QN:O VDD:B VSS:B 
 MN0 n0 GN VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 GN VDD VDD sg13_lv_pmos w=5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 ng=1 
@@ -13110,7 +13198,7 @@ XMP5 n5 I1 VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ad=9.3e-14 as=9.3e-14 pd=1.22e
 </code></pre>
 <h4 id="cdl-netlist-45"><a class="header" href="#cdl-netlist-45">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT MUX2_DL I0 I1 S0 Y VDD VSS
-*.PININFO I1:I S0:I I0:I Y:O VDD:B VSS:B 
+*.PININFO I0:I I1:I S0:I Y:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 Y n1 VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
@@ -13157,7 +13245,7 @@ XMP5 n5 I1 VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ad=1.86e-13 as=1.86e-13 pd=1.8
 </code></pre>
 <h4 id="cdl-netlist-1-42"><a class="header" href="#cdl-netlist-1-42">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT MUX2_D1 I0 I1 S0 Y VDD VSS
-*.PININFO I1:I S0:I I0:I Y:O VDD:B VSS:B 
+*.PININFO I0:I I1:I S0:I Y:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ng=1 
 MN1 Y n1 VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
@@ -13272,7 +13360,7 @@ XMP4 n4 I1 VDD VDD sg13_lv_pmos w=4.8e-07 l=1.3e-07 ad=1.488e-13 as=1.488e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-46"><a class="header" href="#cdl-netlist-46">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT MUX2N_DL I0 I1 S0 YN VDD VSS
-*.PININFO I1:I S0:I I0:I YN:O VDD:B VSS:B 
+*.PININFO I0:I I1:I S0:I YN:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ng=1 
 MN1 YN n0 n1 VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
@@ -13314,7 +13402,7 @@ XMP4 n4 I1 VDD VDD sg13_lv_pmos w=9.6e-07 l=1.3e-07 ad=2.976e-13 as=2.976e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-1-43"><a class="header" href="#cdl-netlist-1-43">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT MUX2N_D1 I0 I1 S0 YN VDD VSS
-*.PININFO I1:I S0:I I0:I YN:O VDD:B VSS:B 
+*.PININFO I0:I I1:I S0:I YN:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=2.4e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=3.6e-07 l=1.3e-07 ng=1 
 MN1 YN n0 n1 VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
@@ -13445,7 +13533,7 @@ XMP9 n3 S1 n2 VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ad=1.395e-13 as=1.395e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-47"><a class="header" href="#cdl-netlist-47">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT MUX3_DL I0 I1 I2 S0 S1 Y VDD VSS
-*.PININFO I1:I I0:I I2:I S1:I S0:I Y:O VDD:B VSS:B 
+*.PININFO I0:I I1:I I2:I S0:I S1:I Y:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ng=1 
 MN1 n1 S1 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -13511,7 +13599,7 @@ XMP9 n3 S1 n2 VDD sg13_lv_pmos w=9e-07 l=1.3e-07 ad=2.79e-13 as=2.79e-13 pd=2.42
 </code></pre>
 <h4 id="cdl-netlist-1-44"><a class="header" href="#cdl-netlist-1-44">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT MUX3_D1 I0 I1 I2 S0 S1 Y VDD VSS
-*.PININFO I1:I I0:I I2:I S1:I S0:I Y:O VDD:B VSS:B 
+*.PININFO I0:I I1:I I2:I S0:I S1:I Y:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=4e-07 l=1.3e-07 ng=1 
 MN1 n1 S1 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -13663,7 +13751,7 @@ XMP12 n8 n1 n2 VDD sg13_lv_pmos w=9e-07 l=1.3e-07 ad=2.79e-13 as=2.79e-13 pd=2.4
 </code></pre>
 <h4 id="cdl-netlist-48"><a class="header" href="#cdl-netlist-48">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT MUX4_DL I0 I1 I2 I3 S0 S1 Y VDD VSS
-*.PININFO I1:I I0:I I2:I S1:I S0:I I3:I Y:O VDD:B VSS:B 
+*.PININFO I0:I I1:I I2:I I3:I S0:I S1:I Y:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 S1 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -13743,7 +13831,7 @@ XMP12 n8 n1 n2 VDD sg13_lv_pmos w=9e-07 l=1.3e-07 ad=2.79e-13 as=2.79e-13 pd=2.4
 </code></pre>
 <h4 id="cdl-netlist-1-45"><a class="header" href="#cdl-netlist-1-45">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT MUX4_D1 I0 I1 I2 I3 S0 S1 Y VDD VSS
-*.PININFO I1:I I0:I I2:I S1:I S0:I I3:I Y:O VDD:B VSS:B 
+*.PININFO I0:I I1:I I2:I I3:I S0:I S1:I Y:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=7.5e-07 l=1.3e-07 ng=1 
 MN1 n1 S1 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -13865,7 +13953,7 @@ XMP1 Y B VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=1
 </code></pre>
 <h4 id="cdl-netlist-49"><a class="header" href="#cdl-netlist-49">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND2_DL A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 Y B n0 VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
 MP0 Y A VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ng=1 
@@ -13893,7 +13981,7 @@ XMP1 Y B VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=2
 </code></pre>
 <h4 id="cdl-netlist-1-46"><a class="header" href="#cdl-netlist-1-46">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND2_D1 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 ng=1 
 MN1 Y B n0 VSS sg13_lv_nmos w=9e-07 l=1.3e-07 ng=1 
 MP0 Y A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
@@ -13925,7 +14013,7 @@ XMP1 Y B VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.8
 </code></pre>
 <h4 id="cdl-netlist-2-32"><a class="header" href="#cdl-netlist-2-32">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND2_D2 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 B VSS VSS sg13_lv_nmos w=7.25e-07 l=1.3e-07 ng=1 
 MN1 Y A n0 VSS sg13_lv_nmos w=7.25e-07 l=1.3e-07 ng=1 
 MN2 n1 B VSS VSS sg13_lv_nmos w=7.25e-07 l=1.3e-07 ng=1 
@@ -13965,7 +14053,7 @@ XMP3 Y B VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.8
 </code></pre>
 <h4 id="cdl-netlist-3-10"><a class="header" href="#cdl-netlist-3-10">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND2_D4 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 B VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MN1 Y A n0 VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MN2 n1 B VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
@@ -14021,7 +14109,7 @@ XMP5 Y B VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.8
 </code></pre>
 <h4 id="cdl-netlist-4-5"><a class="header" href="#cdl-netlist-4-5">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND2_D8 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 B VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MN1 Y A n0 VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MN2 n1 B VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
@@ -14138,7 +14226,7 @@ XMP2 Y C VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=1
 </code></pre>
 <h4 id="cdl-netlist-50"><a class="header" href="#cdl-netlist-50">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND3_DL A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=5.2e-07 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=5.2e-07 l=1.3e-07 ng=1 
 MN2 Y A n1 VSS sg13_lv_nmos w=5.2e-07 l=1.3e-07 ng=1 
@@ -14170,7 +14258,7 @@ XMP2 Y C VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=2
 </code></pre>
 <h4 id="cdl-netlist-1-47"><a class="header" href="#cdl-netlist-1-47">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND3_D1 A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=1.03e-06 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=1.03e-06 l=1.3e-07 ng=1 
 MN2 Y A n1 VSS sg13_lv_nmos w=1.03e-06 l=1.3e-07 ng=1 
@@ -14209,7 +14297,7 @@ XMP5 Y C VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=2
 </code></pre>
 <h4 id="cdl-netlist-2-33"><a class="header" href="#cdl-netlist-2-33">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND3_D2 A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=1.03e-06 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=1.03e-06 l=1.3e-07 ng=1 
 MN2 Y A n1 VSS sg13_lv_nmos w=1.03e-06 l=1.3e-07 ng=1 
@@ -14268,7 +14356,7 @@ XMP11 Y C VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-3-11"><a class="header" href="#cdl-netlist-3-11">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND3_D4 A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=1.03e-06 l=1.3e-07 ng=1 
 MN1 n1 B n0 VSS sg13_lv_nmos w=1.03e-06 l=1.3e-07 ng=1 
 MN2 Y A n1 VSS sg13_lv_nmos w=1.03e-06 l=1.3e-07 ng=1 
@@ -14395,7 +14483,7 @@ XMP3 Y D VDD VDD sg13_lv_pmos w=4e-07 l=1.3e-07 ad=1.24e-13 as=1.24e-13 pd=1.42e
 </code></pre>
 <h4 id="cdl-netlist-51"><a class="header" href="#cdl-netlist-51">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4_DL A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=4.5e-07 l=1.3e-07 ng=1 
@@ -14431,7 +14519,7 @@ XMP3 Y D VDD VDD sg13_lv_pmos w=7e-07 l=1.3e-07 ad=2.17e-13 as=2.17e-13 pd=2.02e
 </code></pre>
 <h4 id="cdl-netlist-1-48"><a class="header" href="#cdl-netlist-1-48">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4_D1 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
@@ -14467,7 +14555,7 @@ XMP3 Y D VDD VDD sg13_lv_pmos w=1.2e-06 l=1.3e-07 ad=3.72e-13 as=3.72e-13 pd=3.0
 </code></pre>
 <h4 id="cdl-netlist-2-34"><a class="header" href="#cdl-netlist-2-34">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4_D2 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN1 n1 C n0 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN2 n2 B n1 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
@@ -14503,7 +14591,7 @@ XMP3 Y D VDD VDD sg13_lv_pmos w=2.6e-06 l=1.3e-07 ad=8.06e-13 as=8.06e-13 pd=5.8
 </code></pre>
 <h4 id="cdl-netlist-3-12"><a class="header" href="#cdl-netlist-3-12">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4_D4 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=3.18e-06 l=1.3e-07 ng=3 
 MN1 n1 C n0 VSS sg13_lv_nmos w=3.18e-06 l=1.3e-07 ng=3 
 MN2 n2 B n1 VSS sg13_lv_nmos w=3.18e-06 l=1.3e-07 ng=3 
@@ -14616,7 +14704,7 @@ XMP4 n3 AN VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ad=7.13e-14 as=7.13e-14 pd=1
 </code></pre>
 <h4 id="cdl-netlist-52"><a class="header" href="#cdl-netlist-52">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4N1_DL AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=3.6e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=3.6e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=3.6e-07 l=1.3e-07 ng=1 
@@ -14657,7 +14745,7 @@ XMP4 n3 AN VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ad=9.3e-14 as=9.3e-14 pd=1.22e
 </code></pre>
 <h4 id="cdl-netlist-1-49"><a class="header" href="#cdl-netlist-1-49">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4N1_D1 AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN2 n2 B n1 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
@@ -14698,7 +14786,7 @@ XMP4 n3 AN VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ad=1.86e-13 as=1.86e-13 pd=1.8
 </code></pre>
 <h4 id="cdl-netlist-2-35"><a class="header" href="#cdl-netlist-2-35">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4N1_D2 AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN1 n1 C n0 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN2 n2 B n1 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
@@ -14816,7 +14904,7 @@ XMP5 n3 BN VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ad=7.13e-14 as=7.13e-14 pd=1
 </code></pre>
 <h4 id="cdl-netlist-53"><a class="header" href="#cdl-netlist-53">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4N2_DL AN BN C D Y VDD VSS
-*.PININFO BN:I C:I AN:I D:I Y:O VDD:B VSS:B 
+*.PININFO AN:I BN:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=3.8e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=3.8e-07 l=1.3e-07 ng=1 
 MN2 n2 n3 n1 VSS sg13_lv_nmos w=3.8e-07 l=1.3e-07 ng=1 
@@ -14862,7 +14950,7 @@ XMP5 n3 BN VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ad=9.3e-14 as=9.3e-14 pd=1.22e
 </code></pre>
 <h4 id="cdl-netlist-1-50"><a class="header" href="#cdl-netlist-1-50">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4N2_D1 AN BN C D Y VDD VSS
-*.PININFO BN:I C:I AN:I D:I Y:O VDD:B VSS:B 
+*.PININFO AN:I BN:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN1 n1 C n0 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN2 n2 n3 n1 VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
@@ -14908,7 +14996,7 @@ XMP5 n3 BN VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ad=1.86e-13 as=1.86e-13 pd=1.8
 </code></pre>
 <h4 id="cdl-netlist-2-36"><a class="header" href="#cdl-netlist-2-36">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NAND4N2_D2 AN BN C D Y VDD VSS
-*.PININFO BN:I C:I AN:I D:I Y:O VDD:B VSS:B 
+*.PININFO AN:I BN:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN1 n1 C n0 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
 MN2 n2 n3 n1 VSS sg13_lv_nmos w=1.4e-06 l=1.3e-07 ng=2 
@@ -15016,7 +15104,7 @@ XMP1 Y B n0 VDD sg13_lv_pmos w=4.8e-07 l=1.3e-07 ad=1.488e-13 as=1.488e-13 pd=1.
 </code></pre>
 <h4 id="cdl-netlist-54"><a class="header" href="#cdl-netlist-54">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR2_DL A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
 MP0 n0 A VDD VDD sg13_lv_pmos w=4.8e-07 l=1.3e-07 ng=1 
@@ -15044,7 +15132,7 @@ XMP1 Y B n0 VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=2.
 </code></pre>
 <h4 id="cdl-netlist-1-51"><a class="header" href="#cdl-netlist-1-51">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR2_D1 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
 MP0 n0 A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
@@ -15076,7 +15164,7 @@ XMP3 Y B n1 VDD sg13_lv_pmos w=1.07e-06 l=1.3e-07 ad=3.317e-13 as=3.317e-13 pd=2
 </code></pre>
 <h4 id="cdl-netlist-2-37"><a class="header" href="#cdl-netlist-2-37">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR2_D2 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 Y B VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MN1 Y A VSS VSS sg13_lv_nmos w=1.07e-06 l=1.3e-07 ng=1 
 MP0 n0 A VDD VDD sg13_lv_pmos w=1.07e-06 l=1.3e-07 ng=1 
@@ -15113,7 +15201,7 @@ XMP5 Y B n2 VDD sg13_lv_pmos w=1.43e-06 l=1.3e-07 ad=4.433e-13 as=4.433e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-3-13"><a class="header" href="#cdl-netlist-3-13">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR2_D4 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 Y B VSS VSS sg13_lv_nmos w=2.14e-06 l=1.3e-07 ng=2 
 MN1 Y A VSS VSS sg13_lv_nmos w=2.14e-06 l=1.3e-07 ng=2 
 MP0 n0 A VDD VDD sg13_lv_pmos w=1.43e-06 l=1.3e-07 ng=1 
@@ -15161,7 +15249,7 @@ XMP11 Y B n5 VDD sg13_lv_pmos w=1.43e-06 l=1.3e-07 ad=4.433e-13 as=4.433e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-4-6"><a class="header" href="#cdl-netlist-4-6">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR2_D8 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 Y B VSS VSS sg13_lv_nmos w=4.28e-06 l=1.3e-07 ng=4 
 MN1 Y A VSS VSS sg13_lv_nmos w=4.28e-06 l=1.3e-07 ng=4 
 MP0 n0 A VDD VDD sg13_lv_pmos w=1.43e-06 l=1.3e-07 ng=1 
@@ -15274,7 +15362,7 @@ XMP2 Y C n1 VDD sg13_lv_pmos w=7.5e-07 l=1.3e-07 ad=2.325e-13 as=2.325e-13 pd=2.
 </code></pre>
 <h4 id="cdl-netlist-55"><a class="header" href="#cdl-netlist-55">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR3_DL A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -15306,7 +15394,7 @@ XMP2 Y C n1 VDD sg13_lv_pmos w=1.25e-06 l=1.3e-07 ad=3.875e-13 as=3.875e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-1-52"><a class="header" href="#cdl-netlist-1-52">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR3_D1 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -15345,7 +15433,7 @@ XMP5 Y C n3 VDD sg13_lv_pmos w=1.25e-06 l=1.3e-07 ad=3.875e-13 as=3.875e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-2-38"><a class="header" href="#cdl-netlist-2-38">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR3_D2 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -15404,7 +15492,7 @@ XMP11 Y C n7 VDD sg13_lv_pmos w=1.25e-06 l=1.3e-07 ad=3.875e-13 as=3.875e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-3-14"><a class="header" href="#cdl-netlist-3-14">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR3_D4 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -15531,7 +15619,7 @@ XMP3 Y A n2 VDD sg13_lv_pmos w=8.4e-07 l=1.3e-07 ad=2.604e-13 as=2.604e-13 pd=2.
 </code></pre>
 <h4 id="cdl-netlist-56"><a class="header" href="#cdl-netlist-56">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4_DL A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -15567,7 +15655,7 @@ XMP3 Y A n2 VDD sg13_lv_pmos w=1.4e-06 l=1.3e-07 ad=4.34e-13 as=4.34e-13 pd=3.42
 </code></pre>
 <h4 id="cdl-netlist-1-53"><a class="header" href="#cdl-netlist-1-53">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4_D1 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -15603,7 +15691,7 @@ XMP3 Y A n2 VDD sg13_lv_pmos w=2.2e-06 l=1.3e-07 ad=6.82e-13 as=6.82e-13 pd=5.02
 </code></pre>
 <h4 id="cdl-netlist-2-39"><a class="header" href="#cdl-netlist-2-39">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4_D2 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN1 Y B VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN2 Y C VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
@@ -15639,7 +15727,7 @@ XMP3 Y A n2 VDD sg13_lv_pmos w=4.41e-06 l=1.3e-07 ad=1.367e-12 as=1.367e-12 pd=9
 </code></pre>
 <h4 id="cdl-netlist-3-15"><a class="header" href="#cdl-netlist-3-15">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4_D4 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 Y A VSS VSS sg13_lv_nmos w=1.5e-06 l=1.3e-07 ng=2 
 MN1 Y B VSS VSS sg13_lv_nmos w=1.5e-06 l=1.3e-07 ng=2 
 MN2 Y C VSS VSS sg13_lv_nmos w=1.5e-06 l=1.3e-07 ng=2 
@@ -15753,7 +15841,7 @@ XMP4 Y n0 n3 VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ad=1.86e-13 as=1.86e-13 pd=1.82e
 </code></pre>
 <h4 id="cdl-netlist-57"><a class="header" href="#cdl-netlist-57">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4N1_DL AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 AN VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
 MP0 n0 AN VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ng=1 
 MN1 Y n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -15794,7 +15882,7 @@ XMP4 Y n0 n3 VDD sg13_lv_pmos w=1.4e-06 l=1.3e-07 ad=4.34e-13 as=4.34e-13 pd=3.4
 </code></pre>
 <h4 id="cdl-netlist-1-54"><a class="header" href="#cdl-netlist-1-54">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4N1_D1 AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 AN VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 AN VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 Y n0 VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -15835,7 +15923,7 @@ XMP4 Y n0 n3 VDD sg13_lv_pmos w=2.2e-06 l=1.3e-07 ad=6.82e-13 as=6.82e-13 pd=5.0
 </code></pre>
 <h4 id="cdl-netlist-2-40"><a class="header" href="#cdl-netlist-2-40">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4N1_D2 AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 AN VSS VSS sg13_lv_nmos w=6e-07 l=1.3e-07 ng=1 
 MP0 n0 AN VDD VDD sg13_lv_pmos w=9e-07 l=1.3e-07 ng=1 
 MN1 Y n0 VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
@@ -15876,7 +15964,7 @@ XMP4 Y n0 n3 VDD sg13_lv_pmos w=4.41e-06 l=1.3e-07 ad=1.367e-12 as=1.367e-12 pd=
 </code></pre>
 <h4 id="cdl-netlist-3-16"><a class="header" href="#cdl-netlist-3-16">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4N1_D4 AN B C D Y VDD VSS
-*.PININFO C:I B:I D:I AN:I Y:O VDD:B VSS:B 
+*.PININFO AN:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 AN VSS VSS sg13_lv_nmos w=8.9e-07 l=1.3e-07 ng=1 
 MP0 n0 AN VDD VDD sg13_lv_pmos w=1.4e-06 l=1.3e-07 ng=1 
 MN1 Y n0 VSS VSS sg13_lv_nmos w=1.5e-06 l=1.3e-07 ng=2 
@@ -15994,7 +16082,7 @@ XMP5 Y n0 n4 VDD sg13_lv_pmos w=8e-07 l=1.3e-07 ad=2.48e-13 as=2.48e-13 pd=2.22e
 </code></pre>
 <h4 id="cdl-netlist-58"><a class="header" href="#cdl-netlist-58">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4N2_DL AN BN C D Y VDD VSS
-*.PININFO BN:I C:I AN:I D:I Y:O VDD:B VSS:B 
+*.PININFO AN:I BN:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 AN VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
 MP0 n0 AN VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ng=1 
 MN1 n1 BN VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
@@ -16040,7 +16128,7 @@ XMP5 Y n0 n4 VDD sg13_lv_pmos w=1.4e-06 l=1.3e-07 ad=4.34e-13 as=4.34e-13 pd=3.4
 </code></pre>
 <h4 id="cdl-netlist-1-55"><a class="header" href="#cdl-netlist-1-55">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4N2_D1 AN BN C D Y VDD VSS
-*.PININFO BN:I C:I AN:I D:I Y:O VDD:B VSS:B 
+*.PININFO AN:I BN:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 AN VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 ng=1 
 MP0 n0 AN VDD VDD sg13_lv_pmos w=4e-07 l=1.3e-07 ng=1 
 MN1 n1 BN VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 ng=1 
@@ -16086,7 +16174,7 @@ XMP5 Y n0 n4 VDD sg13_lv_pmos w=2.2e-06 l=1.3e-07 ad=6.82e-13 as=6.82e-13 pd=5.0
 </code></pre>
 <h4 id="cdl-netlist-2-41"><a class="header" href="#cdl-netlist-2-41">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT NOR4N2_D2 AN BN C D Y VDD VSS
-*.PININFO BN:I C:I AN:I D:I Y:O VDD:B VSS:B 
+*.PININFO AN:I BN:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 AN VSS VSS sg13_lv_nmos w=5.3e-07 l=1.3e-07 ng=1 
 MP0 n0 AN VDD VDD sg13_lv_pmos w=8e-07 l=1.3e-07 ng=1 
 MN1 n1 BN VSS VSS sg13_lv_nmos w=5.3e-07 l=1.3e-07 ng=1 
@@ -16205,7 +16293,7 @@ XMP3 Y n1 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-59"><a class="header" href="#cdl-netlist-59">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OA21_DL A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 
 MN2 n0 C n1 VSS sg13_lv_nmos w=2e-07 l=1.3e-07 
@@ -16247,7 +16335,7 @@ XMP3 Y n1 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1-56"><a class="header" href="#cdl-netlist-1-56">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OA21_D1 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
 MN2 n0 C n1 VSS sg13_lv_nmos w=3e-07 l=1.3e-07 
@@ -16289,7 +16377,7 @@ XMP3 Y n1 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2-42"><a class="header" href="#cdl-netlist-2-42">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OA21_D2 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=5.5e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=5.5e-07 l=1.3e-07 
 MN2 n0 C n1 VSS sg13_lv_nmos w=5.5e-07 l=1.3e-07 
@@ -16331,7 +16419,7 @@ XMP3 Y n1 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd=7.
 </code></pre>
 <h4 id="cdl-netlist-3-17"><a class="header" href="#cdl-netlist-3-17">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OA21_D4 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1e-06 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=1e-06 l=1.3e-07 
 MN2 n0 C n1 VSS sg13_lv_nmos w=1e-06 l=1.3e-07 
@@ -16452,7 +16540,7 @@ XMP4 Y n1 VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ad=1.86e-13 as=1.86e-13 pd=1.82
 </code></pre>
 <h4 id="cdl-netlist-60"><a class="header" href="#cdl-netlist-60">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OA22_DL A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN1 n0 D VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN2 n0 A n1 VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
@@ -16500,7 +16588,7 @@ XMP4 Y n1 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1-57"><a class="header" href="#cdl-netlist-1-57">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OA22_D1 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=3.5e-07 l=1.3e-07 
 MN1 n0 D VSS VSS sg13_lv_nmos w=3.5e-07 l=1.3e-07 
 MN2 n0 A n1 VSS sg13_lv_nmos w=3.5e-07 l=1.3e-07 
@@ -16548,7 +16636,7 @@ XMP4 Y n1 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2-43"><a class="header" href="#cdl-netlist-2-43">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OA22_D2 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN1 n0 D VSS VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN2 n0 A n1 VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
@@ -16667,7 +16755,7 @@ XMP3 n2 D Y VDD sg13_lv_pmos w=8.4e-07 l=1.3e-07 ad=2.604e-13 as=2.604e-13 pd=2.
 </code></pre>
 <h4 id="cdl-netlist-61"><a class="header" href="#cdl-netlist-61">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OAI22_DL A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN1 n0 D VSS VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN2 n0 A Y VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
@@ -16710,7 +16798,7 @@ XMP3 n2 D Y VDD sg13_lv_pmos w=1.27e-06 l=1.3e-07 ad=3.937e-13 as=3.937e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-1-58"><a class="header" href="#cdl-netlist-1-58">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OAI22_D1 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 C VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN1 n0 D VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN2 n0 A Y VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
@@ -16826,7 +16914,7 @@ XMP3 n2 B Y VDD sg13_lv_pmos w=8.4e-07 l=1.3e-07 ad=2.604e-13 as=2.604e-13 pd=2.
 </code></pre>
 <h4 id="cdl-netlist-62"><a class="header" href="#cdl-netlist-62">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OAI211_DL A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN2 n0 D n1 VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
@@ -16869,7 +16957,7 @@ XMP3 n2 B Y VDD sg13_lv_pmos w=1.27e-06 l=1.3e-07 ad=3.937e-13 as=3.937e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-1-59"><a class="header" href="#cdl-netlist-1-59">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OAI211_D1 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN2 n0 D n1 VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
@@ -16992,7 +17080,7 @@ XMP4 n3 A Y VDD sg13_lv_pmos w=8e-07 l=1.3e-07 ad=2.48e-13 as=2.48e-13 pd=2.22e-
 </code></pre>
 <h4 id="cdl-netlist-63"><a class="header" href="#cdl-netlist-63">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OAI221_DL A B C D E Y VDD VSS
-*.PININFO B:I C:I D:I A:I E:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I E:I Y:O VDD:B VSS:B 
 MN0 n0 E Y VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN1 n1 A n0 VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN2 n1 B n0 VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
@@ -17041,7 +17129,7 @@ XMP4 n3 A Y VDD sg13_lv_pmos w=1.27e-06 l=1.3e-07 ad=3.937e-13 as=3.937e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-1-60"><a class="header" href="#cdl-netlist-1-60">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OAI221_D1 A B C D E Y VDD VSS
-*.PININFO B:I C:I D:I A:I E:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I E:I Y:O VDD:B VSS:B 
 MN0 n0 E Y VSS sg13_lv_nmos w=1e-06 l=1.3e-07 
 MN1 n1 A n0 VSS sg13_lv_nmos w=1e-06 l=1.3e-07 
 MN2 n1 B n0 VSS sg13_lv_nmos w=1e-06 l=1.3e-07 
@@ -17175,7 +17263,7 @@ XMP5 n4 A Y VDD sg13_lv_pmos w=8e-07 l=1.3e-07 ad=2.48e-13 as=2.48e-13 pd=2.22e-
 </code></pre>
 <h4 id="cdl-netlist-64"><a class="header" href="#cdl-netlist-64">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OAI222_DL A B C D E F Y VDD VSS
-*.PININFO B:I C:I D:I A:I F:I E:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I E:I F:I Y:O VDD:B VSS:B 
 MN0 n0 F Y VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN1 n0 E Y VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
 MN2 n1 A n0 VSS sg13_lv_nmos w=6e-07 l=1.3e-07 
@@ -17230,7 +17318,7 @@ XMP5 n4 A Y VDD sg13_lv_pmos w=1.27e-06 l=1.3e-07 ad=3.937e-13 as=3.937e-13 pd=3
 </code></pre>
 <h4 id="cdl-netlist-1-61"><a class="header" href="#cdl-netlist-1-61">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OAI222_D1 A B C D E F Y VDD VSS
-*.PININFO B:I C:I D:I A:I F:I E:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I E:I F:I Y:O VDD:B VSS:B 
 MN0 n0 F Y VSS sg13_lv_nmos w=1e-06 l=1.3e-07 
 MN1 n0 E Y VSS sg13_lv_nmos w=1e-06 l=1.3e-07 
 MN2 n1 A n0 VSS sg13_lv_nmos w=1e-06 l=1.3e-07 
@@ -17348,7 +17436,7 @@ XMP3 n2 n0 VDD VDD sg13_lv_pmos w=6.4e-07 l=1.3e-07 ad=1.984e-13 as=1.984e-13 pd
 </code></pre>
 <h4 id="cdl-netlist-65"><a class="header" href="#cdl-netlist-65">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI2N1_DL A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 
 MN2 Y n0 VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 
@@ -17391,7 +17479,7 @@ XMP3 n2 n0 VDD VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 p
 </code></pre>
 <h4 id="cdl-netlist-1-62"><a class="header" href="#cdl-netlist-1-62">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT AOI2N1_D1 A B C Y VDD VSS
-*.PININFO C:I B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN1 n0 B VSS VSS sg13_lv_nmos w=2.5e-07 l=1.3e-07 
 MN2 Y n0 VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
@@ -17497,7 +17585,7 @@ XMP2 Y n0 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-66"><a class="header" href="#cdl-netlist-66">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR2_DL A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 B VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
 MN1 n0 A VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
 MP0 n1 B VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
@@ -17530,7 +17618,7 @@ XMP2 Y n0 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1-63"><a class="header" href="#cdl-netlist-1-63">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR2_D1 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MN1 n0 B VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n1 A VDD VDD sg13_lv_pmos w=4e-07 l=1.3e-07 ng=1 
@@ -17563,7 +17651,7 @@ XMP2 Y n0 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2-44"><a class="header" href="#cdl-netlist-2-44">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR2_D2 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 n0 A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MP0 n1 B VDD VDD sg13_lv_pmos w=1e-06 l=1.3e-07 ng=1 
@@ -17596,7 +17684,7 @@ XMP2 Y n0 VDD VDD sg13_lv_pmos w=2.6e-06 l=1.3e-07 ad=8.06e-13 as=8.06e-13 pd=5.
 </code></pre>
 <h4 id="cdl-netlist-3-18"><a class="header" href="#cdl-netlist-3-18">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR2_D4 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 B VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MN1 n0 A VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=1 
 MP0 n1 B VDD VDD sg13_lv_pmos w=1.5e-06 l=1.3e-07 ng=1 
@@ -17704,7 +17792,7 @@ XMP3 Y n0 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-67"><a class="header" href="#cdl-netlist-67">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR3_DL A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1.7e-07 l=1.3e-07 ng=1 
 MN1 n0 B VSS VSS sg13_lv_nmos w=1.7e-07 l=1.3e-07 ng=1 
 MN2 n0 C VSS VSS sg13_lv_nmos w=1.7e-07 l=1.3e-07 ng=1 
@@ -17741,7 +17829,7 @@ XMP3 Y n0 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1-64"><a class="header" href="#cdl-netlist-1-64">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR3_D1 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MN1 n0 B VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MN2 n0 C VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -17778,7 +17866,7 @@ XMP3 Y n0 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2-45"><a class="header" href="#cdl-netlist-2-45">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR3_D2 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 n0 B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN2 n0 C VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -17815,7 +17903,7 @@ XMP3 Y n0 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd=7.
 </code></pre>
 <h4 id="cdl-netlist-3-19"><a class="header" href="#cdl-netlist-3-19">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR3_D4 A B C Y VDD VSS
-*.PININFO B:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=2 
 MN1 n0 B VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=2 
 MN2 n0 C VSS VSS sg13_lv_nmos w=8e-07 l=1.3e-07 ng=2 
@@ -17929,7 +18017,7 @@ XMP4 Y n0 VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ad=1.519e-13 as=1.519e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-68"><a class="header" href="#cdl-netlist-68">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR4_DL A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=1.9e-07 l=1.3e-07 ng=1 
 MN1 n0 B VSS VSS sg13_lv_nmos w=1.9e-07 l=1.3e-07 ng=1 
 MN2 n0 C VSS VSS sg13_lv_nmos w=1.9e-07 l=1.3e-07 ng=1 
@@ -17970,7 +18058,7 @@ XMP4 Y n0 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 pd=
 </code></pre>
 <h4 id="cdl-netlist-1-65"><a class="header" href="#cdl-netlist-1-65">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR4_D1 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=2.2e-07 l=1.3e-07 ng=1 
 MN1 n0 B VSS VSS sg13_lv_nmos w=2.2e-07 l=1.3e-07 ng=1 
 MN2 n0 C VSS VSS sg13_lv_nmos w=2.2e-07 l=1.3e-07 ng=1 
@@ -18011,7 +18099,7 @@ XMP4 Y n0 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ad=4.96e-13 as=4.96e-13 pd=3.
 </code></pre>
 <h4 id="cdl-netlist-2-46"><a class="header" href="#cdl-netlist-2-46">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR4_D2 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN1 n0 B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MN2 n0 C VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -18052,7 +18140,7 @@ XMP4 Y n0 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd=7.
 </code></pre>
 <h4 id="cdl-netlist-3-20"><a class="header" href="#cdl-netlist-3-20">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT OR4_D4 A B C D Y VDD VSS
-*.PININFO B:I D:I C:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 A VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 ng=2 
 MN1 n0 B VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 ng=2 
 MN2 n0 C VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 ng=2 
@@ -18346,7 +18434,7 @@ XMP4 n0 n2 Y VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ad=9.3e-14 as=9.3e-14 pd=1.22e-0
 </code></pre>
 <h4 id="cdl-netlist-71"><a class="header" href="#cdl-netlist-71">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT XNOR2_DL A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 n1 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 n1 VDD VDD sg13_lv_pmos w=4e-07 l=1.3e-07 ng=1 
 MN1 n1 B VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -18392,7 +18480,7 @@ XMP4 n0 n2 Y VDD sg13_lv_pmos w=8e-07 l=1.3e-07 ad=2.48e-13 as=2.48e-13 pd=2.22e
 </code></pre>
 <h4 id="cdl-netlist-1-66"><a class="header" href="#cdl-netlist-1-66">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT XNOR2_D1 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 n1 VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MP0 n0 n1 VDD VDD sg13_lv_pmos w=8e-07 l=1.3e-07 ng=1 
 MN1 n1 B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
@@ -18508,7 +18596,7 @@ XMP4 n0 A Y VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ad=9.3e-14 as=9.3e-14 pd=1.22e-06
 </code></pre>
 <h4 id="cdl-netlist-72"><a class="header" href="#cdl-netlist-72">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT XOR2_DL A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 n1 VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 n1 VDD VDD sg13_lv_pmos w=4e-07 l=1.3e-07 ng=1 
 MN1 n1 B VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
@@ -18554,7 +18642,7 @@ XMP4 n0 A Y VDD sg13_lv_pmos w=8e-07 l=1.3e-07 ad=2.48e-13 as=2.48e-13 pd=2.22e-
 </code></pre>
 <h4 id="cdl-netlist-1-67"><a class="header" href="#cdl-netlist-1-67">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT XOR2_D1 A B Y VDD VSS
-*.PININFO B:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
 MN0 n0 n1 VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
 MP0 n0 n1 VDD VDD sg13_lv_pmos w=8e-07 l=1.3e-07 ng=1 
 MN1 n1 B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 ng=1 
