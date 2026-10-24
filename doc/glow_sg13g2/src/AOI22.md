@@ -92,7 +92,7 @@ XMP3 Y D n2 VDD sg13_lv_pmos w=7.5e-07 l=1.3e-07 ad=2.325e-13 as=2.325e-13 pd=2.
 #### CDL netlist
 ```cdl
 .SUBCKT AOI22_DL A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN1 Y C n0 VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
 MN2 n1 B VSS VSS sg13_lv_nmos w=5e-07 l=1.3e-07 
@@ -143,7 +143,7 @@ XMP3 Y D n2 VDD sg13_lv_pmos w=1.28e-06 l=1.3e-07 ad=3.968e-13 as=3.968e-13 pd=3
 #### CDL netlist
 ```cdl
 .SUBCKT AOI22_D1 A B C D Y VDD VSS
-*.PININFO C:I B:I D:I A:I Y:O VDD:B VSS:B 
+*.PININFO A:I B:I C:I D:I Y:O VDD:B VSS:B 
 MN0 n0 D VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN1 Y C n0 VSS sg13_lv_nmos w=9e-07 l=1.3e-07 
 MN2 n1 B VSS VSS sg13_lv_nmos w=9e-07 l=1.3e-07 

@@ -89,7 +89,7 @@ XMP5 n5 I1 VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ad=9.3e-14 as=9.3e-14 pd=1.22e
 #### CDL netlist
 ```cdl
 .SUBCKT MUX2_DL I0 I1 S0 Y VDD VSS
-*.PININFO I1:I S0:I I0:I Y:O VDD:B VSS:B 
+*.PININFO I0:I I1:I S0:I Y:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 Y n1 VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
@@ -144,7 +144,7 @@ XMP5 n5 I1 VDD VDD sg13_lv_pmos w=6e-07 l=1.3e-07 ad=1.86e-13 as=1.86e-13 pd=1.8
 #### CDL netlist
 ```cdl
 .SUBCKT MUX2_D1 I0 I1 S0 Y VDD VSS
-*.PININFO I1:I S0:I I0:I Y:O VDD:B VSS:B 
+*.PININFO I0:I I1:I S0:I Y:O VDD:B VSS:B 
 MN0 n0 S0 VSS VSS sg13_lv_nmos w=1.5e-07 l=1.3e-07 ng=1 
 MP0 n0 S0 VDD VDD sg13_lv_pmos w=2.3e-07 l=1.3e-07 ng=1 
 MN1 Y n1 VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 

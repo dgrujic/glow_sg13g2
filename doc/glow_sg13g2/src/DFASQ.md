@@ -103,7 +103,7 @@ XMP15 Q n16 VDD VDD sg13_lv_pmos w=4.8e-07 l=1.3e-07 ad=1.488e-13 as=1.488e-13 p
 #### CDL netlist
 ```cdl
 .SUBCKT DFASQ_DL D CLK Q SN VDD VSS
-*.PININFO D:I CLK:I SN:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I SN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=3e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
@@ -204,7 +204,7 @@ XMP15 Q n16 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ad=3.038e-13 as=3.038e-13 p
 #### CDL netlist
 ```cdl
 .SUBCKT DFASQ_D1 D CLK Q SN VDD VSS
-*.PININFO D:I CLK:I SN:I Q:O VDD:B VSS:B 
+*.PININFO CLK:I D:I SN:I Q:O VDD:B VSS:B 
 MN0 n0 CLK VSS VSS sg13_lv_nmos w=3e-07 l=1.3e-07 ng=1 
 MP0 n0 CLK VDD VDD sg13_lv_pmos w=4.5e-07 l=1.3e-07 ng=1 
 MN1 n1 n0 VSS VSS sg13_lv_nmos w=2e-07 l=1.3e-07 ng=1 
