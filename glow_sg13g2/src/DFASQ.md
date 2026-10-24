@@ -35,6 +35,13 @@ D flip-flop with asynchronous set and output Q.
 <img src="figs/DFASQ_sch.svg" />
 </div>
 
+## Verification simulation waveform
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://svg.wavedrom.com/%7B%22signal%22%3A%5B%7B%22name%22%3A%22CLK%22%2C%22wave%22%3A%220.10101....0....1....0....10..%22%7D%2C%7B%22name%22%3A%22D%22%2C%22wave%22%3A%220..1.0..1010101..010101010....%22%7D%2C%7B%22name%22%3A%22SN%22%2C%22wave%22%3A%221...........................01%22%7D%2C%7B%22name%22%3A%22Q%22%2C%22wave%22%3A%221.0.1.0.........1.........0.1.%22%7D%5D%2C%22config%22%3A%7B%22skin%22%3A%22dark%22%7D%7D">
+  <img alt="Timing Diagram" src="https://svg.wavedrom.com/%7B%22signal%22%3A%5B%7B%22name%22%3A%22CLK%22%2C%22wave%22%3A%220.10101....0....1....0....10..%22%7D%2C%7B%22name%22%3A%22D%22%2C%22wave%22%3A%220..1.0..1010101..010101010....%22%7D%2C%7B%22name%22%3A%22SN%22%2C%22wave%22%3A%221...........................01%22%7D%2C%7B%22name%22%3A%22Q%22%2C%22wave%22%3A%221.0.1.0.........1.........0.1.%22%7D%5D%7D">
+</picture>
+
 ## Cell variants
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
