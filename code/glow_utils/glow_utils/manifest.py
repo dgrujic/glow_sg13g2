@@ -123,6 +123,12 @@ class Manifest:
         """
         return self.manifest[cellGroup]['pins']
 
+    def getCellGroupDescription(self, cellGroup):
+        """
+        Returns a description of a cell group
+        """
+        return self.manifest[cellGroup]['description']
+
     def getCellGroupCells(self, cellGroup):
         """
         Returns a list of cell group cells
@@ -159,6 +165,16 @@ class Manifest:
         if cellGroup is not None:
             pinDict = self.getCellGroupPins(cellGroup)
             return list(pinDict.keys())
+        else:
+            return None
+
+    def getCellDescription(self, cellName):
+        """
+        Returns a description of a cell
+        """
+        cellGroup = self.findCellGroup(cellName)
+        if cellGroup is not None:
+            return self.getCellGroupDescription(cellGroup)
         else:
             return None
 
