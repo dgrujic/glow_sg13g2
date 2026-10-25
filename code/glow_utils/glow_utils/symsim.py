@@ -445,31 +445,11 @@ class Symsim:
         strTables = []
         inputs = self.getInputNames()
         for entry in reducedTables:
-            res = ""
             outputName, tbl = entry
-            res += "Reduced truth table for output " + outputName + "\n"
-            nchars = 0
-            for name in inputs:
-                res += f"{name:<4}"
-                if len(name) < 4:
-                    nchars += 4
-                else:
-                    nchars += len(name)
-            res += f"{outputName:<4}"
-            if len(outputName) < 4:
-                nchars += 4
-            else:
-                nchars += len(outputName)
-            res += "\n"
-            res += "-" * nchars + "\n"
-
-            for i in range(len(tbl)):
-                row = tbl[i]
-                for val in row:
-                    res += f"{str(val):<4}"
-                res += "\n"
-            res += "-" * nchars
-            strTables.append(res)
+            res = "Reduced truth table for output " + outputName + "\n"
+            headers = copy(inputs)
+            headers.append(outputName)
+            strTables.append(res + tabulate(tbl, headers=headers, tablefmt="simple_grid"))
         return strTables
 
     #######################################
@@ -660,7 +640,7 @@ class Symsim:
         Returns a string representation of a DFF table
         """
         pins, rows = dffTable
-        return tabulate(rows, headers=pins, tablefmt="grid")
+        return tabulate(rows, headers=pins, tablefmt="simple_grid")
 
     def dffParse(self, spec):
         # Parse given FF specification
