@@ -1537,8 +1537,6 @@ DL:
         - DL_DL
         - DL_D1
         - DL_D2
-#    optional:
-#        latex: "Y = (I0 \\cdot \\overline{S0} \\cdot \\overline{S1} + I1 \\cdot S0 \\cdot \\overline{S1} + I2 \\cdot \\overline{S0} \\cdot S1 + I3 \\cdot I0 \\cdot I1)"
 
 DLN:
     description: "D latch with inverted control signal."
@@ -1571,8 +1569,6 @@ DLN:
         - DLN_DL
         - DLN_D1
         - DLN_D2
-#    optional:
-#        latex: "Y = (I0 \\cdot \\overline{S0} \\cdot \\overline{S1} + I1 \\cdot S0 \\cdot \\overline{S1} + I2 \\cdot \\overline{S0} \\cdot S1 + I3 \\cdot I0 \\cdot I1)"
 
 #
 # Flip-flops
