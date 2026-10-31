@@ -89,3 +89,5 @@ that runs `gdsinfo` based checks, DRC and LVS, and should produce an output
 Checking INV_D1	 | GDSINFO OK	 | DRC OK	 | LVS OK	 | ALL OK
 ```
 meaning that all checks have passed.
+
+Further steps on how to generate cells and assemble them in a library are discussed [here](./design_flow.md)
