@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e1e35917.js";
+            window.path_to_searchindex_js = "searchindex-5cbdb09f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9e19758c.js"></script>
@@ -266,6 +266,7 @@ $GLOW_ROOT/code/scripts/check_cell.sh INV_D1.gds INV_D1
 <pre><code>Checking INV_D1	 | GDSINFO OK	 | DRC OK	 | LVS OK	 | ALL OK
 </code></pre>
 <p>meaning that all checks have passed.</p>
+<p>Further steps on how to generate cells and assemble them in a library are discussed <a href="#design-flow">here</a></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="a-short-overview-of-asic-digital-design-flow"><a class="header" href="#a-short-overview-of-asic-digital-design-flow">A short overview of ASIC digital design flow</a></h1>
 <p>The objective of this section is to give a short overview of ASIC digital design flow and the role, uses and different libraries and formats that make a digital standard cell library.</p>
@@ -670,6 +671,116 @@ If <code>genFlat</code> is <code>True</code> the circuit is flattened, and if <c
 <h2 id="abstract-view-generation"><a class="header" href="#abstract-view-generation">Abstract view generation</a></h2>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="design-flow"><a class="header" href="#design-flow">Design flow</a></h1>
+<p>This chapter is work in progress, and only steps to generate CDL and SPICE netlists are complete so far.</p>
+<p>When individual cells have been designed, they should be assembled into a library.
+The cell manifest holds information about all cells in a library, and a collection of tools is used to:</p>
+<ul>
+<li>Check the cell manifest,</li>
+<li>Generating cells and their CDL and SPICE netlists,</li>
+<li>Checking cell layouts,</li>
+<li>Generating the library databook.</li>
+</ul>
+<p>The following chapters show how to perform these steps.</p>
+<h2 id="checking-the-cell-manifest"><a class="header" href="#checking-the-cell-manifest">Checking the cell manifest</a></h2>
+<p>First the cell manifest should be checked by</p>
+<pre><code class="language-sh">cd $GLOW_ROOT/cells
+checkmanifest cell_manifest.yaml --all
+</code></pre>
+<p>This command checks if the manifest is correct, and checks all cells against specification given in manifest, and produces the output</p>
+<pre><code>********************************************************************************
+Reading manifest file : cell_manifest.yaml
+Running checks on cells :
+AND2_D1 AND2_D2 AND2_D4 AND2_DL AND3_D1 AND3_D2 AND3_D4 AND3_DL AND4_D1 AND4_D2 AND4_D4 AND4_DL AO21_D1 AO21_D2 AO
+21_DL AO22_D1 AO22_D2 AO22_DL AOI211_D1 AOI211_D2 AOI211_DL AOI21_D1 AOI21_D2 AOI21_DL AOI221_D1 AOI221_DL AOI222_
+D1 AOI222_DL AOI22_D1 AOI22_DL AOI2N1_D1 AOI2N1_D2 AOI2N1_DL AOI2N2_D1 BUF_D1 BUF_D12 BUF_D2 BUF_D3 BUF_D4 BUF_D6 
+BUF_D8 BUF_DL CLKBUF_D1 CLKBUF_D12 CLKBUF_D16 CLKBUF_D2 CLKBUF_D3 CLKBUF_D4 CLKBUF_D6 CLKBUF_D8 CLKINV_D1 CLKINV_D
+16 CLKINV_D2 CLKINV_D4 CLKINV_D8 DFARQN_D1 DFARQN_DL DFARQQN_D1 DFARQQN_DL DFARQ_D1 DFARQ_DL DFASQN_D1 DFASQN_DL D
+FASQQN_D1 DFASQQN_DL DFASQ_D1 DFASQ_DL DFEQN_D1 DFEQN_D2 DFEQN_DL DFEQQN_D1 DFEQQN_D2 DFEQQN_DL DFEQ_D1 DFEQ_D2 DF
+EQ_DL DFERQN_D1 DFERQN_D2 DFERQN_DL DFERQQN_D1 DFERQQN_D2 DFERQQN_DL DFERQ_D1 DFERQ_D2 DFERQ_DL DFESQN_D1 DFESQN_D
+2 DFESQN_DL DFESQQN_D1 DFESQQN_D2 DFESQQN_DL DFESQ_D1 DFESQ_D2 DFESQ_DL DFQN_D1 DFQN_D2 DFQN_D4 DFQN_DL DFQQN_D1 D
+FQQN_D2 DFQQN_D4 DFQQN_DL DFQ_D1 DFQ_D2 DFQ_D4 DFQ_DL DFRQN_D1 DFRQN_D2 DFRQN_DL DFRQQN_D1 DFRQQN_D2 DFRQQN_DL DFR
+Q_D1 DFRQ_D2 DFRQ_DL DFSQN_D1 DFSQN_D2 DFSQN_DL DFSQQN_D1 DFSQQN_D2 DFSQQN_DL DFSQ_D1 DFSQ_D2 DFSQ_DL DLN_D1 DLN_D
+2 DLN_DL DL_D1 DL_D2 DL_DL INV_D1 INV_D12 INV_D14 INV_D16 INV_D2 INV_D4 INV_D8 INV_DL MUX2N_D1 MUX2N_DL MUX2_D1 MU
+X2_DL MUX3_D1 MUX3_DL MUX4_D1 MUX4_DL NAND2_D1 NAND2_D2 NAND2_D4 NAND2_D8 NAND2_DL NAND3_D1 NAND3_D2 NAND3_D4 NAND
+3_DL NAND4N1_D1 NAND4N1_D2 NAND4N1_DL NAND4N2_D1 NAND4N2_D2 NAND4N2_DL NAND4_D1 NAND4_D2 NAND4_D4 NAND4_DL NOR2_D1
+ NOR2_D2 NOR2_D4 NOR2_D8 NOR2_DL NOR3_D1 NOR3_D2 NOR3_D4 NOR3_DL NOR4N1_D1 NOR4N1_D2 NOR4N1_D4 NOR4N1_DL NOR4N2_D1
+ NOR4N2_D2 NOR4N2_DL NOR4_D1 NOR4_D2 NOR4_D4 NOR4_DL OA21_D1 OA21_D2 OA21_D4 OA21_DL OA22_D1 OA22_D2 OA22_DL OAI21
+1_D1 OAI211_DL OAI221_D1 OAI221_DL OAI222_D1 OAI222_DL OAI22_D1 OAI22_DL OR2_D1 OR2_D2 OR2_D4 OR2_DL OR3_D1 OR3_D2
+ OR3_D4 OR3_DL OR4_D1 OR4_D2 OR4_D4 OR4_DL TIEH TIEL XNOR2_D1 XNOR2_DL XOR2_D1 XOR2_DL
+********************************************************************************
+Checking cell AND2_D1
+Succesfully imported and generated Python code.
+Cell and manifest pins match.
+Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : A B
+Symsim::Elaborate: Outputs : Y
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : A B VDD VSS Y n0 n1
+Symsim::Elaborate: Elaboration OK.
+********************************************************************************
+
+⋮
+
+Gate logic functions :
+	(A &amp; ~B) | (B &amp; ~A)
+Expected logic functions :
+	A ^ B
+Function A ^ B successfully mapped to (A &amp; ~B) | (B &amp; ~A)
+	Symbol mapping : 
+	A -&gt; A
+	B -&gt; B
+Cell check function from manifest specification OK
+ALL OK [218]
+</code></pre>
+<p><code>ALL OK</code> at the end of report means that checks on all cells have passed.
+On success the script returns 0 as exit value that can be used for checking the status programmatically.</p>
+<h2 id="generating-cells-and-their-cdl-and-spice-netlists"><a class="header" href="#generating-cells-and-their-cdl-and-spice-netlists">Generating cells and their CDL and SPICE netlists</a></h2>
+<p>The next step is to generate CDL and SPICE netlists for all cells by running</p>
+<pre><code class="language-sh">cd $GLOW_ROOT/cells
+batch_gencell cell_manifest.yaml --all --parallel 0
+</code></pre>
+<p>At the end of report there should be a message</p>
+<pre><code>ALL OK [218]
+</code></pre>
+<p>that signifies that all of the cells pass internal checks and that netlists have been succesfully generated.</p>
+<p>Individual cell netlists can be packed to a single netlist file by running</p>
+<pre><code class="language-sh">cd $GLOW_ROOT/cells
+packnetlists cell_manifest.yaml --all
+</code></pre>
+<p>If the command succedes, the end of report should contain</p>
+<pre><code>ALL OK
+</code></pre>
+<p>Full CDL netlist will be available at <code>$GLOW_ROOT/library/cdl/glow_sg13g2.cdl</code>,
+while the SPICE netlist will be available at <code>$GLOW_ROOT/library/spice/glow_sg13g2.sp</code>.</p>
+<h2 id="checking-cell-layouts"><a class="header" href="#checking-cell-layouts">Checking cell layouts</a></h2>
+<p>Cell layouts should be checked for conformance to conventions and user-defined rules, as well as foundry DRC and LVS.
+These checks are performed by <code>check_cell.sh</code> script, and are:</p>
+<ul>
+<li>Layout passes <code>gdsinfo</code> check
+<pre><code>gdsinfo file.gds -c cell_name --noref --errlay *,* --uselay 1,0 --uselay 5,0 --uselay 6,0 --uselay 8,0 --uselay 8,2 --uselay 8,25 --uselay 14,0 --uselay 31,0 --uselay 189,* --label VDD --label VSS --nolabel 'vdd!' --nolabel 'vss!'
+</code></pre>
+<ul>
+<li>Argument <code>--noref</code> forces that a cell has flat hierarchy,</li>
+<li>Argument <code>--errlay *,*</code> marks all layers and purposes as error layers, and individual <code>--uselay</code> arguments explicitly allow only specific layers,</li>
+<li>Arguments <code>--label VDD</code> and <code>--label VSS</code> require that pins with labels <code>VDD</code> and <code>VSS</code> are present,</li>
+<li>Arguments <code>--nolabel 'vdd!'</code> and <code>--nolabel 'vss!'</code> forbid the use of global labels <code>vdd!</code> and <code>vss!</code>.</li>
+</ul>
+</li>
+<li>Layout passed DRC check. This check ensures that the cell is manufacturable.</li>
+<li>Layout passed LVS check. This check ensures that the cell netlist and layout match.</li>
+</ul>
+<h2 id="generating-the-library-databook"><a class="header" href="#generating-the-library-databook">Generating the library databook</a></h2>
+<p>Databook reports can be generated by running</p>
+<pre><code class="language-sh">cd $GLOW_ROOT/cells
+genreport cell_manifest.yaml --all --summary
+</code></pre>
+<p>If reports are generated succesfully the end of report should be:</p>
+<pre><code>Generating summary...	OK
+Generating introduction...	OK
+ALL OK [70]
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="glow-utilities"><a class="header" href="#glow-utilities">GLOW Utilities</a></h1>
 <p>Python package <code>glow_utils</code> provides utility functions used for design of digital standard cell library.
@@ -1924,11 +2035,20 @@ A   B   Y
 1   1   0   
 ------------
 
+Reduced truth table for output Y
+
+A   B   Y   
+------------
+0   -   1   
+-   0   1   
+1   1   0   
+------------
+
 Circuit Boolean functions : 
 Y = ~A | ~B
 
 Matching Boolean functions...
-Y 	MATCH
+Y       MATCH
 ALL OK
 </code></pre>
 <p>PDK libraries and corners can be specified as:</p>
@@ -1937,6 +2057,526 @@ ALL OK
 <p>Operating conditions, such as <code>supplyVoltage</code> or <code>temperature</code> can be changed as</p>
 <pre><code class="language-sh">ngcombsim NAND2_D1.sp NAND2_D1 --cond "supplyVoltage=1.3"
 </code></pre>
+<h2 id="cell-manifest-file-syntax"><a class="header" href="#cell-manifest-file-syntax">Cell Manifest File Syntax</a></h2>
+<p>Cell manifest is a YAML file that contains information about cells in a standard cell library.
+...</p>
+<p>Basic unit of manifest file is a cell group.
+Cell group is a collection of cells that are functionally equivalent, but have different drive strenghts.</p>
+<p>Syntax of a cell group is:</p>
+<pre><code class="language-yaml">[cell_group]:
+	description: "Cell group description"
+	type: [combinatorial | constant | dff | dlatch | antenna | physical]
+	pins:
+		[pin_name]:
+			type: [input | output | inout | power | ground]
+			description: "Pin description"
+	function:
+		[fn_name]: "function specification"
+	cells:
+		- cell_group_Dx
+</code></pre>
+<p>where</p>
+<ul>
+<li>Top level field <code>[cell_group]</code> is the name of a cell group, for example <code>AND2</code>.</li>
+<li>Field <code>description</code> contains a string description of a cell group, for example 'Two input AND gate'</li>
+<li>Field <code>type</code> specifies the cell type. The following table summarizes the valid values and their meaning.
+| Value 			| Description 				|
+| :---- 			| :---------- 				|
+| <code>combinatorial</code> 	| Combinatorial circuits	|
+| <code>constant</code>		| Special cells for constant logic '1' and '0' |
+| <code>dff</code>				| D flip-flop				|
+| <code>dlatch</code>			| D latch					|
+| <code>antenna</code>			| Antenna cell				|
+| <code>physical</code>		| Physical cells, such as fillers |</li>
+<li>Field <code>pins</code> contains information about cell pins. Individual pin is specified by <code>[pin_name]</code>, followed by specifying the pin type and a string description.</li>
+<li>Field <code>function</code> specifies the cell function.
+<ul>
+<li><code>combinatorial</code>: for each output a <code>[fn_name]</code> entry with output name as key and expected logic function as value should be given.</li>
+<li><code>constant</code>: for each output a <code>[fn_name]</code> entry with output name as key and expected constant value should be given.</li>
+<li><code>dff</code>: D flip flop specification is given through specifying pin names as keys and specifiers as values. For example, <code>D</code>: <code>data_in</code>. Valid specifiers and descriptions are given in the table below.
+| Specifier	| Description				|
+|:---:		| :----						|
+| <code>data_in</code>	| Pin is the data input. Mutually exclusive with <code>data_in_inv</code>.				|
+| <code>data_in_inv</code>	| Pin is the inverted data input. Mutually exclusive with <code>data_in</code>.				|
+| <code>data_out</code> | Pin is the data output. |
+| <code>data_out_inv</code> | Pin is the inverterd data output. |
+| <code>clock</code>		| Pin is the clock input. Mutually exclusive with <code>clock_inv</code>.|
+| <code>clock_inv</code>	| Pin is the inverted clock input. Mutually exclusive with <code>clock_inv</code>.|
+| <code>async_clear</code> | Pin is the asynchronous clear pin. Mutually exclusive with <code>async_clear_inv</code>, <code>sync_clear</code> and <code>sync_clear_inv</code>. |
+| <code>async_clear_inv</code> | Pin is the inverted asynchronous clear pin. Mutually exclusive with <code>async_clear</code>, <code>sync_clear</code> and <code>sync_clear_inv</code>. |
+| <code>sync_clear</code> | Pin is the synchronous clear pin. Mutually exclusive with <code>async_clear</code>, <code>async_clear_inv</code> and <code>sync_clear_inv</code>. |
+| <code>sync_clear_inv</code> | Pin is the inverted synchronous clear pin. Mutually exclusive with <code>async_clear</code>, <code>async_clear_inv</code> and <code>sync_clear</code>. |
+| <code>async_set</code> | Pin is the asynchronous set pin. Mutually exclusive with <code>async_set_inv</code>, <code>sync_set</code> and <code>sync_set_inv</code>. |
+| <code>async_set_inv</code> | Pin is the inverted asynchronous set pin. Mutually exclusive with <code>async_set</code>, <code>sync_set</code> and <code>sync_set_inv</code>. |
+| <code>sync_set</code> | Pin is the synchronous set pin. Mutually exclusive with <code>async_set</code>, <code>async_set_inv</code> and <code>sync_set_inv</code>. |
+| <code>sync_set_inv</code> | Pin is the inverted synchronous set pin. Mutually exclusive with <code>async_set</code>, <code>async_set_inv</code> and <code>sync_set</code>. |
+| <code>enable</code>		| Pin is enable input. Mutually exclusive with <code>enable_inv</code>. |
+| <code>enable_inv</code>	| Pin is inverted enable input. Mutually exclusive with <code>enable</code>.|
+| <code>set_clr_val</code>	| Value of output when both set and clear are asserted. |</li>
+<li><code>dlatch</code>: D latch specification is given through specifying pin names as keys and specifiers as values. For example, <code>D</code>: <code>data_in</code>. Valid specifiers and descriptions are given in the table below.
+| Specifier	| Description				|
+|:---:		| :----						|
+| <code>data_in</code>	| Pin is the data input. Mutually exclusive with <code>data_in_inv</code>.				|
+| <code>data_in_inv</code>	| Pin is the inverted data input. Mutually exclusive with <code>data_in</code>.				|
+| <code>data_out</code> | Pin is the data output. |
+| <code>data_out_inv</code> | Pin is the inverterd data output. |
+| <code>latch</code>		| Pin is the latch input. Mutually exclusive with <code>latch_inv</code>.|
+| <code>latch_inv</code>	| Pin is the inverted latch input. Mutually exclusive with <code>latch_inv</code>.|
+| <code>async_clear</code> | Pin is the asynchronous clear pin. Mutually exclusive with <code>async_clear_inv</code>. |
+| <code>async_clear_inv</code> | Pin is the inverted asynchronous clear pin. Mutually exclusive with <code>async_clear</code>. |
+| <code>async_set</code> | Pin is the asynchronous set pin. Mutually exclusive with <code>async_set_inv</code>. |
+| <code>async_set_inv</code> | Pin is the inverted asynchronous set pin. Mutually exclusive with <code>async_set</code>. |
+| <code>enable</code>		| Pin is enable input. Mutually exclusive with <code>enable_inv</code>. |
+| <code>enable_inv</code>	| Pin is inverted enable input. Mutually exclusive with <code>enable</code>.|
+| <code>set_clr_val</code>	| Value of output when both set and clear are asserted. |</li>
+</ul>
+</li>
+<li><code>cells</code>contains a list of cells in a cell group. All cells should have the same function, only different drive strengths.</li>
+<li><code>optional</code> field contains optional values, such as Latex code for cell function for pretty rendering of cell function.</li>
+</ul>
+<p>Combinatorial <code>AND2</code> cell is given as an example below:</p>
+<pre><code class="language-yaml">AND2:
+    description: "Two input AND gate"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input A"
+        B:
+            type: input
+            description: "Input B"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A &amp; B
+    cells:
+        - AND2_DL
+        - AND2_D1
+        - AND2_D2
+        - AND2_D4
+    optional:
+        latex: "Y = A \\cdot B"
+</code></pre>
+<p>D flip flop with asynchronous reset <code>DFARQQN</code> is given as an example below:</p>
+<pre><code class="language-yaml">DFARQQN:
+    description: "D flip-flop with asynchronous reset and outputs Q and QN."
+    type: dff
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        CLK:
+            type: input
+            description: "Clock"
+        RN:
+            type: input
+            description: "Asynchronous reset, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        CLK: 'clock'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+        RN: 'async_clear_inv'
+    cells:
+        - DFARQQN_DL
+        - DFARQQN_D1
+</code></pre>
+<p>D latch with inverted latch input <code>DLN</code> is given as an example below:</p>
+<pre><code class="language-yaml">DLN:
+    description: "D latch with inverted control signal."
+    type: dlatch
+    pins:
+        D:
+            type: input
+            description: "Data input"
+        GN:
+            type: input
+            description: "Latch input, inverted"
+        Q:
+            type: output
+            description: "Data output"
+        QN:
+            type: output
+            description: "Data output, inverted"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        D: 'data_in'
+        GN: 'latch_inv'
+        Q: 'data_out'
+        QN: 'data_out_inv'
+    cells:
+        - DLN_DL
+        - DLN_D1
+        - DLN_D2
+</code></pre>
+<h2 id="checkmanifest"><a class="header" href="#checkmanifest"><code>checkmanifest</code></a></h2>
+<p>Script <code>checkmanifest</code> is an utility to perform checks on manifest file and cells listed in it.
+It is not a substitution for other scripts that perform checks on cells, but is rather a tool to ensure that manifest data is consistent with cells in a library.</p>
+<p>Checks performed:</p>
+<ul>
+<li>Check if a cell directory and Python code exists</li>
+<li>Check if a cell can be generated without errors</li>
+<li>Check if cell pins from manifest and cell info match</li>
+<li>Check if a cell's check() function returns True</li>
+<li>Check if running Symsim check passes with data from manifest in strict mode</li>
+</ul>
+<p>Script is invoked as:</p>
+<pre><code class="language-sh">checkmanifest manifest_file [commands]
+</code></pre>
+<p>Commands are summarized in the following table</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Command</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>-c, --cell</td><td>Check a single cell.</td></tr>
+<tr><td>-g, --group</td><td>Check a cell group.</td></tr>
+<tr><td>-t, --type</td><td>Check all cells of a given type.</td></tr>
+<tr><td>-a, --all</td><td>Check all cells.</td></tr>
+<tr><td>--quiet</td><td>Print only essential information.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Return code is 0 if all checks pass, and nonzero if there was an error, and it can be used in other scripts as a pass/fail value.</p>
+<p><code>checkmanifest</code> can be run on a single cell, for example <code>AND2_D1</code> by running the following command in the <code>$GLOW_ROOT/cells</code> directory</p>
+<pre><code class="language-sh">checkmanifest cell_manifest.yaml -c AND2_D1
+</code></pre>
+<p>that produces the output</p>
+<pre><code>********************************************************************************
+Reading manifest file : cell_manifest.yaml
+Running checks on cells :
+AND2_D1
+********************************************************************************
+Checking cell AND2_D1
+Succesfully imported and generated Python code.
+Cell and manifest pins match.
+Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : A B
+Symsim::Elaborate: Outputs : Y
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : A B VDD VSS Y n0 n1
+Symsim::Elaborate: Elaboration OK.
+********************************************************************************
+Working on circuit : AND2_D1
+
+Symsim::combSim: Simulating circuit with 2 inputs and 1 outputs.
+Symsim::combSim: | 11 | 1
+Symsim::combSim: | 10 | 0
+Symsim::combSim: | 01 | 0
+Symsim::combSim: | 00 | 0
+
+Gate logic functions :
+        A &amp; B
+Expected logic functions :
+        x &amp; y
+Function x &amp; y successfully mapped to A &amp; B
+        Symbol mapping : 
+        x -&gt; A
+        y -&gt; B
+Cell check function OK
+Symsim::Elaborate: Circuit is flat.
+Symsim::Elaborate: Circuit passes ERC.
+Symsim::Elaborate: Inputs  : A B
+Symsim::Elaborate: Outputs : Y
+Symsim::Elaborate: Power   : VDD
+Symsim::Elaborate: Ground  : VSS
+Symsim::Elaborate: Nodes   : A B VDD VSS Y n0 n1
+Symsim::Elaborate: Elaboration OK.
+********************************************************************************
+Working on circuit : AND2_D1
+
+Symsim::combSim: Simulating circuit with 2 inputs and 1 outputs.
+Symsim::combSim: | 11 | 1
+Symsim::combSim: | 10 | 0
+Symsim::combSim: | 01 | 0
+Symsim::combSim: | 00 | 0
+
+Gate logic functions :
+        A &amp; B
+Expected logic functions :
+        A &amp; B
+Function A &amp; B successfully mapped to A &amp; B
+        Symbol mapping : 
+        A -&gt; A
+        B -&gt; B
+Cell check function from manifest specification OK
+ALL OK [1]
+</code></pre>
+<p>Running in quiet mode</p>
+<pre><code class="language-sh">checkmanifest cell_manifest.yaml -c AND2_D1 --quiet
+</code></pre>
+<p>produces only one line of output</p>
+<pre><code>AND2_D1 Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+</code></pre>
+<p>Checks can be run for a cell group as</p>
+<pre><code class="language-sh">checkmanifest cell_manifest.yaml -g AND2 --quiet
+</code></pre>
+<p>and the output is</p>
+<pre><code>AND2_D1 Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+AND2_D2 Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+AND2_D4 Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+AND2_DL Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+</code></pre>
+<p>Checks can be run for a cell type, for example D latches, as</p>
+<pre><code class="language-sh">checkmanifest cell_manifest.yaml -t dlatch --quiet
+</code></pre>
+<p>that produces the output</p>
+<pre><code>DLN_D1  Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+DLN_D2  Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+DLN_DL  Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+DL_D1   Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+DL_D2   Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+DL_DL   Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+</code></pre>
+<p>Finally, checks can be performed on all cells as</p>
+<pre><code class="language-sh">checkmanifest cell_manifest.yaml --all --quiet
+</code></pre>
+<p>that produces a long ouptut even in quiet mode, and a part of it is</p>
+<pre><code>AND2_D1 Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+AND2_D2 Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+AND2_D4 Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+...
+XNOR2_DL        Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+XOR2_D1 Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+XOR2_DL Python OK       PINS OK CELL_CHECK OK   CELL_CHECK_MANIFEST OK
+</code></pre>
+<h2 id="packnetlists"><a class="header" href="#packnetlists"><code>packnetlists</code></a></h2>
+<p>Script <code>packnetlists</code> is an utility to collect individual CDL and SPICE netlists and pack them into a single file.</p>
+<p>Script is invoked as:</p>
+<pre><code class="language-sh">packnetlists manifest_file [commands]
+</code></pre>
+<p>Commands are summarized in the following table</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Command</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>-c, --cell</td><td>Check a single cell.</td></tr>
+<tr><td>-g, --group</td><td>Check a cell group.</td></tr>
+<tr><td>-t, --type</td><td>Check all cells of a given type.</td></tr>
+<tr><td>-a, --all</td><td>Check all cells.</td></tr>
+<tr><td>--quiet</td><td>Print only essential information.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Output netlists are saved to locations given in the following table
+| Netlist | Location |
+| :--		| :-- |
+| CDL		| <code>$GLOW_LIBRARY/cdl/$GLOW_NETLIST_FILE.cdl</code> |
+| SPICE		| <code>$GLOW_LIBRARY/spice/$GLOW_NETLIST_FILE.sp</code> |</p>
+<p>Default values of variables are</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Variable</th><th style="text-align: left">Default value</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><code>GLOW_LIBRARY</code></td><td style="text-align: left"><code>$GLOW_ROOT/library</code></td></tr>
+<tr><td style="text-align: left"><code>GLOW_NETLIST_FILE</code></td><td style="text-align: left"><code>glow_sg13g2</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Default values can be overriden by exporting environment variables.</p>
+<p>Individual netlists can be packaged by running the following command in the <code>$GLOW_ROOT/cells</code> directory</p>
+<pre><code class="language-sh">packnetlists cell_manifest.yaml --all
+</code></pre>
+<p>that produces the output</p>
+<pre><code>********************************************************************************
+Reading manifest file : cell_manifest.yaml
+Running packnetlists on cells :
+AND2_D1 AND2_D2 AND2_D4 AND2_DL AND3_D1 AND3_D2 AND3_D4 AND3_DL AND4_D1 AND4_D2 AND4_D4 AND4_DL AO21_D1 AO21_D2 AO21_DL AO22_D1 AO22_D2 AO22_DL AOI211_D1 AOI211_D2 AOI211_DL AOI21_D1 AOI21_D2 AOI21_DL AOI221_D1 AOI221_DL AOI222_D1 AOI222_DL AOI22_D1 AOI22_DL AOI2N1_D1 AOI2N1_D2 AOI2N1_DL AOI2N2_D1 BUF_D1 BUF_D12 BUF_D2 BUF_D3 BUF_D4 BUF_D6 BUF_D8 BUF_DL CLKBUF_D1 CLKBUF_D12 CLKBUF_D16 CLKBUF_D2 CLKBUF_D3 CLKBUF_D4 CLKBUF_D6 CLKBUF_D8 CLKINV_D1 CLKINV_D16 CLKINV_D2 CLKINV_D4 CLKINV_D8 DFARQN_D1 DFARQN_DL DFARQQN_D1 DFARQQN_DL DFARQ_D1 DFARQ_DL DFASQN_D1 DFASQN_DL DFASQQN_D1 DFASQQN_DL DFASQ_D1 DFASQ_DL DFEQN_D1 DFEQN_D2 DFEQN_DL DFEQQN_D1 DFEQQN_D2 DFEQQN_DL DFEQ_D1 DFEQ_D2 DFEQ_DL DFERQN_D1 DFERQN_D2 DFERQN_DL DFERQQN_D1 DFERQQN_D2 DFERQQN_DL DFERQ_D1 DFERQ_D2 DFERQ_DL DFESQN_D1 DFESQN_D2 DFESQN_DL DFESQQN_D1 DFESQQN_D2 DFESQQN_DL DFESQ_D1 DFESQ_D2 DFESQ_DL DFQN_D1 DFQN_D2 DFQN_D4 DFQN_DL DFQQN_D1 DFQQN_D2 DFQQN_D4 DFQQN_DL DFQ_D1 DFQ_D2 DFQ_D4 DFQ_DL DFRQN_D1 DFRQN_D2 DFRQN_DL DFRQQN_D1 DFRQQN_D2 DFRQQN_DL DFRQ_D1 DFRQ_D2 DFRQ_DL DFSQN_D1 DFSQN_D2 DFSQN_DL DFSQQN_D1 DFSQQN_D2 DFSQQN_DL DFSQ_D1 DFSQ_D2 DFSQ_DL DLN_D1 DLN_D2 DLN_DL DL_D1 DL_D2 DL_DL INV_D1 INV_D12 INV_D14 INV_D16 INV_D2 INV_D4 INV_D8 INV_DL MUX2N_D1 MUX2N_DL MUX2_D1 MUX2_DL MUX3_D1 MUX3_DL MUX4_D1 MUX4_DL NAND2_D1 NAND2_D2 NAND2_D4 NAND2_D8 NAND2_DL NAND3_D1 NAND3_D2 NAND3_D4 NAND3_DL NAND4N1_D1 NAND4N1_D2 NAND4N1_DL NAND4N2_D1 NAND4N2_D2 NAND4N2_DL NAND4_D1 NAND4_D2 NAND4_D4 NAND4_DL NOR2_D1 NOR2_D2 NOR2_D4 NOR2_D8 NOR2_DL NOR3_D1 NOR3_D2 NOR3_D4 NOR3_DL NOR4N1_D1 NOR4N1_D2 NOR4N1_D4 NOR4N1_DL NOR4N2_D1 NOR4N2_D2 NOR4N2_DL NOR4_D1 NOR4_D2 NOR4_D4 NOR4_DL OA21_D1 OA21_D2 OA21_D4 OA21_DL OA22_D1 OA22_D2 OA22_DL OAI211_D1 OAI211_DL OAI221_D1 OAI221_DL OAI222_D1 OAI222_DL OAI22_D1 OAI22_DL OR2_D1 OR2_D2 OR2_D4 OR2_DL OR3_D1 OR3_D2 OR3_D4 OR3_DL OR4_D1 OR4_D2 OR4_D4 OR4_DL TIEH TIEL XNOR2_D1 XNOR2_DL XOR2_D1 XOR2_DL 
+Read in 218 netlists
+********************************************************************************
+Writing CDL netlists to $GLOW_ROOT/library/cdl/glow_sg13g2.cdl
+AND2_D1 AND2_D2 AND2_D4 AND2_DL AND3_D1 AND3_D2 AND3_D4 AND3_DL AND4_D1 AND4_D2 AND4_D4 AND4_DL AO21_D1 AO21_D2 AO21_DL AO22_D1 AO22_D2 AO22_DL AOI211_D1 AOI211_D2 AOI211_DL AOI21_D1 AOI21_D2 AOI21_DL AOI221_D1 AOI221_DL AOI222_D1 AOI222_DL AOI22_D1 AOI22_DL AOI2N1_D1 AOI2N1_D2 AOI2N1_DL AOI2N2_D1 BUF_D1 BUF_D12 BUF_D2 BUF_D3 BUF_D4 BUF_D6 BUF_D8 BUF_DL CLKBUF_D1 CLKBUF_D12 CLKBUF_D16 CLKBUF_D2 CLKBUF_D3 CLKBUF_D4 CLKBUF_D6 CLKBUF_D8 CLKINV_D1 CLKINV_D16 CLKINV_D2 CLKINV_D4 CLKINV_D8 DFARQN_D1 DFARQN_DL DFARQQN_D1 DFARQQN_DL DFARQ_D1 DFARQ_DL DFASQN_D1 DFASQN_DL DFASQQN_D1 DFASQQN_DL DFASQ_D1 DFASQ_DL DFEQN_D1 DFEQN_D2 DFEQN_DL DFEQQN_D1 DFEQQN_D2 DFEQQN_DL DFEQ_D1 DFEQ_D2 DFEQ_DL DFERQN_D1 DFERQN_D2 DFERQN_DL DFERQQN_D1 DFERQQN_D2 DFERQQN_DL DFERQ_D1 DFERQ_D2 DFERQ_DL DFESQN_D1 DFESQN_D2 DFESQN_DL DFESQQN_D1 DFESQQN_D2 DFESQQN_DL DFESQ_D1 DFESQ_D2 DFESQ_DL DFQN_D1 DFQN_D2 DFQN_D4 DFQN_DL DFQQN_D1 DFQQN_D2 DFQQN_D4 DFQQN_DL DFQ_D1 DFQ_D2 DFQ_D4 DFQ_DL DFRQN_D1 DFRQN_D2 DFRQN_DL DFRQQN_D1 DFRQQN_D2 DFRQQN_DL DFRQ_D1 DFRQ_D2 DFRQ_DL DFSQN_D1 DFSQN_D2 DFSQN_DL DFSQQN_D1 DFSQQN_D2 DFSQQN_DL DFSQ_D1 DFSQ_D2 DFSQ_DL DLN_D1 DLN_D2 DLN_DL DL_D1 DL_D2 DL_DL INV_D1 INV_D12 INV_D14 INV_D16 INV_D2 INV_D4 INV_D8 INV_DL MUX2N_D1 MUX2N_DL MUX2_D1 MUX2_DL MUX3_D1 MUX3_DL MUX4_D1 MUX4_DL NAND2_D1 NAND2_D2 NAND2_D4 NAND2_D8 NAND2_DL NAND3_D1 NAND3_D2 NAND3_D4 NAND3_DL NAND4N1_D1 NAND4N1_D2 NAND4N1_DL NAND4N2_D1 NAND4N2_D2 NAND4N2_DL NAND4_D1 NAND4_D2 NAND4_D4 NAND4_DL NOR2_D1 NOR2_D2 NOR2_D4 NOR2_D8 NOR2_DL NOR3_D1 NOR3_D2 NOR3_D4 NOR3_DL NOR4N1_D1 NOR4N1_D2 NOR4N1_D4 NOR4N1_DL NOR4N2_D1 NOR4N2_D2 NOR4N2_DL NOR4_D1 NOR4_D2 NOR4_D4 NOR4_DL OA21_D1 OA21_D2 OA21_D4 OA21_DL OA22_D1 OA22_D2 OA22_DL OAI211_D1 OAI211_DL OAI221_D1 OAI221_DL OAI222_D1 OAI222_DL OAI22_D1 OAI22_DL OR2_D1 OR2_D2 OR2_D4 OR2_DL OR3_D1 OR3_D2 OR3_D4 OR3_DL OR4_D1 OR4_D2 OR4_D4 OR4_DL TIEH TIEL XNOR2_D1 XNOR2_DL XOR2_D1 XOR2_DL 
+********************************************************************************
+Writing SPICE netlists to $GLOW_ROOT/library/spice/glow_sg13g2.sp
+AND2_D1 AND2_D2 AND2_D4 AND2_DL AND3_D1 AND3_D2 AND3_D4 AND3_DL AND4_D1 AND4_D2 AND4_D4 AND4_DL AO21_D1 AO21_D2 AO21_DL AO22_D1 AO22_D2 AO22_DL AOI211_D1 AOI211_D2 AOI211_DL AOI21_D1 AOI21_D2 AOI21_DL AOI221_D1 AOI221_DL AOI222_D1 AOI222_DL AOI22_D1 AOI22_DL AOI2N1_D1 AOI2N1_D2 AOI2N1_DL AOI2N2_D1 BUF_D1 BUF_D12 BUF_D2 BUF_D3 BUF_D4 BUF_D6 BUF_D8 BUF_DL CLKBUF_D1 CLKBUF_D12 CLKBUF_D16 CLKBUF_D2 CLKBUF_D3 CLKBUF_D4 CLKBUF_D6 CLKBUF_D8 CLKINV_D1 CLKINV_D16 CLKINV_D2 CLKINV_D4 CLKINV_D8 DFARQN_D1 DFARQN_DL DFARQQN_D1 DFARQQN_DL DFARQ_D1 DFARQ_DL DFASQN_D1 DFASQN_DL DFASQQN_D1 DFASQQN_DL DFASQ_D1 DFASQ_DL DFEQN_D1 DFEQN_D2 DFEQN_DL DFEQQN_D1 DFEQQN_D2 DFEQQN_DL DFEQ_D1 DFEQ_D2 DFEQ_DL DFERQN_D1 DFERQN_D2 DFERQN_DL DFERQQN_D1 DFERQQN_D2 DFERQQN_DL DFERQ_D1 DFERQ_D2 DFERQ_DL DFESQN_D1 DFESQN_D2 DFESQN_DL DFESQQN_D1 DFESQQN_D2 DFESQQN_DL DFESQ_D1 DFESQ_D2 DFESQ_DL DFQN_D1 DFQN_D2 DFQN_D4 DFQN_DL DFQQN_D1 DFQQN_D2 DFQQN_D4 DFQQN_DL DFQ_D1 DFQ_D2 DFQ_D4 DFQ_DL DFRQN_D1 DFRQN_D2 DFRQN_DL DFRQQN_D1 DFRQQN_D2 DFRQQN_DL DFRQ_D1 DFRQ_D2 DFRQ_DL DFSQN_D1 DFSQN_D2 DFSQN_DL DFSQQN_D1 DFSQQN_D2 DFSQQN_DL DFSQ_D1 DFSQ_D2 DFSQ_DL DLN_D1 DLN_D2 DLN_DL DL_D1 DL_D2 DL_DL INV_D1 INV_D12 INV_D14 INV_D16 INV_D2 INV_D4 INV_D8 INV_DL MUX2N_D1 MUX2N_DL MUX2_D1 MUX2_DL MUX3_D1 MUX3_DL MUX4_D1 MUX4_DL NAND2_D1 NAND2_D2 NAND2_D4 NAND2_D8 NAND2_DL NAND3_D1 NAND3_D2 NAND3_D4 NAND3_DL NAND4N1_D1 NAND4N1_D2 NAND4N1_DL NAND4N2_D1 NAND4N2_D2 NAND4N2_DL NAND4_D1 NAND4_D2 NAND4_D4 NAND4_DL NOR2_D1 NOR2_D2 NOR2_D4 NOR2_D8 NOR2_DL NOR3_D1 NOR3_D2 NOR3_D4 NOR3_DL NOR4N1_D1 NOR4N1_D2 NOR4N1_D4 NOR4N1_DL NOR4N2_D1 NOR4N2_D2 NOR4N2_DL NOR4_D1 NOR4_D2 NOR4_D4 NOR4_DL OA21_D1 OA21_D2 OA21_D4 OA21_DL OA22_D1 OA22_D2 OA22_DL OAI211_D1 OAI211_DL OAI221_D1 OAI221_DL OAI222_D1 OAI222_DL OAI22_D1 OAI22_DL OR2_D1 OR2_D2 OR2_D4 OR2_DL OR3_D1 OR3_D2 OR3_D4 OR3_DL OR4_D1 OR4_D2 OR4_D4 OR4_DL TIEH TIEL XNOR2_D1 XNOR2_DL XOR2_D1 XOR2_DL 
+********************************************************************************
+ALL OK
+</code></pre>
+<p>Contents of packed netlists can be examined as</p>
+<pre><code class="language-sh">more $GLOW_ROOT/library/cdl/glow_sg13g2.cdl
+</code></pre>
+<p>and a part of the output is</p>
+<pre><code>*
+* Copyright Dr. Dušan Grujić (dusan.grujic@etf.bg.ac.rs)
+* 
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*    https://www.apache.org/licenses/LICENSE-2.0
+* 
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+
+****************************************
+* Cell : AND2_D1
+* Description : Two input AND gate
+* Reduced truth table for output Y
+* ┌─────┬─────┬─────┐
+* │ A   │ B   │   Y │
+* ├─────┼─────┼─────┤
+* │ 1   │ 1   │   1 │
+* ├─────┼─────┼─────┤
+* │ 0   │ -   │   0 │
+* ├─────┼─────┼─────┤
+* │ -   │ 0   │   0 │
+* └─────┴─────┴─────┘
+****************************************
+.SUBCKT AND2_D1 A B Y VDD VSS
+*.PININFO A:I B:I Y:O VDD:B VSS:B 
+MN0 n0 A VSS VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
+MN1 n1 B n0 VSS sg13_lv_nmos w=3.2e-07 l=1.3e-07 ng=1 
+MP0 n1 A VDD VDD sg13_lv_pmos w=3.6e-07 l=1.3e-07 ng=1 
+MP1 n1 B VDD VDD sg13_lv_pmos w=3.6e-07 l=1.3e-07 ng=1 
+MN2 Y n1 VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ng=1 
+MP2 Y n1 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1 
+.ENDS
+</code></pre>
+<h2 id="genreport"><a class="header" href="#genreport"><code>genreport</code></a></h2>
+<p>Script <code>genreport</code> is an utility to generate reports for cell groups.
+Reports are generated by rendering Jinja templates located at location specified in <code>GLOW_TEMPLATES</code>.
+Output markdown reports are written to <code>GLOW_REPORT</code> directory.
+If a cell has a GDSII layout the script generates a SVG snapshot and saves it into <code>$GLOW_REPORT/figs</code>.</p>
+<p>Script is invoked as:</p>
+<pre><code class="language-sh">genreport manifest_file [commands]
+</code></pre>
+<p>Commands are summarized in the following table</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Command</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>-g, --group</td><td>Check a cell group.</td></tr>
+<tr><td>-t, --type</td><td>Check all cells of a given type.</td></tr>
+<tr><td>-a, --all</td><td>Check all cells.</td></tr>
+<tr><td>-s, --summary</td><td>Generate SUMMARY.md and introduction.md.</td></tr>
+<tr><td>--quiet</td><td>Print only essential information.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Default values of variables are</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Variable</th><th style="text-align: left">Default value</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><code>GLOW_TEMPLATES</code></td><td style="text-align: left"><code>$GLOW_ROOT/templates</code></td></tr>
+<tr><td style="text-align: left"><code>GLOW_REPORT</code></td><td style="text-align: left"><code>$GLOW_ROOT/doc/glow_sg13g2/src</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Default values can be overriden by exporting environment variables.</p>
+<p>Reports for individual groups can be generated by executing the following command in <code>$GLOW_ROOT/cells</code> directory.</p>
+<pre><code class="language-sh">genreport cell_manifest.yaml -g AND2
+</code></pre>
+<p>that produces the output</p>
+<pre><code>	    __ _  ___ _ __  _ __ ___ _ __   ___  _ __| |_ 
+	   / _` |/ _ \ '_ \| '__/ _ \ '_ \ / _ \| '__| __|
+	  | (_| |  __/ | | | | |  __/ |_) | (_) | |  | |_ 
+	   \__, |\___|_| |_|_|  \___| .__/ \___/|_|   \__|
+	   |___/                    |_|                   
+
+Using template path : $GLOW_ROOT/code/templates
+Using report path   : $GLOW_ROOT/doc/glow_sg13g2/src
+********************************************************************************
+Reading manifest file : cell_manifest.yaml
+Generating reports for :
+AND2
+********************************************************************************
+Generating report for group AND2	OK
+ALL OK [1]
+</code></pre>
+<p>and writes AND2.md report to <code>$GLOW_ROOT/doc/glow_sg13g2/src</code>.
+The script goes through all cells of a cell group and generates SVG snapshots of layouts, if they are present, and saves them to <code>$GLOW_ROOT/doc/glow_sg13g2/src/fig</code> directory.
+If layouts are not present, a link to empty layout placeholder is used in the documentation instead.</p>
+<p>Generating cell group reports does not update the <code>SUMMARY.md</code> and <code>introduction.md</code> pages, so while the report is present, it will not be visible in the documentation tree.</p>
+<p>For reports to be visible in the documentation tree, the <code>-s</code> or equivalently <code>--summary</code> option should be used, that generates <code>SUMMARY.md</code> and <code>introduction.md</code> files.
+Generated summary and introduction pages include links only to cell groups specified in the command line, so it should be used with caution, or with <code>--all</code> argument to generate reports for all cells.</p>
+<h2 id="batch_absgen-batch_checkcell-and-batch_gencell"><a class="header" href="#batch_absgen-batch_checkcell-and-batch_gencell"><code>batch_absgen</code>, <code>batch_checkcell</code> and <code>batch_gencell</code></a></h2>
+<p>Scripts <code>batch_absgen</code>, <code>batch_checkcell</code> and <code>batch_gencell</code> execute corresponding scripts <code>absgen</code>, <code>checkcell</code> and <code>gencell</code> for a batch of cells.</p>
+<p>Scripts are invoked as:</p>
+<pre><code class="language-sh">batch_absgen manifest_file [commands]
+batch_gencell manifest_file [commands]
+batch_checkcell manifest_file [commands]
+</code></pre>
+<p>Commands are summarized in the following table</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Command</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>-c, --cell</td><td>Run on a single cell.</td></tr>
+<tr><td>-g, --group</td><td>Run on a cell group.</td></tr>
+<tr><td>-t, --type</td><td>Run for all cells of a given type.</td></tr>
+<tr><td>-a, --all</td><td>Run for all cells.</td></tr>
+<tr><td>-p, --parallel</td><td>Run in parallel with specified number of processes.</td></tr>
+<tr><td>--quiet</td><td>Print only essential information.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Executing scripts, especially <code>checkcell</code> that runs DRC and LVS, can be time consuming, and the <code>-p</code> or equivalently <code>--parallel</code> option can come in handy to execute jobs in parallel.
+For example, <code>gencell</code> can be run on all cells in parallel by executing the following command in the <code>$GLOW_ROOT/cells</code> directory:</p>
+<pre><code class="language-sh">batch_gencell cell_manifest.yaml --all --parallel 0
+</code></pre>
+<p>Argument <code>--parallel 0</code> means to use all availabe CPU cores. Number of processes run in parallel can also be explicitly given.</p>
+<p>To illustrate the benefit of parallel execution, sequential and parallel run times of <code>gencell</code> on all cells can be compared as</p>
+<pre><code class="language-sh">time batch_gencell cell_manifest.yaml --all &gt; /dev/null
+real	1m7.000s
+user	5m9.495s
+sys	0m10.296s
+
+time batch_gencell cell_manifest.yaml --all --parallel 0 &gt; /dev/null
+real	0m13.980s
+user	3m16.818s
+sys	0m13.776s
+</code></pre>
+<p>This result is obtained on a CPU that has 8 physical and 16 logical cores.</p>
+<p>Increasing the number of processes beyond the number of CPU cores does not result in speed-up, as can be seen from</p>
+<pre><code class="language-sh">time batch_gencell cell_manifest.yaml --all --parallel 32 &gt; /dev/null
+real	0m12.555s
+user	3m0.564s
+sys	0m13.696s
+</code></pre>
+<p>so the <code>--parallel 0</code> is a reasonable choice.
+Depending on the number of cores and available memory, it might be necessary to reduce the number of parallel jobs to avoid memory swapping.</p>
 
                     </main>
 
