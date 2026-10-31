@@ -57,7 +57,7 @@ def printusage():
     print("\t", "-t, --type", "\t", "Generate reports for a cell type.")
     print("\t", "-a, --all", "\t", "Generate reports for all cells.")
     print("\t", "-s, --summary", "\t", "Generate a top level page for generated reports.")
-    print("\t", "\t", "\t", "Top level page will overwrite the SUMMARY.md file.")
+    print("\t", "\t", "\t", "Top level page will overwrite SUMMARY.md and introduction.md files.")
     print("\t", "--quiet", "\t", "Print only essential information.")
     print("*"*80)
 
