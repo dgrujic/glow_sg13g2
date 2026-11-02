@@ -1402,6 +1402,8 @@ where
 - Field `description` contains a string description of a cell group, for example 'Two input AND gate'
 - Field `type` specifies the cell type. The following table summarizes the valid values and their meaning.
 
+<div align="center">
+
 | Value 			| Description 				|
 | :---- 			| :---------- 				|
 | `combinatorial` 	| Combinatorial circuits	|
@@ -1411,12 +1413,16 @@ where
 | `antenna`			| Antenna cell				|
 | `physical`		| Physical cells, such as fillers |
 
+</div>
+
 - Field `pins` contains information about cell pins. Individual pin is specified by `[pin_name]`, followed by specifying the pin type and a string description.
 
 - Field `function` specifies the cell function.
    - `combinatorial`: for each output a `[fn_name]` entry with output name as key and expected logic function as value should be given.
    - `constant`: for each output a `[fn_name]` entry with output name as key and expected constant value should be given.  
    - `dff`: D flip flop specification is given through specifying pin names as keys and specifiers as values. For example, `D`: `data_in`. Valid specifiers and descriptions are given in the table below.
+
+<div align="center">
 
 | Specifier	| Description				|
 |:---:		| :----						|
@@ -1438,7 +1444,11 @@ where
 | `enable_inv`	| Pin is inverted enable input. Mutually exclusive with `enable`.|
 | `set_clr_val`	| Value of output when both set and clear are asserted. |
 
-   - `dlatch`: D latch specification is given through specifying pin names as keys and specifiers as values. For example, `D`: `data_in`. Valid specifiers and descriptions are given in the table below.
+</div>
+
+-   - `dlatch`: D latch specification is given through specifying pin names as keys and specifiers as values. For example, `D`: `data_in`. Valid specifiers and descriptions are given in the table below.
+
+<div align="center">
 
 | Specifier	| Description				|
 |:---:		| :----						|
@@ -1455,6 +1465,8 @@ where
 | `enable`		| Pin is enable input. Mutually exclusive with `enable_inv`. |
 | `enable_inv`	| Pin is inverted enable input. Mutually exclusive with `enable`.|
 | `set_clr_val`	| Value of output when both set and clear are asserted. |
+
+</div>
 
 - `cells`contains a list of cells in a cell group. All cells should have the same function, only different drive strengths.
 - `optional` field contains optional values, such as Latex code for cell function for pretty rendering of cell function.
