@@ -1402,14 +1402,14 @@ where
 - Field `description` contains a string description of a cell group, for example 'Two input AND gate'
 - Field `type` specifies the cell type. The following table summarizes the valid values and their meaning.
 
-      | Value | Description |
-      |:----|:----------|
-      | `combinatorial` 	| Combinatorial circuits	|
-      | `constant`		| Special cells for constant logic '1' and '0' |
-      | `dff`				| D flip-flop				|
-      | `dlatch`			| D latch					|
-      | `antenna`			| Antenna cell				|
-      | `physical`		| Physical cells, such as fillers |
+   | Value | Description |
+   |:----|:----------|
+   | `combinatorial` 	| Combinatorial circuits	|
+   | `constant`		| Special cells for constant logic '1' and '0' |
+   | `dff`				| D flip-flop				|
+   | `dlatch`			| D latch					|
+   | `antenna`			| Antenna cell				|
+   | `physical`		| Physical cells, such as fillers |
 
 - Field `pins` contains information about cell pins. Individual pin is specified by `[pin_name]`, followed by specifying the pin type and a string description.
 
