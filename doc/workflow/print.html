@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-151f459d.js";
+            window.path_to_searchindex_js = "searchindex-3a7934d6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9e19758c.js"></script>
@@ -2077,15 +2077,11 @@ Cell group is a collection of cells that are functionally equivalent, but have d
 </code></pre>
 <p>where</p>
 <ul>
-<li>
-<p>Top level field <code>[cell_group]</code> is the name of a cell group, for example <code>AND2</code>.</p>
-</li>
-<li>
-<p>Field <code>description</code> contains a string description of a cell group, for example 'Two input AND gate'</p>
-</li>
-<li>
-<p>Field <code>type</code> specifies the cell type. The following table summarizes the valid values and their meaning.
-| Value 			| Description 				|
+<li>Top level field <code>[cell_group]</code> is the name of a cell group, for example <code>AND2</code>.</li>
+<li>Field <code>description</code> contains a string description of a cell group, for example 'Two input AND gate'</li>
+<li>Field <code>type</code> specifies the cell type. The following table summarizes the valid values and their meaning.</li>
+</ul>
+<p>| Value 			| Description 				|
 | :---- 			| :---------- 				|
 | <code>combinatorial</code> 	| Combinatorial circuits	|
 | <code>constant</code>		| Special cells for constant logic '1' and '0' |
@@ -2093,21 +2089,19 @@ Cell group is a collection of cells that are functionally equivalent, but have d
 | <code>dlatch</code>			| D latch					|
 | <code>antenna</code>			| Antenna cell				|
 | <code>physical</code>		| Physical cells, such as fillers |</p>
-</li>
+<ul>
 <li>
 <p>Field <code>pins</code> contains information about cell pins. Individual pin is specified by <code>[pin_name]</code>, followed by specifying the pin type and a string description.</p>
 </li>
 <li>
 <p>Field <code>function</code> specifies the cell function.</p>
 <ul>
-<li>
-<p><code>combinatorial</code>: for each output a <code>[fn_name]</code> entry with output name as key and expected logic function as value should be given.</p>
+<li><code>combinatorial</code>: for each output a <code>[fn_name]</code> entry with output name as key and expected logic function as value should be given.</li>
+<li><code>constant</code>: for each output a <code>[fn_name]</code> entry with output name as key and expected constant value should be given.</li>
+<li><code>dff</code>: D flip flop specification is given through specifying pin names as keys and specifiers as values. For example, <code>D</code>: <code>data_in</code>. Valid specifiers and descriptions are given in the table below.</li>
+</ul>
 </li>
-<li>
-<p><code>constant</code>: for each output a <code>[fn_name]</code> entry with output name as key and expected constant value should be given.</p>
-</li>
-<li>
-<p><code>dff</code>: D flip flop specification is given through specifying pin names as keys and specifiers as values. For example, <code>D</code>: <code>data_in</code>. Valid specifiers and descriptions are given in the table below.</p>
+</ul>
 <p>| Specifier	| Description				|
 |:---:		| :----						|
 | <code>data_in</code>	| Pin is the data input. Mutually exclusive with <code>data_in_inv</code>.				|
@@ -2127,9 +2121,9 @@ Cell group is a collection of cells that are functionally equivalent, but have d
 | <code>enable</code>		| Pin is enable input. Mutually exclusive with <code>enable_inv</code>. |
 | <code>enable_inv</code>	| Pin is inverted enable input. Mutually exclusive with <code>enable</code>.|
 | <code>set_clr_val</code>	| Value of output when both set and clear are asserted. |</p>
-</li>
-<li>
-<p><code>dlatch</code>: D latch specification is given through specifying pin names as keys and specifiers as values. For example, <code>D</code>: <code>data_in</code>. Valid specifiers and descriptions are given in the table below.</p>
+<ul>
+<li><code>dlatch</code>: D latch specification is given through specifying pin names as keys and specifiers as values. For example, <code>D</code>: <code>data_in</code>. Valid specifiers and descriptions are given in the table below.</li>
+</ul>
 <p>| Specifier	| Description				|
 |:---:		| :----						|
 | <code>data_in</code>	| Pin is the data input. Mutually exclusive with <code>data_in_inv</code>.				|
@@ -2145,15 +2139,9 @@ Cell group is a collection of cells that are functionally equivalent, but have d
 | <code>enable</code>		| Pin is enable input. Mutually exclusive with <code>enable_inv</code>. |
 | <code>enable_inv</code>	| Pin is inverted enable input. Mutually exclusive with <code>enable</code>.|
 | <code>set_clr_val</code>	| Value of output when both set and clear are asserted. |</p>
-</li>
-</ul>
-</li>
-<li>
-<p><code>cells</code>contains a list of cells in a cell group. All cells should have the same function, only different drive strengths.</p>
-</li>
-<li>
-<p><code>optional</code> field contains optional values, such as Latex code for cell function for pretty rendering of cell function.</p>
-</li>
+<ul>
+<li><code>cells</code>contains a list of cells in a cell group. All cells should have the same function, only different drive strengths.</li>
+<li><code>optional</code> field contains optional values, such as Latex code for cell function for pretty rendering of cell function.</li>
 </ul>
 <p>Combinatorial <code>AND2</code> cell is given as an example below:</p>
 <pre><code class="language-yaml">AND2:
