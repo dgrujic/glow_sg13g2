@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5256be0b.js";
+            window.path_to_searchindex_js = "searchindex-19df0819.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9e19758c.js"></script>
@@ -1477,15 +1477,21 @@ Cell group is a collection of cells that are functionally equivalent, but have d
 </li>
 <li>
 <p>Field <code>type</code> specifies the cell type. The following table summarizes the valid values and their meaning.</p>
-<pre><code>| Value | Description |
-|:----|:----------|
-| `combinatorial` 	| Combinatorial circuits	|
-| `constant`		| Special cells for constant logic '1' and '0' |
-| `dff`				| D flip-flop				|
-| `dlatch`			| D latch					|
-| `antenna`			| Antenna cell				|
-| `physical`		| Physical cells, such as fillers |
-</code></pre>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: left">Value</th><th style="text-align: left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: left"><code>combinatorial</code></td><td style="text-align: left">Combinatorial circuits</td></tr>
+<tr><td style="text-align: left"><code>constant</code></td><td style="text-align: left">Special cells for constant logic '1' and '0'</td></tr>
+<tr><td style="text-align: left"><code>dff</code></td><td style="text-align: left">D flip-flop</td></tr>
+<tr><td style="text-align: left"><code>dlatch</code></td><td style="text-align: left">D latch</td></tr>
+<tr><td style="text-align: left"><code>antenna</code></td><td style="text-align: left">Antenna cell</td></tr>
+<tr><td style="text-align: left"><code>physical</code></td><td style="text-align: left">Physical cells, such as fillers</td></tr>
+</tbody>
+</table>
+</div>
 </li>
 <li>
 <p>Field <code>pins</code> contains information about cell pins. Individual pin is specified by <code>[pin_name]</code>, followed by specifying the pin type and a string description.</p>
