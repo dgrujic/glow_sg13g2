@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg 
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  height="100%" width="100%"
+  viewBox="-240.0 -250.0 2400.0 4960.0">
+
+
+  <defs>
+    <!-- Define the repeating diagonal pattern -->
+    <pattern id="nwell-stipple" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="00" y1="0" x2="0" y2="20" stroke="#268c6b" stroke-width="10" />
+    </pattern>
+
+    <pattern id="m1-stipple" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(135)">
+      <line x1="00" y1="0" x2="0" y2="40" stroke="#39bfff" stroke-width="20" />
+    </pattern>
+  </defs>    
+
+  <rect x="-240.0" y="-250.0" width="2400.0" height="4960.0" fill="#000000" />
+   <g transform="scale(1, -1) translate(0, -4460.0)">
+<polygon 
+    points=" 2160.0,4710.0 -240.0,4710.0 -240.0,1880.0000000000002 2160.0,1880.0000000000002  "
+fill="url(#nwell-stipple)"
+stroke="#268c6b"
+stroke-width="10.0"
+opacity="1.0" />
+<polygon 
+    points=" 0.0,4170.0 1360.0,4170.0 1360.0,3790.0 560.0,3790.0 560.0,4170.0 260.0,4170.0 260.0,2190.0 1660.0000000000002,2190.0 1660.0000000000002,4170.0 1920.0,4170.0 1920.0,4470.0 0.0,4470.0  "
+fill="#00ff00"
+stroke="#00ff00"
+stroke-width="10.0"
+opacity="0.5" />
+<polygon 
+    points=" 1660.0000000000002,1570.0 260.0,1570.0 260.0,150.0 560.0,150.0 560.0,500.0 1360.0,500.0 1360.0,150.0 560.0,150.0 260.0,150.0 0.0,150.0 0.0,-150.0 1920.0,-150.0 1920.0,150.0 1660.0000000000002,150.0  "
+fill="#00ff00"
+stroke="#00ff00"
+stroke-width="10.0"
+opacity="0.5" />
+<polygon 
+    points=" 2030.0000000000002,4090.0 -110.0,4090.0 -110.0,1880.0000000000002 2030.0000000000002,1880.0000000000002  "
+fill="#ccb899"
+stroke="#ccb899"
+stroke-width="10.0"
+opacity="0.3" />
+<polygon 
+    points=" 1950.0,180.0 -30.0,180.0 -30.0,-180.0 1950.0,-180.0  "
+fill="#ccb899"
+stroke="#ccb899"
+stroke-width="10.0"
+opacity="0.3" />
+<polygon 
+    points=" 1150.0000000000002,300.0 1280.0,300.0 1280.0,3990.0 1150.0000000000002,3990.0 1150.0000000000002,2030.0000000000002 770.0,2030.0000000000002 770.0,3990.0 640.0,3990.0 640.0,2030.0000000000002 130.0,2030.0000000000002 130.0,1730.0 640.0,1730.0 640.0,300.0 770.0,300.0 770.0,1730.0 1150.0000000000002,1730.0  "
+fill="#bf4026"
+stroke="#bf4026"
+stroke-width="10.0"
+opacity="1.0" />
+<polygon 
+    points=" 540.0,2710.0 540.0,4070.0000000000005 1380.0000000000002,4070.0000000000005 1380.0000000000002,2710.0 1640.0000000000002,2710.0 1640.0000000000002,4070.0000000000005 1920.0,4070.0000000000005 1920.0,4570.0 0.0,4570.0 0.0,4070.0000000000005 280.0,4070.0000000000005 280.0,2710.0  "
+fill="url(#m1-stipple)"
+stroke="#39bfff"
+stroke-width="10.0"
+opacity="1.0" />
+<polygon 
+    points=" 1305.0,1420.0 1305.0,2420.0 1090.0,2420.0 1090.0,3770.0 830.0000000000001,3770.0 830.0000000000001,2210.0 950.0000000000001,2210.0 950.0000000000001,1550.0 830.0000000000001,1550.0 830.0000000000001,520.0 1090.0,520.0 1090.0,1420.0  "
+fill="url(#m1-stipple)"
+stroke="#39bfff"
+stroke-width="10.0"
+opacity="1.0" />
+<polygon 
+    points=" 750.0,1750.0 750.0,2010.0000000000002 345.00000000000006,2010.0000000000002 345.00000000000006,2305.0 135.0,2305.0 135.0,1750.0  "
+fill="url(#m1-stipple)"
+stroke="#39bfff"
+stroke-width="10.0"
+opacity="1.0" />
+<polygon 
+    points=" 0.0,-250.0 1920.0,-250.0 1920.0,250.0 1640.0000000000002,250.0 1640.0000000000002,1230.0 1380.0000000000002,1230.0 1380.0000000000002,250.0 540.0,250.0 540.0,1550.0 280.0,1550.0 280.0,250.0 0.0,250.0  "
+fill="url(#m1-stipple)"
+stroke="#39bfff"
+stroke-width="10.0"
+opacity="1.0" />
+<polygon 
+    points=" 1280.0,4400.0 1120.0,4400.0 1120.0,4240.0 1280.0,4240.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="1120.0" y1="4240.0" x2="1280.0" y2="4400.0" stroke="#000000" stroke-width="10.0" />
+<line x1="1120.0" y1="4400.0" x2="1280.0" y2="4240.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 800.0,4400.0 640.0,4400.0 640.0,4240.0 800.0,4240.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="640.0" y1="4240.0" x2="800.0" y2="4400.0" stroke="#000000" stroke-width="10.0" />
+<line x1="640.0" y1="4400.0" x2="800.0" y2="4240.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 320.0,4400.0 160.0,4400.0 160.0,4240.0 320.0,4240.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="160.0" y1="4240.0" x2="320.0" y2="4400.0" stroke="#000000" stroke-width="10.0" />
+<line x1="160.0" y1="4400.0" x2="320.0" y2="4240.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 1760.0,4400.0 1600.0,4400.0 1600.0,4240.0 1760.0,4240.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="1600.0" y1="4240.0" x2="1760.0" y2="4400.0" stroke="#000000" stroke-width="10.0" />
+<line x1="1600.0" y1="4400.0" x2="1760.0" y2="4240.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 330.0,3980.0 330.0,2800.0000000000005 490.0,2800.0000000000005 490.0,3980.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="330.0" y1="2800.0000000000005" x2="490.0" y2="3980.0" stroke="#000000" stroke-width="10.0" />
+<line x1="330.0" y1="3980.0" x2="490.0" y2="2800.0000000000005" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 1430.0,3980.0 1430.0,2800.0000000000005 1590.0,2800.0000000000005 1590.0,3980.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="1430.0" y1="2800.0000000000005" x2="1590.0" y2="3980.0" stroke="#000000" stroke-width="10.0" />
+<line x1="1430.0" y1="3980.0" x2="1590.0" y2="2800.0000000000005" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 880.0,3720.0 880.0,2260.0000000000005 1040.0,2260.0000000000005 1040.0,3720.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="880.0" y1="2260.0000000000005" x2="1040.0" y2="3720.0" stroke="#000000" stroke-width="10.0" />
+<line x1="880.0" y1="3720.0" x2="1040.0" y2="2260.0000000000005" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 700.0000000000001,1960.0 540.0,1960.0 540.0,1800.0 700.0000000000001,1800.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="540.0" y1="1800.0" x2="700.0000000000001" y2="1960.0" stroke="#000000" stroke-width="10.0" />
+<line x1="540.0" y1="1960.0" x2="700.0000000000001" y2="1800.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 360.0,1960.0 200.0,1960.0 200.0,1800.0 360.0,1800.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="200.0" y1="1800.0" x2="360.0" y2="1960.0" stroke="#000000" stroke-width="10.0" />
+<line x1="200.0" y1="1960.0" x2="360.0" y2="1800.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 880.0,1500.0 880.0,570.0000000000001 1040.0,570.0000000000001 1040.0,1500.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="880.0" y1="570.0000000000001" x2="1040.0" y2="1500.0" stroke="#000000" stroke-width="10.0" />
+<line x1="880.0" y1="1500.0" x2="1040.0" y2="570.0000000000001" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 330.0,1500.0 330.0,570.0000000000001 490.0,570.0000000000001 490.0,1500.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="330.0" y1="570.0000000000001" x2="490.0" y2="1500.0" stroke="#000000" stroke-width="10.0" />
+<line x1="330.0" y1="1500.0" x2="490.0" y2="570.0000000000001" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 1430.0,1180.0 1430.0,340.0 1590.0,340.0 1590.0,1180.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="1430.0" y1="340.0" x2="1590.0" y2="1180.0" stroke="#000000" stroke-width="10.0" />
+<line x1="1430.0" y1="1180.0" x2="1590.0" y2="340.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 800.0,80.0 640.0,80.0 640.0,-80.0 800.0,-80.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="640.0" y1="-80.0" x2="800.0" y2="80.0" stroke="#000000" stroke-width="10.0" />
+<line x1="640.0" y1="80.0" x2="800.0" y2="-80.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 1280.0,80.0 1120.0,80.0 1120.0,-80.0 1280.0,-80.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="1120.0" y1="-80.0" x2="1280.0" y2="80.0" stroke="#000000" stroke-width="10.0" />
+<line x1="1120.0" y1="80.0" x2="1280.0" y2="-80.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 1760.0,80.0 1600.0,80.0 1600.0,-80.0 1760.0,-80.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="1600.0" y1="-80.0" x2="1760.0" y2="80.0" stroke="#000000" stroke-width="10.0" />
+<line x1="1600.0" y1="80.0" x2="1760.0" y2="-80.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 320.0,80.0 160.0,80.0 160.0,-80.0 320.0,-80.0  "
+fill="#ffffff"
+stroke="#000000"
+stroke-width="10.0"
+opacity="1.0" />
+<line x1="160.0" y1="-80.0" x2="320.0" y2="80.0" stroke="#000000" stroke-width="10.0" />
+<line x1="160.0" y1="80.0" x2="320.0" y2="-80.0" stroke="#000000" stroke-width="10.0" />
+<polygon 
+    points=" 1920.0,0.0 1920.0,4320.0 0.0,4320.0 0.0,0.0  "
+fill="none"
+stroke="#9900e6"
+stroke-width="10.0"
+opacity="0.5" />
+</g>
+  <text x="945.0000000000001" y="140.0" font-size="160.0px" fill="#FFEE00" text-anchor="middle" dominant-baseline="middle" stroke="#060F13" stroke-width="3" font-family="Arial">
+VDD
+</text>
+  <text x="940.0000000000001" y="4460.0" font-size="160.0px" fill="#FFEE00" text-anchor="middle" dominant-baseline="middle" stroke="#060F13" stroke-width="3" font-family="Arial">
+VSS
+</text>
+  <text x="240.0" y="2300.0" font-size="160.0px" fill="#FFEE00" text-anchor="middle" dominant-baseline="middle" stroke="#060F13" stroke-width="3" font-family="Arial">
+A
+</text>
+  <text x="1200.0" y="2300.0" font-size="160.0px" fill="#FFEE00" text-anchor="middle" dominant-baseline="middle" stroke="#060F13" stroke-width="3" font-family="Arial">
+Y
+</text>
+</svg>
