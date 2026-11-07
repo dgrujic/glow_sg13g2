@@ -45,7 +45,7 @@ Y = 1
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
-| [TIEH](#tieh) | TBD | TBD |
+| [TIEH](#tieh) | 2 | 4.1472 |
 
 
 
@@ -79,7 +79,7 @@ MP0 Y n0 VDD VDD sg13_lv_pmos w=1.2e-06 l=1.3e-07
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/TIEH.svg" height=500/>
 </div>
 
 ## Pin capacitance
