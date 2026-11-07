@@ -45,7 +45,7 @@ def generate(genFlat = True, anonimize = True):
 
     TIEL = Symsubcircuit(cellInfo['name'], cellInfo['pinList'])
     lmin = SymTech.technology['Lmin']
-    wn = SymTech.technology['invx1WN']
+    wn = 770e-9
     wp = wn
 
     # NMOS
