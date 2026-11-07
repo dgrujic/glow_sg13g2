@@ -127,19 +127,28 @@ class Manifest:
         """
         Returns a description of a cell group
         """
-        return self.manifest[cellGroup]['description']
+        try:
+            return self.manifest[cellGroup]['description']
+        except:
+            return None
 
     def getCellGroupCells(self, cellGroup):
         """
         Returns a list of cell group cells
         """
-        return self.manifest[cellGroup]['cells']
+        try:
+            return self.manifest[cellGroup]['cells']
+        except:
+            return []
 
     def getCellGroupType(self, cellGroup):
         """
         Returns a type of cell group
         """
-        return self.manifest[cellGroup]['type']
+        try:
+            return self.manifest[cellGroup]['type']
+        except:
+            return None
 
     def getCellGroupFnSpec(self, cellGroup):
         """
