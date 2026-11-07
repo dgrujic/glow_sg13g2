@@ -47,14 +47,14 @@ Y = ~A
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
-| [INV_DL](#inv_dl) | TBD | TBD |
+| [INV_DL](#inv_dl) | 2 | 4.1472 |
 | [INV_D1](#inv_d1) | 2 | 4.1472 |
-| [INV_D2](#inv_d2) | TBD | TBD |
-| [INV_D4](#inv_d4) | TBD | TBD |
-| [INV_D8](#inv_d8) | TBD | TBD |
-| [INV_D12](#inv_d12) | TBD | TBD |
-| [INV_D14](#inv_d14) | TBD | TBD |
-| [INV_D16](#inv_d16) | TBD | TBD |
+| [INV_D2](#inv_d2) | 3 | 6.2208 |
+| [INV_D4](#inv_d4) | 4 | 8.2944 |
+| [INV_D8](#inv_d8) | 6 | 12.4416 |
+| [INV_D12](#inv_d12) | 8 | 16.5888 |
+| [INV_D14](#inv_d14) | 10 | 20.736 |
+| [INV_D16](#inv_d16) | 11 | 22.8096 |
 
 
 
@@ -87,7 +87,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=6.6e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/INV_DL.svg" height=500/>
 </div>
 
 ### INV_D1
@@ -151,7 +151,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/INV_D2.svg" height=500/>
 </div>
 
 ### INV_D4
@@ -183,7 +183,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ng=2
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/INV_D4.svg" height=500/>
 </div>
 
 ### INV_D8
@@ -215,7 +215,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=6.4e-06 l=1.3e-07 ng=4
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/INV_D8.svg" height=500/>
 </div>
 
 ### INV_D12
@@ -247,7 +247,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=9.6e-06 l=1.3e-07 ng=6
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/INV_D12.svg" height=500/>
 </div>
 
 ### INV_D14
@@ -279,7 +279,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=1.12e-05 l=1.3e-07 ng=7
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/INV_D14.svg" height=500/>
 </div>
 
 ### INV_D16
@@ -311,7 +311,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=1.28e-05 l=1.3e-07 ng=8
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/INV_D16.svg" height=500/>
 </div>
 
 ## Pin capacitance
