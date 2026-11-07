@@ -38,7 +38,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f789739f.js";
+            window.path_to_searchindex_js = "searchindex-e06d7654.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-c63673e2.js"></script>
@@ -18437,33 +18437,33 @@ Y = 0
 <tr><th style="text-align: left">Cell name <br></th><th style="text-align: center">Width <br> [unit sites]</th><th style="text-align: center">Area <br> [\(\mu m^2\)]</th></tr>
 </thead>
 <tbody>
-<tr><td style="text-align: left"><a href="#tiel">TIEL</a></td><td style="text-align: center">TBD</td><td style="text-align: center">TBD</td></tr>
+<tr><td style="text-align: left"><a href="#tiel">TIEL</a></td><td style="text-align: center">2</td><td style="text-align: center">4.1472</td></tr>
 </tbody>
 </table>
 </div>
 <h3 id="tiel-1"><a class="header" href="#tiel-1">TIEL</a></h3>
 <h4 id="hierarchical-spice-netlist-70"><a class="header" href="#hierarchical-spice-netlist-70">Hierarchical SPICE netlist</a></h4>
 <pre><code class="language-spice">.subckt TIEL Y VDD VSS
-XMN0 Y G VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ad={6.4e-07*3.1e-07} as={6.4e-07*3.1e-07} pd={2*(6.4e-07+3.1e-07)} ps={2*(6.4e-07+3.1e-07)} 
-XMP0 G G VDD VDD sg13_lv_pmos w=6.4e-07 l=1.3e-07 ad={6.4e-07*3.1e-07} as={6.4e-07*3.1e-07} pd={2*(6.4e-07+3.1e-07)} ps={2*(6.4e-07+3.1e-07)} 
+XMN0 Y G VSS VSS sg13_lv_nmos w=7.7e-07 l=1.3e-07 ad={7.7e-07*3.1e-07} as={7.7e-07*3.1e-07} pd={2*(7.7e-07+3.1e-07)} ps={2*(7.7e-07+3.1e-07)} 
+XMP0 G G VDD VDD sg13_lv_pmos w=7.7e-07 l=1.3e-07 ad={7.7e-07*3.1e-07} as={7.7e-07*3.1e-07} pd={2*(7.7e-07+3.1e-07)} ps={2*(7.7e-07+3.1e-07)} 
 .ends
 </code></pre>
 <h4 id="flat-spice-netlist-70"><a class="header" href="#flat-spice-netlist-70">Flat SPICE netlist</a></h4>
 <pre><code class="language-spice">.subckt TIEL Y VDD VSS
-XMN0 Y n0 VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 ad=1.984e-13 as=1.984e-13 pd=1.9e-06 ps=1.9e-06 
-XMP0 n0 n0 VDD VDD sg13_lv_pmos w=6.4e-07 l=1.3e-07 ad=1.984e-13 as=1.984e-13 pd=1.9e-06 ps=1.9e-06 
+XMN0 Y n0 VSS VSS sg13_lv_nmos w=7.7e-07 l=1.3e-07 ad=2.387e-13 as=2.387e-13 pd=2.16e-06 ps=2.16e-06 
+XMP0 n0 n0 VDD VDD sg13_lv_pmos w=7.7e-07 l=1.3e-07 ad=2.387e-13 as=2.387e-13 pd=2.16e-06 ps=2.16e-06 
 .ends
 </code></pre>
 <h4 id="cdl-netlist-70"><a class="header" href="#cdl-netlist-70">CDL netlist</a></h4>
 <pre><code class="language-cdl">.SUBCKT TIEL Y VDD VSS
 *.PININFO Y:O VDD:B VSS:B 
-MN0 Y n0 VSS VSS sg13_lv_nmos w=6.4e-07 l=1.3e-07 
-MP0 n0 n0 VDD VDD sg13_lv_pmos w=6.4e-07 l=1.3e-07 
+MN0 Y n0 VSS VSS sg13_lv_nmos w=7.7e-07 l=1.3e-07 
+MP0 n0 n0 VDD VDD sg13_lv_pmos w=7.7e-07 l=1.3e-07 
 .ENDS
 </code></pre>
 <h4 id="layout-70"><a class="header" href="#layout-70">Layout</a></h4>
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height="500/">
+<img src="figs/TIEL.svg" height="500/">
 </div>
 
 <h2 id="pin-capacitance-67"><a class="header" href="#pin-capacitance-67">Pin capacitance</a></h2>
