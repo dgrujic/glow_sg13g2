@@ -716,7 +716,7 @@ OAI21:
     optional:
         latex: "Y = \\overline{(A + B) \\cdot C}"
 
-OAI21:
+OAI22:
     description: "Inverted output OR-AND gate with two two-input OR gates"
     type: combinatorial
     pins:
@@ -2385,15 +2385,103 @@ DFSQN:
 
 
 
-# #
-# # Delay cells
-# #
+#
+# Delay cells
+#
 
-# DLY1_D1
-# DLY1_D4
-# DLY2_D1
-# DLY2_D4
-# DLY3_D1
-# DLY3_D4
-# DLY4_D1
-# DLY4_D4
+DLY1:
+    description: "Delay cell with 1x delay"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A
+    cells:
+        - DLY1_D1
+        - DLY1_D4
+    optional:
+        latex: "Y = A"
+
+DLY2:
+    description: "Delay cell with 2x delay"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A
+    cells:
+        - DLY2_D1
+        - DLY2_D4
+    optional:
+        latex: "Y = A"
+
+DLY3:
+    description: "Delay cell with 3x delay"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A
+    cells:
+        - DLY3_D1
+        - DLY3_D4
+    optional:
+        latex: "Y = A"
+
+DLY4:
+    description: "Delay cell with 4x delay"
+    type: combinatorial
+    pins:
+        A:
+            type: input
+            description: "Input"
+        Y:
+            type: output
+            description: "Output"
+        VDD:
+            type: power
+            description: "Power supply"
+        VSS:
+            type: ground
+            description: "Ground"
+    function:
+        Y:  A
+    cells:
+        - DLY4_D1
+        - DLY4_D4
+    optional:
+        latex: "Y = A"
+
