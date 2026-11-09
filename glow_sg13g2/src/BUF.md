@@ -47,14 +47,14 @@ Y = A
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
-| [BUF_DL](#buf_dl) | TBD | TBD |
-| [BUF_D1](#buf_d1) | TBD | TBD |
-| [BUF_D2](#buf_d2) | TBD | TBD |
-| [BUF_D3](#buf_d3) | TBD | TBD |
-| [BUF_D4](#buf_d4) | TBD | TBD |
-| [BUF_D6](#buf_d6) | TBD | TBD |
-| [BUF_D8](#buf_d8) | TBD | TBD |
-| [BUF_D12](#buf_d12) | TBD | TBD |
+| [BUF_DL](#buf_dl) | 3 | 6.2208 |
+| [BUF_D1](#buf_d1) | 4 | 8.2944 |
+| [BUF_D2](#buf_d2) | 4 | 8.2944 |
+| [BUF_D3](#buf_d3) | 4 | 8.2944 |
+| [BUF_D4](#buf_d4) | 6 | 12.4416 |
+| [BUF_D6](#buf_d6) | 6 | 12.4416 |
+| [BUF_D8](#buf_d8) | 10 | 20.736 |
+| [BUF_D12](#buf_d12) | 13 | 26.9568 |
 
 
 
@@ -92,7 +92,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=6.6e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/BUF_DL.svg" height=500/>
 </div>
 
 ### BUF_D1
@@ -129,7 +129,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/BUF_D1.svg" height=500/>
 </div>
 
 ### BUF_D2
@@ -166,7 +166,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/BUF_D2.svg" height=500/>
 </div>
 
 ### BUF_D3
@@ -203,7 +203,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=2.2e-06 l=1.3e-07 ng=2
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/BUF_D3.svg" height=500/>
 </div>
 
 ### BUF_D4
@@ -240,7 +240,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ng=3
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/BUF_D4.svg" height=500/>
 </div>
 
 ### BUF_D6
@@ -277,7 +277,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=4e-06 l=1.3e-07 ng=3
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/BUF_D6.svg" height=500/>
 </div>
 
 ### BUF_D8
@@ -314,7 +314,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=6.4e-06 l=1.3e-07 ng=5
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/BUF_D8.svg" height=500/>
 </div>
 
 ### BUF_D12
@@ -351,7 +351,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=9.6e-06 l=1.3e-07 ng=7
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/BUF_D12.svg" height=500/>
 </div>
 
 ## Pin capacitance
