@@ -47,11 +47,11 @@ Y = ~A
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
-| [CLKINV_D1](#clkinv_d1) | TBD | TBD |
-| [CLKINV_D2](#clkinv_d2) | TBD | TBD |
-| [CLKINV_D4](#clkinv_d4) | TBD | TBD |
-| [CLKINV_D8](#clkinv_d8) | TBD | TBD |
-| [CLKINV_D16](#clkinv_d16) | TBD | TBD |
+| [CLKINV_D1](#clkinv_d1) | 2 | 4.1472 |
+| [CLKINV_D2](#clkinv_d2) | 3 | 6.2208 |
+| [CLKINV_D4](#clkinv_d4) | 4 | 8.2944 |
+| [CLKINV_D8](#clkinv_d8) | 6 | 12.4416 |
+| [CLKINV_D16](#clkinv_d16) | 11 | 22.8096 |
 
 
 
@@ -84,7 +84,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKINV_D1.svg" height=500/>
 </div>
 
 ### CLKINV_D2
@@ -116,7 +116,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=1.5e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKINV_D2.svg" height=500/>
 </div>
 
 ### CLKINV_D4
@@ -148,7 +148,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=3e-06 l=1.3e-07 ng=2
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKINV_D4.svg" height=500/>
 </div>
 
 ### CLKINV_D8
@@ -180,7 +180,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=6e-06 l=1.3e-07 ng=4
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKINV_D8.svg" height=500/>
 </div>
 
 ### CLKINV_D16
@@ -212,7 +212,7 @@ MP0 Y A VDD VDD sg13_lv_pmos w=1.2e-05 l=1.3e-07 ng=8
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKINV_D16.svg" height=500/>
 </div>
 
 ## Pin capacitance

@@ -20,7 +20,7 @@ Y = ~A
 </div>
 
 ### Logic function (Boolean)
-\\[ Y = ~A \\]
+\\[ Y = \overline{A} \\]
 
 ### Truth Table for Y
 
