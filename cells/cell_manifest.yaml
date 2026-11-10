@@ -919,7 +919,7 @@ INV:
         - INV_D14
         - INV_D16
     optional:
-        latex: "Y = ~A"
+        latex: "Y = \\overline{A}"
 
 #
 # NAND
