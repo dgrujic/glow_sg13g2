@@ -47,14 +47,14 @@ Y = A
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
-| [CLKBUF_D1](#clkbuf_d1) | TBD | TBD |
-| [CLKBUF_D2](#clkbuf_d2) | TBD | TBD |
-| [CLKBUF_D3](#clkbuf_d3) | TBD | TBD |
-| [CLKBUF_D4](#clkbuf_d4) | TBD | TBD |
-| [CLKBUF_D6](#clkbuf_d6) | TBD | TBD |
-| [CLKBUF_D8](#clkbuf_d8) | TBD | TBD |
-| [CLKBUF_D12](#clkbuf_d12) | TBD | TBD |
-| [CLKBUF_D16](#clkbuf_d16) | TBD | TBD |
+| [CLKBUF_D1](#clkbuf_d1) | 4 | 8.2944 |
+| [CLKBUF_D2](#clkbuf_d2) | 4 | 8.2944 |
+| [CLKBUF_D3](#clkbuf_d3) | 4 | 8.2944 |
+| [CLKBUF_D4](#clkbuf_d4) | 6 | 12.4416 |
+| [CLKBUF_D6](#clkbuf_d6) | 6 | 12.4416 |
+| [CLKBUF_D8](#clkbuf_d8) | 10 | 20.736 |
+| [CLKBUF_D12](#clkbuf_d12) | 13 | 26.9568 |
+| [CLKBUF_D16](#clkbuf_d16) | 14 | 29.0304 |
 
 
 
@@ -92,7 +92,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKBUF_D1.svg" height=500/>
 </div>
 
 ### CLKBUF_D2
@@ -129,7 +129,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=1.45e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKBUF_D2.svg" height=500/>
 </div>
 
 ### CLKBUF_D3
@@ -166,7 +166,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=2.2e-06 l=1.3e-07 ng=2
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKBUF_D3.svg" height=500/>
 </div>
 
 ### CLKBUF_D4
@@ -203,7 +203,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=3e-06 l=1.3e-07 ng=2
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKBUF_D4.svg" height=500/>
 </div>
 
 ### CLKBUF_D6
@@ -240,7 +240,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=3.9e-06 l=1.3e-07 ng=2
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKBUF_D6.svg" height=500/>
 </div>
 
 ### CLKBUF_D8
@@ -277,7 +277,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=6.6e-06 l=1.3e-07 ng=4
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKBUF_D8.svg" height=500/>
 </div>
 
 ### CLKBUF_D12
@@ -314,7 +314,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=9.9e-06 l=1.3e-07 ng=6
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKBUF_D12.svg" height=500/>
 </div>
 
 ### CLKBUF_D16
@@ -351,7 +351,7 @@ MP1 Y n0 VDD VDD sg13_lv_pmos w=1.2e-05 l=1.3e-07 ng=8
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/CLKBUF_D16.svg" height=500/>
 </div>
 
 ## Pin capacitance
