@@ -49,11 +49,11 @@ Y = ~(A & B)
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
-| [NAND2_DL](#nand2_dl) | TBD | TBD |
-| [NAND2_D1](#nand2_d1) | TBD | TBD |
-| [NAND2_D2](#nand2_d2) | TBD | TBD |
-| [NAND2_D4](#nand2_d4) | TBD | TBD |
-| [NAND2_D8](#nand2_d8) | TBD | TBD |
+| [NAND2_DL](#nand2_dl) | 3 | 6.2208 |
+| [NAND2_D1](#nand2_d1) | 3 | 6.2208 |
+| [NAND2_D2](#nand2_d2) | 5 | 10.368 |
+| [NAND2_D4](#nand2_d4) | 7 | 14.5152 |
+| [NAND2_D8](#nand2_d8) | 13 | 26.9568 |
 
 
 
@@ -90,7 +90,7 @@ MP1 Y B VDD VDD sg13_lv_pmos w=4.9e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/NAND2_DL.svg" height=500/>
 </div>
 
 ### NAND2_D1
@@ -126,7 +126,7 @@ MP1 Y B VDD VDD sg13_lv_pmos w=9.8e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/NAND2_D1.svg" height=500/>
 </div>
 
 ### NAND2_D2
@@ -168,7 +168,7 @@ MP1 Y B VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/NAND2_D2.svg" height=500/>
 </div>
 
 ### NAND2_D4
@@ -220,7 +220,7 @@ MP3 Y B VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/NAND2_D4.svg" height=500/>
 </div>
 
 ### NAND2_D8
@@ -292,7 +292,7 @@ MP5 Y B VDD VDD sg13_lv_pmos w=1.6e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/NAND2_D8.svg" height=500/>
 </div>
 
 ## Pin capacitance
