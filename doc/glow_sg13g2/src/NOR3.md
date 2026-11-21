@@ -51,10 +51,10 @@ Y = ~(A | B | C)
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
-| [NOR3_DL](#nor3_dl) | TBD | TBD |
-| [NOR3_D1](#nor3_d1) | TBD | TBD |
-| [NOR3_D2](#nor3_d2) | TBD | TBD |
-| [NOR3_D4](#nor3_d4) | TBD | TBD |
+| [NOR3_DL](#nor3_dl) | 4 | 8.2944 |
+| [NOR3_D1](#nor3_d1) | 4 | 8.2944 |
+| [NOR3_D2](#nor3_d2) | 7 | 14.5152 |
+| [NOR3_D4](#nor3_d4) | 14 | 29.0304 |
 
 
 
@@ -95,7 +95,7 @@ MP2 Y C n1 VDD sg13_lv_pmos w=7.5e-07 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/NOR3_DL.svg" height=500/>
 </div>
 
 ### NOR3_D1
@@ -135,7 +135,7 @@ MP2 Y C n1 VDD sg13_lv_pmos w=1.25e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/NOR3_D1.svg" height=500/>
 </div>
 
 ### NOR3_D2
@@ -188,7 +188,7 @@ MP5 Y C n3 VDD sg13_lv_pmos w=1.25e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/NOR3_D2.svg" height=500/>
 </div>
 
 ### NOR3_D4
@@ -267,7 +267,7 @@ MP11 Y C n7 VDD sg13_lv_pmos w=1.25e-06 l=1.3e-07 ng=1
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/NOR3_D4.svg" height=500/>
 </div>
 
 ## Pin capacitance
