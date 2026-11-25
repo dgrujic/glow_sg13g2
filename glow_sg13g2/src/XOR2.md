@@ -50,8 +50,8 @@ Y = A ^ B
 
 | Cell name <br> | Width <br> [unit sites] | Area <br> [\\(\mu m^2\\)] |
 | :-        | :-:   | :-:   |
-| [XOR2_DL](#xor2_dl) | TBD | TBD |
-| [XOR2_D1](#xor2_d1) | TBD | TBD |
+| [XOR2_DL](#xor2_dl) | 7 | 14.5152 |
+| [XOR2_D1](#xor2_d1) | 7 | 14.5152 |
 
 
 
@@ -106,7 +106,7 @@ MP4 n0 A Y VDD sg13_lv_pmos w=3e-07 l=1.3e-07
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/XOR2_DL.svg" height=500/>
 </div>
 
 ### XOR2_D1
@@ -160,7 +160,7 @@ MP4 n0 A Y VDD sg13_lv_pmos w=8e-07 l=1.3e-07
 #### Layout
 
 <div align="center">
-<img src="figs/empty_cell_layout.svg" height=500/>
+<img src="figs/XOR2_D1.svg" height=500/>
 </div>
 
 ## Pin capacitance
