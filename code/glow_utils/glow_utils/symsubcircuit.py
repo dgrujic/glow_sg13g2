@@ -638,7 +638,7 @@ class Symsubcircuit(object):
                 else:
                     paramVal = str(parameterEvaluator.substitute(params[param]))
                 if isinstance(paramVal, (int, float)) or self.isNumber(paramVal):
-                    res += param + "=" + str(paramVal) + " "
+                    res += param + "=" + "{:.4g}".format(float(paramVal)) + " "
                 else:
                     # NGSPICE expression
                     res += param + "={" + str(paramVal) + "} "
