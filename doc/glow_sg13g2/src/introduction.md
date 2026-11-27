@@ -7,11 +7,11 @@ Summary of standard cell library celss is given in the following table.
 
 | Category | Groups | Cells |
 | :------  | :---: | :---: |
-| combinatorial | 42 | 144 |
+| combinatorial | 47 | 154 |
 | dff | 24 | 69 |
 | dlatch | 2 | 6 |
 | constant | 2 | 2 |
-| ∑ | 70 | 221
+| ∑ | 75 | 231
 
 
 Documentation for groups of standard cells can be accessed from the following links.
@@ -57,6 +57,10 @@ Documentation for groups of standard cells can be accessed from the following li
 - [DFSQQN](./DFSQQN.md)
 - [DL](./DL.md)
 - [DLN](./DLN.md)
+- [DLY1](./DLY1.md)
+- [DLY2](./DLY2.md)
+- [DLY3](./DLY3.md)
+- [DLY4](./DLY4.md)
 - [INV](./INV.md)
 - [MUX2](./MUX2.md)
 - [MUX2N](./MUX2N.md)
@@ -76,6 +80,7 @@ Documentation for groups of standard cells can be accessed from the following li
 - [OA22](./OA22.md)
 - [OAI21](./OAI21.md)
 - [OAI211](./OAI211.md)
+- [OAI22](./OAI22.md)
 - [OAI221](./OAI221.md)
 - [OAI222](./OAI222.md)
 - [OAI2N1](./OAI2N1.md)
