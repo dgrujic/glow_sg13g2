@@ -569,7 +569,9 @@ def main():
                 print("\tOK")
             else:
                 print("\tWARNING : Unsupported group type", groupType, "SKIPPING")
-        except:
+        except Exception as e:
+            if not quiet:
+                print(f"\n{type(e).__name__}: {e}")
             print("\tERROR")
             error_groups.append(group)
 
@@ -583,7 +585,9 @@ def main():
             with open(reportFilename, "w") as file:
                 file.write(res)
             print("\tOK")
-        except:
+        except Exception as e:
+            if not quiet:
+                print(f"\n{type(e).__name__}: {e}")
             print("\tERROR")
             error_groups.append("SUMMARY")
 
@@ -596,7 +600,9 @@ def main():
             with open(reportFilename, "w") as file:
                 file.write(res)
             print("\tOK")
-        except:
+        except Exception as e:
+            if not quiet:
+                print(f"\n{type(e).__name__}: {e}")
             print("\tERROR")
             error_groups.append("INTRODUCTION")
 
