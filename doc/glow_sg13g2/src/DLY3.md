@@ -58,8 +58,8 @@ Y = A
 ```spice
 .subckt DLY3_D1 A Y VDD VSS
 Xinv1 A n0 VDD VSS inv_par WN=6e-07 WP=9e-07 
-Xinv2 n0 n1 VDD VSS inv_par WN=6e-07 WP=9e-07 L=3.8999999999999997e-07 
-Xinv3 n1 n2 VDD VSS inv_par WN=6e-07 WP=9e-07 L=3.8999999999999997e-07 
+Xinv2 n0 n1 VDD VSS inv_par WN=6e-07 WP=9e-07 L=3.9e-07 
+Xinv3 n1 n2 VDD VSS inv_par WN=6e-07 WP=9e-07 L=3.9e-07 
 Xinv4 n2 Y VDD VSS inv_par WN=3e-07 WP=9e-07 
 .ends
 ```
@@ -105,9 +105,9 @@ MP3 Y n2 VDD VDD sg13_lv_pmos w=9e-07 l=1.3e-07 ng=1
 ```spice
 .subckt DLY3_D4 A Y VDD VSS
 Xinv1 A n0 VDD VSS inv_par WN=6e-07 WP=9e-07 
-Xinv2 n0 n1 VDD VSS inv_par WN=6e-07 WP=9e-07 L=3.8999999999999997e-07 
-Xinv3 n1 n2 VDD VSS inv_par WN=6e-07 WP=9e-07 L=3.8999999999999997e-07 
-Xinv4 n2 Y VDD VSS inv_par WN=1.0666666666666667e-06 WP=3.2e-06 NGN=2 NGP=2 
+Xinv2 n0 n1 VDD VSS inv_par WN=6e-07 WP=9e-07 L=3.9e-07 
+Xinv3 n1 n2 VDD VSS inv_par WN=6e-07 WP=9e-07 L=3.9e-07 
+Xinv4 n2 Y VDD VSS inv_par WN=1e-06 WP=3.2e-06 NGN=2 NGP=2 
 .ends
 ```
 
@@ -120,7 +120,7 @@ XMN1 n1 n0 VSS VSS sg13_lv_nmos w=6e-07 l=3.9e-07 ad=1.86e-13 as=1.86e-13 pd=1.8
 XMP1 n1 n0 VDD VDD sg13_lv_pmos w=9e-07 l=3.9e-07 ad=2.79e-13 as=2.79e-13 pd=2.42e-06 ps=2.42e-06 ng=1 
 XMN2 n2 n1 VSS VSS sg13_lv_nmos w=6e-07 l=3.9e-07 ad=1.86e-13 as=1.86e-13 pd=1.82e-06 ps=1.82e-06 ng=1 
 XMP2 n2 n1 VDD VDD sg13_lv_pmos w=9e-07 l=3.9e-07 ad=2.79e-13 as=2.79e-13 pd=2.42e-06 ps=2.42e-06 ng=1 
-XMN3 Y n2 VSS VSS sg13_lv_nmos w=1.067e-06 l=1.3e-07 ad=3.307e-13 as=3.307e-13 pd=2.753e-06 ps=2.753e-06 ng=2 
+XMN3 Y n2 VSS VSS sg13_lv_nmos w=1e-06 l=1.3e-07 ad=3.1e-13 as=3.1e-13 pd=2.62e-06 ps=2.62e-06 ng=2 
 XMP3 Y n2 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ad=9.92e-13 as=9.92e-13 pd=7.02e-06 ps=7.02e-06 ng=2 
 .ends
 ```
@@ -135,7 +135,7 @@ MN1 n1 n0 VSS VSS sg13_lv_nmos w=6e-07 l=3.9e-07 ng=1
 MP1 n1 n0 VDD VDD sg13_lv_pmos w=9e-07 l=3.9e-07 ng=1 
 MN2 n2 n1 VSS VSS sg13_lv_nmos w=6e-07 l=3.9e-07 ng=1 
 MP2 n2 n1 VDD VDD sg13_lv_pmos w=9e-07 l=3.9e-07 ng=1 
-MN3 Y n2 VSS VSS sg13_lv_nmos w=1.067e-06 l=1.3e-07 ng=2 
+MN3 Y n2 VSS VSS sg13_lv_nmos w=1e-06 l=1.3e-07 ng=2 
 MP3 Y n2 VDD VDD sg13_lv_pmos w=3.2e-06 l=1.3e-07 ng=2 
 .ENDS
 ```

@@ -47,7 +47,7 @@ def generate(genFlat = True, anonimize = True):
     wp = 900e-9
 
     wpout = 2 * SymTech.technology['invx2WP']
-    wnout = wpout / 3
+    wnout = round(1e6 * wpout / 3) / 1e6
     lch = 3 * SymTech.technology['Lmin']
     ng = 2
 
